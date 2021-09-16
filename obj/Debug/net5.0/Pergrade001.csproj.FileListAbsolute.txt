@@ -1,0 +1,16 @@
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.exe
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.deps.json
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.runtimeconfig.json
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.runtimeconfig.dev.json
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.dll
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\ref\Pergrade001.dll
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\bin\Debug\net5.0\Pergrade001.pdb
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.csproj.AssemblyReference.cache
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.AssemblyInfoInputs.cache
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.AssemblyInfo.cs
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.csproj.CoreCompileInputs.cache
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.dll
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\ref\Pergrade001.dll
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.pdb
+C:\Users\Егор Шарапов\source\repos\Pergrade001\Pergrade001\obj\Debug\net5.0\Pergrade001.genruntimeconfig.cache
