@@ -6,5 +6,5 @@ build_property.ProjectTypeGuids =
 build_property.PublishSingleFile = 
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
-build_property.RootNamespace = Peergrade001
-build_property.ProjectDir = C:\Users\Егор Шарапов\RiderProjects\219\HSE-PEERGRADE\Pergrade001\
+build_property.RootNamespace = Peergrade002
+build_property.ProjectDir = C:\Users\Егор Шарапов\source\repos\Peergrade002\Peergrade002\
