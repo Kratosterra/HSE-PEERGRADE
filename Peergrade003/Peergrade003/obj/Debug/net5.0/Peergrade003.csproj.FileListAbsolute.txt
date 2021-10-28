@@ -1,0 +1,16 @@
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.csproj.AssemblyReference.cache
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.AssemblyInfoInputs.cache
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.AssemblyInfo.cs
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.csproj.CoreCompileInputs.cache
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.exe
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.deps.json
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.runtimeconfig.json
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.runtimeconfig.dev.json
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\ref\Peergrade003.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\bin\Debug\net5.0\Peergrade003.pdb
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\ref\Peergrade003.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.pdb
+C:\Users\Егор Шарапов\source\repos\Peergrade003\Peergrade003\obj\Debug\net5.0\Peergrade003.genruntimeconfig.cache
