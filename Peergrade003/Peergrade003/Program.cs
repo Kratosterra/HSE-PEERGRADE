@@ -171,6 +171,9 @@ namespace Peergrade003
                     nowDrive = null;
                     return false;
                 }
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"\nПроизошла смена диска на {(allDrives[driveChoice - 1].Name).ToString()}.\n");
+                Console.ResetColor();
                 nowDirectory = (allDrives[driveChoice - 1].Name).ToString();
                 nowDrive = (allDrives[driveChoice - 1].Name).ToString();
                 return true;
@@ -720,7 +723,11 @@ namespace Peergrade003
                 mask = ReverseString(mask);
                 if (control == 0)
                 {
-                    if (rawPathTrim[^1] != Path.DirectorySeparatorChar) rawPathTrim += Path.DirectorySeparatorChar;
+                    if (Directory.Exists(rawPathTrim) && rawPathTrim[^1] != Path.DirectorySeparatorChar)
+                    {
+                        newPath = rawPathTrim + Path.DirectorySeparatorChar;
+                        return false;
+                    }
                     newPath = rawPathTrim;
                     return false;
                 }
@@ -735,8 +742,12 @@ namespace Peergrade003
                 {
                     if (dataFile.Length == 0 && dataDirect.Length != 0)
                     {
-                        newPath = dataDirect[0] + Path.DirectorySeparatorChar;
-                        return true;
+                        if (dataDirect.Length == 1)
+                        {
+                            newPath = dataDirect[0] + Path.DirectorySeparatorChar;
+                            return true;
+                        }
+                        return CommonPath(out newPath, dataDirect); ;
                     }
                     if (dataFile.Length != 0 && dataDirect.Length == 0)
                     {
@@ -747,6 +758,7 @@ namespace Peergrade003
                                 newPath = $"{rawPathTrim}{Path.GetFileNameWithoutExtension(dataFile[0])}.";
                                 return true;
                             }
+                            return CommonPath(out newPath, dataFile);
                         }
                         else
                         {
@@ -763,11 +775,12 @@ namespace Peergrade003
                                 newPath = $"{rawPathTrim}{Path.GetFileNameWithoutExtension(dataFile[0])}.";
                                 return true;
                             }
-                            else
-                            {
-                                newPath = dataFile[0];
-                                return true;
-                            }
+                            return CommonPath(out newPath, dataFile);
+                        }
+                        else
+                        {
+                            newPath = dataFile[0];
+                            return true;
                         }
                     }
                     newPath = dataFile[0];
@@ -788,6 +801,34 @@ namespace Peergrade003
                 newPath = rawPathTrim;
                 return false;
             }
+        }
+
+        private static bool CommonPath(out string newPath, string[] dataFile)
+        {
+            string commonPath = "";
+            bool isPathValid = true;
+            int indexChar = 0;
+            foreach (var charControl in dataFile[0])
+            {
+                if (!isPathValid) break;
+                foreach (var path in dataFile)
+                {
+                    if (path[indexChar] != charControl)
+                    {
+                        isPathValid = false;
+                        break;
+                    }
+                }
+
+                if (isPathValid)
+                {
+                    commonPath += charControl;
+                    indexChar += 1;
+                }
+            }
+
+            newPath = $"{commonPath}";
+            return true;
         }
 
         public static string ReadLine(string nowDirectory)
@@ -827,10 +868,21 @@ namespace Peergrade003
                     }
                     Console.Write(data);
                 }
+                else if (key.KeyChar == 10)
+                {
+                    return data;
+                }
                 else
                 {
-                    data += key.KeyChar;
-                    Console.Write((key.KeyChar).ToString()[..^1]);
+                    bool isCharValid = true;
+                    if ((int)key.KeyChar == 0 || (int)key.KeyChar == 10 || (int)key.KeyChar == 9)
+                        isCharValid = false;
+                    if (isCharValid)
+                    {
+                        data += key.KeyChar;
+                        Console.Write((key.KeyChar).ToString()[..^1]);
+                    }
+
                 }
             }
 
@@ -1014,13 +1066,14 @@ namespace Peergrade003
             {
                 try
                 {
+                    Console.WriteLine($"{directoryData}");
                     string workPath = Path.GetFullPath($"{nowDrive}{directoryData}");
                     if (workPath[^1] != Path.DirectorySeparatorChar)
                         workPath = workPath + Path.DirectorySeparatorChar;
                     directoryPath = workPath;
                     Directory.CreateDirectory(directoryPath);
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"Создана директория {directoryPath}");
+                    Console.WriteLine($"\nСоздана директория {directoryPath}\n");
                     Console.ResetColor();
                 }
                 catch
@@ -1047,7 +1100,7 @@ namespace Peergrade003
         {
             string directoryData;
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!!" +
+            Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!\n" +
                 "\nДополненный путь будет подсвечиваться ");
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Green;
