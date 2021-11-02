@@ -14,8 +14,9 @@ namespace Peergrade003
         /// <summary>
         /// Вход в программу.
         /// </summary>
-        static void Main(string[] args)
+        static void Main()
         {
+            // Вызов метода файлового менеджера.
             FileManagerApp();
         }
 
@@ -34,25 +35,13 @@ namespace Peergrade003
             {
                 try
                 {
-                    if (nowDirectory == null)
-                    {
-                        nowDirectory = ManageTools.SetStartDrive();
-                        nowDrive = ManageTools.SetStartDrive();
-                    }
-                    if (nowDirectory == null)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("На вашем копьютере не обнаружено доступных дисков, пожалуйста проверьте права доступа в системе!");
-                        Console.ResetColor();
-                    }
-                    else 
-                    {
-                        FileManagerActions(nowDirectory, nowDrive, out nowDirectory, out nowDrive);
-                    }
+                    // Входим в исполнитель файлового менеджера.
+                    FileManagerExecutor(ref nowDirectory, ref nowDrive);
                     // Выводим инструкции по выходу из программы.
                     Environment.EndProgram();
                     // Получаем нажатую кнопку.
                     exitKey = Console.ReadKey();
+                    Console.Clear();
                 }
                 catch
                 {
@@ -64,6 +53,39 @@ namespace Peergrade003
             } while (exitKey.Key != ConsoleKey.Escape);
         }
 
+        /// <summary>
+        /// Метод, исполняющий действия файлового менеджера.
+        /// </summary>
+        /// <param name="nowDirectory"> Ссылка на строку, означающую директорию.</param>
+        /// <param name="nowDrive">Ссылка на строку, означающую диск.</param>
+        /// <returns>
+        /// </returns>
+        private static void FileManagerExecutor(ref string nowDirectory, ref string nowDrive)
+        {
+            // Если директория пустая - устанавливаем входную точку.
+            if (nowDirectory == null || nowDrive == null)
+            {
+                nowDirectory = ManageTools.SetStartDrive();
+                nowDrive = ManageTools.SetStartDrive();
+            }
+            // Если директория всё еще пустая - значит невозможно получить доступ к дискам.
+            if (nowDirectory == null || nowDrive == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("На вашем копьютере не обнаружено доступных дисков," +
+                    " пожалуйста проверьте права доступа в системе!");
+                Console.ResetColor();
+            }
+            else
+            {
+                // Начинаем выполнение действий.
+                FileManagerActions(nowDirectory, nowDrive, out nowDirectory, out nowDrive);
+            }
+        }
+
+        /// <summary>
+        /// Метод, выводящий начальные данные на экран.
+        /// </summary>
         private static void FileManagerStart()
         {
             // Вызываем заставку и паузу с запросом нажатия кнопки.
@@ -74,24 +96,44 @@ namespace Peergrade003
             Environment.Service("stop_button");
         }
 
-        private static bool FileManagerActions(string nowDirectoryOld, string nowDriveOld, out string nowDirectory, out string nowDrive)
+        /// <summary>
+        /// Метод, выводящий главное меню и проверяющий запуск действия менджера.
+        /// </summary>
+        /// <param name="nowDirectoryOld">Строка означающая путь до текущей директории.</param>
+        /// <param name="nowDriveOld">Строка означающая путь до текущего диска.</param>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        private static bool FileManagerActions(string nowDirectoryOld, string nowDriveOld,
+            out string nowDirectory, out string nowDrive)
         {
-            Environment.NowDirectoryInfo(nowDirectoryOld);
+            // Выводим информацию о данном диске и выводим меню.
+            Environment.NowDirectoryInfo(nowDirectoryOld, nowDriveOld);
             Environment.MainMenu();
             FileManagerChoiceActions(out ushort actionChoice);
-            if (Actions.EngageActionSelection(actionChoice, nowDirectoryOld, nowDriveOld, out nowDirectory, out nowDrive))
+            // Начинаем выбор действий.
+            if (Actions.EngageActionSelection(actionChoice, nowDirectoryOld, nowDriveOld,
+                out nowDirectory, out nowDrive))
             {
                 return true;
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Обнаружена ошибка или аварийный выход из действия!");
+                Console.WriteLine("\nОбнаружена ошибка или аварийный выход из действия!");
                 Console.ResetColor();
                 return false;
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий запрос на выбор действия.
+        /// </summary>
+        /// <param name="actionChoice">Число, означающее выбор текущего действия из меню.</param>
         private static void FileManagerChoiceActions(out ushort actionChoice)
         {
             string actionChoiceData;
@@ -105,10 +147,26 @@ namespace Peergrade003
         }
 
     }
+
     class Actions
     {
-        public static bool EngageActionSelection(ushort actionChoice, string nowDirectoryOld, string nowDriveOld, out string nowDirectory, out string nowDrive)
+        /// <summary>
+        /// Метод, запускающий действия в зависимости от полученого от пользователя числа.
+        /// </summary>
+        /// <param name="actionChoice">Число, означающее выбор действия, требуемого от менеджера.</param>
+        /// <param name="nowDirectoryOld">Строка, означающая путь до текущей директории.</param>
+        /// <param name="nowDriveOld">Строка означающая путь до текущего диска.</param>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        public static bool EngageActionSelection(ushort actionChoice, string nowDirectoryOld, string nowDriveOld,
+            out string nowDirectory, out string nowDrive)
         {
+            // В зависимости от выбора пользователя начинаем исполнение соответствующего метода.
             nowDirectory = nowDirectoryOld;
             nowDrive = nowDriveOld;
             return actionChoice switch
@@ -126,80 +184,178 @@ namespace Peergrade003
                 11 => AdvancedSearchByMask(nowDirectory, nowDrive),
                 12 => CopyByMask(nowDirectory, nowDrive),
                 13 => DifferencesBetweenFiles(nowDirectory, nowDrive),
+                14 => SetTestDirectory(out nowDrive, out nowDirectory),
                 _ => false,
             };
         }
 
+        /// <summary>
+        /// Метод, сменяющий текущий диск.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool DriveSelection(out string nowDirectory, out string nowDrive)
         {
-            int driveChoice;
             try
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("\n──────────────────────────────── Приступаем к смене диска.\n");
-                Console.ResetColor();
+                DriveSelectionEnvironment("start");
+                int driveChoice;
+                // Получаем все диски.
                 DriveInfo[] allDrives = DriveInfo.GetDrives();
                 if (allDrives.Length < 1)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Невозможно получить доступ к дискам, проверьте систему!");
-                    Console.ResetColor();
-                    nowDirectory = null;
-                    nowDrive = null;
-                    return false;
+                    DriveSelectionEnvironment("no_drives");
+                    return ReturnErrorDirectory(out nowDirectory, out nowDrive);
                 }
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                int numDrives = 0;
-                foreach (DriveInfo drive in allDrives)
-                {
-                    numDrives += 1;
-                    Console.WriteLine($"{numDrives}. Диск {drive.Name}");
-                }
-                Console.ResetColor();
-                string driveData;
-                do
-                {
-                    Console.Write($"Введите номер диска от 1 до {numDrives} включительно: ");
-                    driveData = Console.ReadLine();
-                } while (!Input.GetDrive(driveData, numDrives, out driveChoice));
+                // Запрашиваем выбор диска.
+                int numDrives = DriveDisplay(allDrives);
+                driveChoice = AskForDrive(numDrives);
                 if (allDrives[driveChoice - 1].IsReady == false)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Выбранный диск не готов к использованию!");
-                    Console.ResetColor();
-                    nowDirectory = null;
-                    nowDrive = null;
-                    return false;
+                    DriveSelectionEnvironment("not_ready");
+                    return ReturnErrorDirectory(out nowDirectory, out nowDrive);
                 }
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nПроизошла смена диска на {(allDrives[driveChoice - 1].Name).ToString()}.\n");
-                Console.ResetColor();
-                nowDirectory = (allDrives[driveChoice - 1].Name).ToString();
-                nowDrive = (allDrives[driveChoice - 1].Name).ToString();
-                return true;
+                DisplayMethodInformationDriveSelection(driveChoice, allDrives);
+                // Устанавливаем диск.
+                return ReturnNewDirectory(out nowDirectory, out nowDrive, driveChoice, allDrives);
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Неизвестная ошибка при выборе диска!");
-                Console.ResetColor();
-                nowDirectory = null;
-                nowDrive = null;
-                return false;
+                DriveSelectionEnvironment("error");
+                return ReturnErrorDirectory(out nowDirectory, out nowDrive);
             }
         }
 
+        private static bool ReturnNewDirectory(out string nowDirectory, out string nowDrive, int driveChoice, DriveInfo[] allDrives)
+        {
+            nowDirectory = (allDrives[driveChoice - 1].Name).ToString();
+            nowDrive = (allDrives[driveChoice - 1].Name).ToString();
+            return true;
+        }
+
+        private static void DisplayMethodInformationDriveSelection(int driveChoice, DriveInfo[] allDrives)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nПроизошла смена диска на {(allDrives[driveChoice - 1].Name).ToString()}.\n");
+            Console.ResetColor();
+        }
+
+        private static bool ReturnErrorDirectory(out string nowDirectory, out string nowDrive)
+        {
+            nowDirectory = null;
+            nowDrive = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Метод, выводящий на эран требуемый тип интрефейса.
+        /// </summary>
+        /// <param name="workType">Строка, означающая требуемый тип интерфейса.</param>
+        /// <returns>
+        private static void DriveSelectionEnvironment(string workType)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("\n──────────────────────────────── Приступаем к смене диска.\n");
+                    Console.ResetColor();
+                    break;
+                case "no_drives":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно получить доступ к дискам, проверьте систему!");
+                    Console.ResetColor();
+                    break;
+                case "not_ready":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Выбранный диск не готов к использованию!");
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Неизвестная ошибка при выборе диска!");
+                    Console.ResetColor();
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Метод, запрашивающий выбор диска.
+        /// </summary>
+        /// <param name="numDrives">Число дисков в системе.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает число типа int, означающее номер нового диска.</item>
+        /// </list>
+        /// </returns>
+        private static int AskForDrive(int numDrives)
+        {
+            int driveChoice;
+            string driveData;
+            // Пока пользователь не введёт номер существующего диска, запрашиваем ввод снова.
+            do
+            {
+                Console.Write($"Введите номер диска от 1 до {numDrives} включительно: ");
+                driveData = Console.ReadLine();
+            } while (!Input.GetDrive(driveData, numDrives, out driveChoice));
+            return driveChoice;
+        }
+
+        /// <summary>
+        /// Метод, выводящий на экран все диски в системе с их порядковыми номерами.
+        /// </summary>
+        /// <param name="allDrives">Индексатор типа DriveInfo.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает число типа int, означающее колличество дисков в системе.</item>
+        /// </list>
+        /// </returns>
+        private static int DriveDisplay(DriveInfo[] allDrives)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            int numDrives = 0;
+            foreach (DriveInfo drive in allDrives)
+            {
+                numDrives += 1;
+                Console.WriteLine($"{numDrives}. Диск {drive.Name}");
+            }
+            Console.ResetColor();
+            return numDrives;
+        }
+
+        /// <summary>
+        /// Метод, производящий смену текущей директории.
+        /// </summary>
+        /// <param name="nowDirectoryOld">Строка, содержащая путь до текущей директории.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске.</param>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool ChangeDirectory(string nowDirectoryOld, string nowDrive, out string nowDirectory)
         {
             try
             {
+                // Выводим данные о директории.
+                DisplayNowDirectory(nowDrive);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("\n──────────────────────────────── Приступаем к смене директории\n" +
-                    "Если вы оказались в ситуации, когда на вашем диске нет директорий, пропишите ?END? или просто нажмите Enter.\n");
+                    "Если вы оказались в ситуации, когда на вашем диске нет директорий, пропишите ?END?" +
+                    " или просто нажмите Enter.\n");
                 Console.ResetColor();
+                // Запрашиваем диреторию для смены.
                 bool condition = Input.AskForDirectory(nowDrive, out string directoryPath);
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                if (condition) Console.WriteLine($"\nПроизошла смена директории с {nowDirectoryOld} на {directoryPath}.\n");
+                if (condition) Console.WriteLine($"\nПроизошла смена директории с {nowDirectoryOld} " +
+                    $"на {directoryPath}.\n");
                 Console.ResetColor();
                 nowDirectory = directoryPath;
                 return condition;
@@ -214,6 +370,16 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий список файлов и директорий внутри рабочей директории.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool ListOfFiles(string nowDirectory, string nowDrive)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -221,162 +387,275 @@ namespace Peergrade003
             Console.ResetColor();
             try
             {
-                var options = new EnumerationOptions();
-                options.IgnoreInaccessible = true;
-                string[] dataFile = Directory.GetFiles(nowDirectory, "*", options);
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine("\n─────────────── Файлы\n");
-                foreach (var item in dataFile)
-                { 
-                    Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Путь: {item}");
-                }
-                string[] dataDir = Directory.GetDirectories(nowDirectory, "*", options);
-                Console.WriteLine("\n─────────────── Папки\n");
-                foreach (var item in dataDir)
-                {
-                    Console.WriteLine($"Папка: {item}");
-                }
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВсе файлы и директории, кроме недоступных вам, выведены.\n");
-                Console.ResetColor();
+                DisplayNowDirectory(nowDirectory);
                 return true;
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не получается получить доступ к файлам в данной директории, вероятно, система запрещает это делать!\n" +
-                    "Смените диск или директорию в следующей итерации."); 
+                Console.WriteLine("Не получается получить доступ к файлам в данной директории, вероятно," +
+                    " система запрещает это делать!\n" +
+                    "Смените диск или директорию в следующей итерации.");
                 Console.ResetColor();
                 return false;
-            }  
+            }
         }
 
+        /// <summary>
+        /// Метод, выводящий данные о директории на экран.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        private static void DisplayNowDirectory(string nowDirectory)
+        {
+            var options = new EnumerationOptions();
+            options.IgnoreInaccessible = true;
+            string[] dataFile = Directory.GetFiles(nowDirectory, "*", options);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("\n─────────────── Файлы\n");
+            foreach (var item in dataFile)
+            {
+                Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Путь: {item}");
+            }
+            string[] dataDir = Directory.GetDirectories(nowDirectory, "*", options);
+            Console.WriteLine("\n─────────────── Папки\n");
+            foreach (var item in dataDir)
+            {
+                Console.WriteLine($"Папка: {item}");
+            }
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nВсе файлы и директории, кроме недоступных вам, выведены.\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Метод, выводящий выбранный пользователем текстовый файл на экран (поддерживаются файлы формата .txt
+        /// и только размером до 10 МБ).
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool OutputtingFileContent(string nowDirectory, string nowDrive)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Вывод текстового файла из {nowDirectory} на экран\n" +
-                $"\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END?.\n");
-            Console.ResetColor();
+            DisplayNowDirectory(nowDirectory);
+            OutputtingFileContentEnvironment("start", nowDirectory);
             try
             {
+                // Запрашиваем файл.
                 bool condition = Input.AskForFile(nowDirectory, true, out string filePath);
+                if (!condition) return false;
+                // Проверяем его размер.
+                condition = Input.CheckSizeOfFile(filePath);
                 if (!condition) return false;
                 string encoding = Input.AskForEncoding();
                 try
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\n──────────────────────────────── {Path.GetFileName(filePath)}\n");
-                    Console.ResetColor();
-                    StreamReader sr = new StreamReader(filePath, Encoding.GetEncoding(encoding));
-                    string line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        Console.WriteLine(line);
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────" +
-                    "────────────────────────────────\n");
-                    Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} прочитан!\n");
-                    Console.ResetColor();
+                    // Выводим содержание файла.
+                    DisplayFile(filePath, encoding);
                     return true;
                 }
                 catch
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Невозможно прочитать файл, убедитесь что он доступен для чтения в предложенных кодировках.");
-                    Console.ResetColor();
+                    OutputtingFileContentEnvironment("error", nowDirectory);
                     return false;
                 }
             }
-            catch 
+            catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка при выводе содержания файла.");
-                Console.ResetColor();
+                OutputtingFileContentEnvironment("big_error", nowDirectory);
                 return false;
             }
         }
 
-        public static bool CopyFile(string nowDirectory, string nowDrive)
+        private static void OutputtingFileContentEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Вывод текстового файла из {nowDirectory}" +
+                        $" на экран\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END?.\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка при выводе содержания файла.");
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно прочитать файл, убедитесь что он доступен для чтения в" +
+                        " предложенных кодировках. Возможно он занят другим процессом.");
+                    Console.ResetColor();
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Метод, выводящий файл на экран, получая путь и кодировку.
+        /// </summary>
+        /// <param name="filePath">Путь до файла, который следует вывести.</param>
+        /// <param name="encoding">Метод кодировки в строковом представлении.</param>
+        private static void DisplayFile(string filePath, string encoding)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Копирование файла\n" +
-                $"Если вы оказались в ситуации, когда на вашем диске нет директорий или в директории нет файлов, пропишите ?END?\n");
+            Console.WriteLine($"\n──────────────────────────────── {Path.GetFileName(filePath)}\n");
             Console.ResetColor();
+            using StreamReader sr = new StreamReader(filePath, Encoding.GetEncoding(encoding));
+            string line = sr.ReadLine();
+            while (line != null)
+            {
+                // Если в файле попалась очень длинная строка, ограничем её размер.
+                if (line.Length > 60024)
+                {
+                    Console.WriteLine(line[..60024] + "... (задействованы ограничения размера одной строки)");
+                }
+                else
+                {
+                    Console.WriteLine(line);
+                }
+                line = sr.ReadLine();
+            }
+            sr.Close();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────" +
+            "────────────────────────────────\n");
+            Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} прочитан!\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Метод, копирующий файл в указанную пользователем директорию.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        public static bool CopyFile(string nowDirectory, string nowDrive)
+        {
+            DisplayNowDirectory(nowDirectory);
+            CopyFileContentEnvironment("start", nowDirectory);
             try
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВведите файл, который хотите скопировать.\n");
-                Console.ResetColor();
+                CopyFileContentEnvironment("file", nowDirectory);
+                // Запрашиваем путь до файла.
                 bool conditionFirst = Input.AskForFile(nowDirectory, out string filePath);
                 if (!conditionFirst) return false;
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВвёдите директорию, в которую будет производится копирование.\n");
-                Console.ResetColor();
+                CopyFileContentEnvironment("dir", nowDirectory);
+                // Запрашиваем путь до директории.
                 bool conditionSecond = Input.AskForDirectory(nowDrive, out string directoryPath);
                 if (!conditionSecond) return false;
+                // Если надо, изменяем название файла для копирования в ту же самую директорию.
                 string destPointPath = CopyInSameDirectoryName(filePath, directoryPath);
+                // Копируем.
                 File.Copy(filePath, destPointPath, true);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} копирован в {directoryPath}.\n");
                 Console.ResetColor();
                 return true;
             }
-            catch (System.IO.IOException)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Невозможно копировать файл в директорию самого же файла.");
-                Console.ResetColor();
-                return false;
-            }
             catch (Exception)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Ошибка при копировании файла в директорию.");
-                Console.ResetColor();
+                CopyFileContentEnvironment("big_error", nowDirectory);
                 return false;
             }
         }
 
+        private static void CopyFileContentEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Копирование файла\nЕсли вы оказались в ситуации," +
+                        $" когда на вашем диске нет директорий или в директории нет файлов, пропишите ?END?\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Ошибка при копировании файла в директорию.");
+                    Console.ResetColor();
+                    break;
+                case "file":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВведите файл, который хотите скопировать.\n");
+                    Console.ResetColor();
+                    break;
+                case "dir":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВведите директорию, в которую будет производится копирование.\n");
+                    Console.ResetColor();
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Метод, создающий новые названия для файлов, копированных в свою же директорию.
+        /// </summary>
+        /// <param name="filePath">Путь до файла, который следует копировать.</param>
+        /// <param name="directoryPath">Путь до директории, в которую следует копировать.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает новое имя файла, включающее путь в который надо скопировать файл.</item>
+        /// </list>
+        /// </returns>
         private static string CopyInSameDirectoryName(string filePath, string directoryPath)
         {
-            string destPointPath = $"{directoryPath}{Path.GetFileNameWithoutExtension(filePath)}{Path.GetExtension(filePath)}";
+            string destPointPath = $"{directoryPath}{Path.GetFileNameWithoutExtension(filePath)}" +
+                $"{Path.GetExtension(filePath)}";
+            // Если пути совпадают, изменяем название файла.
             if (Path.GetFullPath(filePath).ToLower() == Path.GetFullPath(destPointPath).ToLower())
             {
                 int n = 1;
-                destPointPath = $"{directoryPath}({n}) {Path.GetFileNameWithoutExtension(filePath)}{Path.GetExtension(filePath)}";
+                destPointPath = $"{directoryPath}({n}) {Path.GetFileNameWithoutExtension(filePath)}" +
+                    $"{Path.GetExtension(filePath)}";
+                // Пока файл с указанным именем существует, устанавливаем новое название.
                 while (File.Exists(destPointPath))
                 {
                     n += 1;
-                    destPointPath = $"{directoryPath}({n}) {Path.GetFileNameWithoutExtension(filePath)}{Path.GetExtension(filePath)}";
+                    destPointPath = $"{directoryPath}({n}) {Path.GetFileNameWithoutExtension(filePath)}" +
+                        $"{Path.GetExtension(filePath)}";
                 }
             }
-
+            // Возвращаем готовый путь.
             return destPointPath;
         }
 
+        /// <summary>
+        /// Метод, перемещающий файл в указанную директорию.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool FileTransfer(string nowDirectory, string nowDrive)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Перенос файла\n" +
-                $"Если вы оказались в ситуации, когда на вашем диске нет директорий или в директории нет файлов, пропишите ?END?\n");
-            Console.ResetColor();
+            DisplayNowDirectory(nowDirectory);
+            FileTransferEnvironment("start", nowDirectory);
             try
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВведите файл, который хотите перенести.\n");
-                Console.ResetColor();
+                FileTransferEnvironment("file", nowDirectory);
+                // Запрашиваем путь до файла.
                 bool conditionFirst = Input.AskForFile(nowDirectory, out string filePath);
                 if (!conditionFirst) return false;
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВвёдите директорию, в которую будет производится перенос.\n");
-                Console.ResetColor();
+                FileTransferEnvironment("dir", nowDirectory);
+                // Запрашиваем директорию.
                 bool conditionSecond = Input.AskForDirectory(nowDrive, out string directoryPath);
                 if (!conditionSecond) return false;
-                File.Move(filePath, $"{directoryPath}/{Path.GetFileName(filePath)}", true);
+                // Перемещаем.
+                File.Move(filePath, $"{directoryPath}{Path.DirectorySeparatorChar}{Path.GetFileName(filePath)}", true);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} перенесён в {directoryPath}.\n");
                 Console.ResetColor();
@@ -384,23 +663,64 @@ namespace Peergrade003
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка при переносе файла в директорию.");
-                Console.ResetColor();
+                FileTransferEnvironment("big_error", nowDirectory);
                 return false;
             }
         }
 
+        private static void FileTransferEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Перенос файла\n" +
+                        $"Если вы оказались в ситуации, когда на вашем диске нет директорий или в директории нет файлов," +
+                        $" пропишите ?END?\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка при переносе файла в директорию.");
+                    Console.ResetColor();
+                    break;
+                case "file":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВведите файл, который хотите перенести.\n");
+                    Console.ResetColor();
+                    break;
+                case "dir":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВвёдите директорию, в которую будет производится перенос.\n");
+                    Console.ResetColor();
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Метод, удаляющий файл по указанному пути.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool DeletingFile(string nowDirectory, string nowDrive)
         {
+            DisplayNowDirectory(nowDirectory);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\n──────────────────────────────── Удаление файла из {nowDirectory}\n" +
                 $"\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END?.\n");
             Console.ResetColor();
             try
             {
+                // Запрашиваем путь до файла. 
                 bool condition = Input.AskForFile(nowDirectory, out string filePath);
                 if (!condition) return false;
+                // Производим удаление.
                 File.Delete(filePath);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"\nФайл по {filePath} удалён\n");
@@ -416,125 +736,228 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, создающий новый текстовый файл или перезаписывающий существующий.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool CreatingTextFile(string nowDirectory, string nowDrive)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Создание/перезапись текстового файла в {nowDirectory}\n" +
-                $"\nЕсли вы хотите отменить действие, пропишите ?END? при вводе пути.\n");
-            Console.ResetColor();
+            CreatingTextFileEnvironment("start", nowDirectory);
             try
             {
                 string encoding = Input.AskForEncoding();
+                string filePath, data;
+                // Получаем информацию для создания файлов.
+                GetDataForFileCreation(nowDirectory, out filePath, out data);
                 try
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nВыберем имя файла.\n");
-                    Console.ResetColor();
-                    Input.AskForCreationFileName(nowDirectory, out string filePath);
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nВведём текст файла.\n");
-                    Console.ResetColor();
-                    Input.AskForTextCreationFIle(out string data);
-                    try
-                    {
-                        StreamWriter sw = new StreamWriter(filePath+".txt", false, Encoding.GetEncoding(encoding));
-                        sw.Write(data);
-                        sw.Close();
-                    }
-                    catch 
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Возникла ошибка при записи тескста в файл.");
-                        Console.ResetColor();
-                        return false;
-                    }
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} успешно создан.\n");
-                    Console.ResetColor();
-                    return true;
+                    // Записываем полученные данные.
+                    StreamWriter sw = new StreamWriter(filePath + ".txt", false, Encoding.GetEncoding(encoding));
+                    sw.Write(data);
+                    sw.Close();
                 }
                 catch
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Невозможно создать файл, убедитесь, что вы можете создавать файлы в данной системе.");
-                    Console.ResetColor();
+                    CreatingTextFileEnvironment("error", nowDirectory);
                     return false;
                 }
+                DisplayCreatingTextFileInfo(filePath);
+                return true;
             }
-            catch
+            catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка при создании файла.");
-                Console.ResetColor();
+                Console.WriteLine(e);
+                CreatingTextFileEnvironment("big_error", nowDirectory);
                 return false;
             }
         }
 
-        public static bool MergingMultipleFiles(string nowDirectory, string nowDrive)
+        private static void DisplayCreatingTextFileInfo(string filePath)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Обьеденение текста нескольких файлов\n" +
-                $"\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END? при выборе пути.\n" +
-                $"Вы также можете складывать один файл несколько раз, если вам так нужно.\n");
+            Console.WriteLine($"\nФайл {Path.GetFileName(filePath)} успешно создан.\n");
             Console.ResetColor();
+        }
+
+        private static void CreatingTextFileEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Создание/перезапись текстового файла в" +
+                        $" {nowDirectory}\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка при создании файла.");
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Возникла ошибка при записи тескста в файл.");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Метод, получающий данные для создания или перезаписи файла.
+        /// </summary>
+        /// <param name="nowDirectory">Строка, содержащая информацию о текущей директории.</param>
+        /// <param name="">.</param>
+        private static void GetDataForFileCreation(string nowDirectory, out string filePath, out string data)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nВыберем имя файла.\n");
+            Console.ResetColor();
+            // Получим имя файла.
+            Input.AskForCreationFileName(nowDirectory, out filePath);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nВведём текст файла.\n");
+            Console.ResetColor();
+            // Получим текст для создания файла.
+            Input.AskForTextCreationFIle(out data);
+        }
+
+        /// <summary>
+        /// Метод, выводящий несколько соединённых текстовых файлов в консоль.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        public static bool MergingMultipleFiles(string nowDirectory, string nowDrive)
+        {
+            DisplayNowDirectory(nowDirectory);
+            MergingMultipleFilesEnvironment("start", nowDirectory);
             try
             {
                 Input.AskForNumFiles(out int filesNum);
                 string[] data = new string[filesNum];
+                // Запрашиваем каждый файл.
                 for (int i = 0; i < filesNum; i++)
                 {
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nВводим файл [{i+1}]\n");
+                    Console.WriteLine($"\nВводим файл [{i + 1}]\n");
                     Console.ResetColor();
                     bool condition = Input.AskForFile(nowDirectory, true, out string filePath);
                     if (!condition) return false;
+                    condition = Input.CheckSizeOfFile(filePath);
+                    if (!condition) return false;
                     data[i] = filePath;
                 }
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\n──────────────────────────────── Сложение {filesNum} файлов\n");
-                Console.ResetColor();
-                for (int i = 0; i < data.Length; i++)
-                {
-                    Console.WriteLine($"{File.ReadAllText(data[i])}");
-                }
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────" +
-                "────────────────────────────────\n");
+                // Выводим полученные файлы.
+                DisplayAndWriteFiles(filesNum, data);
                 return true;
             }
-            catch
+            catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка при складывании файлов.");
-                Console.ResetColor();
+                Console.WriteLine(e);
+                MergingMultipleFilesEnvironment("big_error", nowDirectory);
                 return false;
             }
         }
 
-        public static bool SearchByMask(string nowDirectory, string nowDrive)
+        private static void MergingMultipleFilesEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Обьединение текста нескольких файлов\n" +
+                        $"\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END? при выборе " +
+                        $"пути.\nВы также можете складывать один файл несколько раз, если вам так нужно.\n" +
+                        $"Cохранение результата будет в первом введённом файле.\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка при складывании файлов." +
+                        "\nВозможно один из файлов недоступен для чтения или используется другим процессом!");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Метод, выводящий заданные текстовые файлы в консоль.
+        /// </summary>
+        /// <param name="filesNum">Количество файлов.</param>
+        /// <param name="data">Пути до всех файлов, которые следует вывести.</param>
+        private static void DisplayAndWriteFiles(int filesNum, string[] data)
+        {
+            DisplayInfoNumOfFiles(filesNum);
+            string pathWrite = data[0];
+            for (int i = 0; i < data.Length; i++)
+            {
+                using StreamReader sr = new StreamReader(data[i]);
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    if (line.Length > 1024)
+                    {
+                        Console.WriteLine(line[..1024]);
+                    }
+                    else
+                    {
+                        Console.WriteLine(line);
+                    }
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+                if (i != 0)
+                {
+                    File.AppendAllText(pathWrite, File.ReadAllText(data[i]));
+                }
+            }
+            DisplayResaultOfWriteFiles(data);
+        }
+
+        private static void DisplayResaultOfWriteFiles(string[] data)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Поиск по маске в {nowDirectory}\n" +
-                $"\n");
+            Console.WriteLine($"─────────────────────────────────────────────────────────────────────────────────" +
+                $"──────────────────────────────────────\n───── Результат записан в {Path.GetFileName(data[0])}\n");
+            Console.ResetColor();
+        }
+
+        private static void DisplayInfoNumOfFiles(int filesNum)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\n──────────────────────────────── Сложение {filesNum} файлов\n");
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Метод, производящий поиск по маске в текущей директории.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        public static bool SearchByMask(string nowDirectory, string nowDrive)
+        {
+            DisplayNowDirectory(nowDirectory);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\n──────────────────────────────── Поиск по маске в {nowDirectory}\n\n");
             Console.ResetColor();
             try
             {
-                Input.AskForMask(out string mask);
-                string[] dataFile = Directory.GetFiles(nowDirectory, mask);
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                if(dataFile.Length == 0)
-                {
-                    Console.WriteLine("\nФайлов не найдено\n");
-                }
-                else
-                {
-                    foreach (var item in dataFile)
-                    {
-                        Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Путь: {item}");
-                    }
-                }
-                Console.ResetColor();
-                return true;
+                return TryToSearchByMask(nowDirectory, false);
             }
             catch
             {
@@ -545,32 +968,26 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, производящий поиск по маске в текущей директории и всех её поддиректориях.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool AdvancedSearchByMask(string nowDirectory, string nowDrive)
         {
+            DisplayNowDirectory(nowDirectory);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\n──────────────────────────────── Расширенный поиск по маске в {nowDirectory}\n" +
                 $"\n");
             Console.ResetColor();
             try
             {
-                Input.AskForMask(out string mask);
-                var options = new EnumerationOptions();
-                options.RecurseSubdirectories = true;
-                string[] dataFile = Directory.GetFiles(nowDirectory, mask, options);
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                if (dataFile.Length == 0)
-                {
-                    Console.WriteLine("\nФайлов не найдено\n");
-                }
-                else
-                {
-                    foreach (var item in dataFile)
-                    {
-                        Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Путь: {item}");
-                    }
-                }
-                Console.ResetColor();
-                return true;
+                return TryToSearchByMask(nowDirectory, true);
             }
             catch
             {
@@ -581,46 +998,60 @@ namespace Peergrade003
             }
         }
 
+        private static bool TryToSearchByMask(string nowDirectory, bool NeedRecurse)
+        {
+            // Запрашиваем маску для поиска.
+            Input.AskForMask(out string mask);
+            var options = new EnumerationOptions();
+            options.RecurseSubdirectories = NeedRecurse;
+            // Получаем подходящие файлы.
+            string[] dataFile = Directory.GetFiles(nowDirectory, mask, options);
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            if (dataFile.Length == 0)
+            {
+                Console.WriteLine("\nФайлов не найдено\n");
+            }
+            else
+            {
+                // Выводим данные о найденных файлах.
+                foreach (var item in dataFile)
+                {
+                    Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Путь: {item}");
+                }
+            }
+            Console.ResetColor();
+            return true;
+        }
+
+        /// <summary>
+        /// Метод, копирующий всей файлы из текущей директории и всех её поддиректорий по заданной маске.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool CopyByMask(string nowDirectory, string nowDrive)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n──────────────────────────────── Копирование по маске из {nowDirectory}\n" +
-                $"Если хотите отменить действие, во время ввода пути до директории копирования напишите ?END?\n");
-            Console.ResetColor();
+            DisplayNowDirectory(nowDirectory);
             try
             {
-                Input.AskForCopyMethod(out bool isRewriteNeeded);
-                Input.AskForMask(out string mask);
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"\nВвёдите директорию, в которую будет производится копирование.\n");
-                Console.ResetColor();
+                GetDataForCopyByMask(out bool isRewriteNeeded, out string mask);
                 bool condition = Input.AskForDirectory(nowDrive, out string directoryPath, true);
                 if (!condition) return false;
-                var options = new EnumerationOptions();
-                options.RecurseSubdirectories = true;
-                string[] dataFile = Directory.GetFiles(nowDirectory, mask, options);
+                string[] dataFile = FindAllDirectoriesByMask(nowDirectory, mask);
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                if (dataFile.Length == 0)
-                {
-                    Console.WriteLine("\nФайлов не найдено\n");
-                }
+                if (dataFile.Length == 0) Console.WriteLine("\nФайлов не найдено\n");
                 else
                 {
+                    // Копируем все файлы.
                     foreach (var item in dataFile)
                     {
-                        try
-                        {
-                            string destPointPath = CopyInSameDirectoryName(item, directoryPath);
-                            File.Copy(item, destPointPath, isRewriteNeeded);
-                            Console.WriteLine($"Файл: {Path.GetFileName(item)}\t копирован в {directoryPath}");
-                        }
-                        catch
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"Не следует копировать файлы в ту же папку, которой они принадлежат.");
-                            Console.ResetColor();
-                            return false;
-                        }
+
+                        CopyItemByMask(isRewriteNeeded, directoryPath, item);
+
                     }
                 }
                 Console.ResetColor();
@@ -628,21 +1059,168 @@ namespace Peergrade003
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine("Нужных файлов не найдено");
-                Console.ResetColor();
+                CopyByMaskEnvironment("main_error");
                 return true;
             }
         }
 
+        private static string[] FindAllDirectoriesByMask(string nowDirectory, string mask)
+        {
+            var options = new EnumerationOptions();
+            options.RecurseSubdirectories = true;
+            string[] dataFile = Directory.GetFiles(nowDirectory, mask, options);
+            return dataFile;
+        }
+
+        /// <summary>
+        /// Метод, производящий копирование в указанную диреторию.
+        /// </summary>
+        /// <param name="isRewriteNeeded">Bool значение, означающее нужно ли перезаписывать файлы с
+        /// таким же именем или нет.</param>
+        /// <param name="directoryPath">Путь до директории, в которую следует провести копирование.</param>
+        /// <param name="">Путь до обьекта, который следует копировать.</param>
+        private static void CopyItemByMask(bool isRewriteNeeded, string directoryPath, string item)
+        {
+            string destPointPath = CopyInSameDirectoryName(item, directoryPath);
+            try
+            {
+                File.Copy(item, destPointPath, isRewriteNeeded);
+            }
+            catch (System.IO.IOException)
+            {
+                Console.WriteLine($"Файл: {Path.GetFileName(item)}\t отмена копирования! Файл уже существует." +
+                    $"Согласно заданым параметрам файл не будет тронут.");
+                return;
+            }
+            catch
+            {
+                Console.WriteLine($"Файл: {Path.GetFileName(item)}\t Возникла неизвестная ошибка!");
+                return;
+            }
+            Console.WriteLine($"Файл: {Path.GetFileName(item)}\t копирован в {directoryPath}");
+        }
+
+        /// <summary>
+        /// Метод, получающий начальную информацию для копирования по маске.
+        /// </summary>
+        /// <param name="isRewriteNeeded">Выходной параметр, означающий согласие или несогласие на пере
+        /// запись файла.</param>
+        /// <param name="mask">Маска поиска, полученная от пользователя.</param>
+        private static void GetDataForCopyByMask(out bool isRewriteNeeded, out string mask)
+        {
+            CopyByMaskEnvironment("start");
+            Input.AskForCopyMethod(out isRewriteNeeded);
+            Input.AskForMask(out mask);
+            CopyByMaskEnvironment("ask_directory");
+        }
+
+        /// <summary>
+        /// Метод, содержащий элементы интерфейса для копирования по маске.
+        /// </summary>
+        /// <param name="workType">Строка означающая, что следует вывести на экран пользователю.</param>
+        private static void CopyByMaskEnvironment(string workType)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Копирование по маске\n" +
+                        $"Если хотите отменить действие, во время ввода пути до директории копирования напишите ?END?\n");
+                    Console.ResetColor();
+                    break;
+                case "ask_directory":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВвёдите директорию, в которую будет производится копирование.\n");
+                    Console.ResetColor();
+                    break;
+                case "main_error":
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("Нужных файлов не найдено");
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Неизвестная ошибка при копировании!");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Метод, выводящий на экран разницу между двумя текстовыми файлами.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="nowDrive">Строка, содержащая информацию о текущем диске работы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         public static bool DifferencesBetweenFiles(string nowDirectory, string nowDrive)
         {
             return false;
+        }
+
+        /// <summary>
+        /// Метод, сменяющий текущий диск и директорию на тестовую, если она есть.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        public static bool SetTestDirectory(out string nowDrive, out string nowDirectory)
+        {
+            try
+            {
+                if (!Directory.Exists(@"../../../../Test"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно получить доступ к тестовой директории!");
+                    Console.ResetColor();
+                    return ReturnErrorDirectory(out nowDirectory, out nowDrive);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine("Тестовая директория установлена!");
+                    Console.ResetColor();
+                    nowDirectory = Path.GetFullPath(@"../../../../Test") + Path.DirectorySeparatorChar;
+                    nowDrive = Path.GetPathRoot(nowDirectory);
+                    DisplayNowTestDirectory(nowDrive, nowDirectory);
+                    return true;
+                }
+
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Невозможно получить доступ к тестовой директории!");
+                Console.ResetColor();
+                return ReturnErrorDirectory(out nowDirectory, out nowDrive);
+            }
+        }
+
+        private static void DisplayNowTestDirectory(string nowDrive, string nowDirectory)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine($"Текущий диск: {nowDrive}\nТекущая директория: {nowDirectory}");
+            Console.ResetColor();
         }
     }
 
     class ManageTools
     {
+        /// <summary>
+        /// Метод, устанавливающий стартовый диск.
+        /// </summary>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает строковое представление полученного диска.</item>
+        /// </list>
+        /// </returns>
         public static string SetStartDrive()
         {
             try
@@ -655,6 +1233,14 @@ namespace Peergrade003
                     Console.ResetColor();
                     return null;
                 }
+                if (allDrives[0].IsReady == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно получить доступ к первому диску, он не готов, проверьте систему!");
+                    Console.ResetColor();
+                    return null;
+                }
+                // Устанавливаем первый в системе диск, как точку входа.
                 return allDrives[0].Name;
             }
             catch
@@ -667,9 +1253,9 @@ namespace Peergrade003
         }
 
         /// <summary>
-        /// Удаляет все символы которые не разрешены в именах файлов.
+        /// Удаляет все символы, которые не разрешены в именах файлов.
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="fileName"> Имя файла, введенное пользователем.</param>
         /// <returns></returns>
         public static string RemoveInvalidChars(string fileName)
         {
@@ -680,13 +1266,22 @@ namespace Peergrade003
             return fileName;
         }
 
+        /// <summary>
+        /// Метод, проверяющий файл на его принадлежность к текстовым файлам.
+        /// </summary>
+        /// <param name="filePath">Путь до файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее является ли файл текстовым.</item>
+        /// </list>
+        /// </returns>
         public static bool IsFIleTxt(string filePath)
         {
-            if (Path.GetExtension(filePath) == ".txt") 
+            if (Path.GetExtension(filePath) == ".txt")
             {
                 return true;
             }
-            else 
+            else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Файл не является текстовым (не в формате .txt)!");
@@ -695,32 +1290,38 @@ namespace Peergrade003
             }
         }
 
-        public static string ReverseString(string s)
+        /// <summary>
+        /// Метод, разворачивающий строку.
+        /// </summary>
+        /// <param name="stringData">Строка.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает развёрнутую строку.</item>
+        /// </list>
+        /// </returns>
+        public static string ReverseString(string stringData)
         {
-            char[] arr = s.ToCharArray();
-            Array.Reverse(arr);
-            return new string(arr);
+            char[] arrString = stringData.ToCharArray();
+            Array.Reverse(arrString);
+            return new string(arrString);
         }
+
+        /// <summary>
+        /// Метод, обновляющий ввод пользователя, находя совпадения в файловой системе.
+        /// </summary>
+        /// <param name="rawPath">Ввод пользователя.</param>
+        /// <param name="newPath">Обновлённый ввод.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее успех или провал в дополнении пути.</item>
+        /// </list>
+        /// </returns>
         public static bool AddSomePath(string rawPath, out string newPath)
         {
             try
             {
-                var options = new EnumerationOptions();
-                options.RecurseSubdirectories = false;
-                string rawPathTrim = $"{rawPath}";
-                int control = 0;
-                string mask = "";
-                while (!Directory.Exists(rawPathTrim))
-                {
-                    if (rawPathTrim.Length == 0)
-                    {
-                        break;
-                    }
-                    mask += rawPathTrim[^1];
-                    rawPathTrim = rawPathTrim[..^1];
-                    control += 1;
-                }
-                mask = ReverseString(mask);
+                FindAllDataForPath(rawPath, out EnumerationOptions options, out string rawPathTrim,
+                    out int control, out string mask);
                 if (control == 0)
                 {
                     if (Directory.Exists(rawPathTrim) && rawPathTrim[^1] != Path.DirectorySeparatorChar)
@@ -728,145 +1329,192 @@ namespace Peergrade003
                         newPath = rawPathTrim + Path.DirectorySeparatorChar;
                         return false;
                     }
-                    newPath = rawPathTrim;
-                    return false;
+                    return ReturnValidUserPath(out newPath, rawPathTrim);
                 }
-                string[] dataFile = Directory.GetFiles(rawPathTrim, mask + "*", options);
-                string[] dataDirect = Directory.GetDirectories(rawPathTrim, mask + "*", options);
+                FindPathVariation(options, rawPathTrim, mask, out string[] dataFile, out string[] dataDirect);
                 if (dataFile.Length == 0 && dataDirect.Length == 0)
                 {
-                    newPath = rawPathTrim;
-                    return false;
+                    return ReturnValidUserPath(out newPath, rawPathTrim);
                 }
                 else
                 {
-                    if (dataFile.Length == 0 && dataDirect.Length != 0)
-                    {
-                        if (dataDirect.Length == 1)
-                        {
-                            newPath = dataDirect[0] + Path.DirectorySeparatorChar;
-                            return true;
-                        }
-                        return CommonPath(out newPath, dataDirect); ;
-                    }
-                    if (dataFile.Length != 0 && dataDirect.Length == 0)
-                    {
-                        if (dataFile.Length >= 2)
-                        {
-                            if (Path.GetFileNameWithoutExtension(dataFile[0]) == Path.GetFileNameWithoutExtension(dataFile[1]))
-                            {
-                                newPath = $"{rawPathTrim}{Path.GetFileNameWithoutExtension(dataFile[0])}.";
-                                return true;
-                            }
-                            return CommonPath(out newPath, dataFile);
-                        }
-                        else
-                        {
-                            newPath = dataFile[0];
-                            return true;
-                        }
-                    }
-                    if (dataFile.Length != 0 && dataDirect.Length != 0)
-                    {
-                        if (dataFile.Length >= 2)
-                        {
-                            if (Path.GetFileNameWithoutExtension(dataFile[0]) == Path.GetFileNameWithoutExtension(dataFile[1]))
-                            {
-                                newPath = $"{rawPathTrim}{Path.GetFileNameWithoutExtension(dataFile[0])}.";
-                                return true;
-                            }
-                            return CommonPath(out newPath, dataFile);
-                        }
-                        else
-                        {
-                            newPath = dataFile[0];
-                            return true;
-                        }
-                    }
-                    newPath = dataFile[0];
-                    return false;
+                    return CreateTruePath(out newPath, rawPathTrim, dataFile, dataDirect);
                 }
             }
             catch (Exception)
             {
-                string rawPathTrim = $"{rawPath}";
-                while (!Directory.Exists(rawPathTrim))
-                {
-                    if (rawPathTrim.Length == 0)
-                    {
-                        break;
-                    }
-                    rawPathTrim = rawPathTrim[..^1];
-                }
-                newPath = rawPathTrim;
-                return false;
+                return ReturnExceptionDataForAddPath(rawPath, out newPath);
             }
         }
 
+        private static bool ReturnValidUserPath(out string newPath, string rawPathTrim)
+        {
+            newPath = rawPathTrim;
+            return false;
+        }
+
+        private static bool ReturnExceptionDataForAddPath(string rawPath, out string newPath)
+        {
+            TrimPathToVailidOne(rawPath, out string rawPathTrim, out _, out _);
+            newPath = rawPathTrim;
+            return false;
+        }
+
+        private static void FindPathVariation(EnumerationOptions options, string rawPathTrim, string mask, out string[] dataFile, out string[] dataDirect)
+        {
+            dataFile = Directory.GetFiles(rawPathTrim, mask + "*", options);
+            dataDirect = Directory.GetDirectories(rawPathTrim, mask + "*", options);
+        }
+
+        private static void FindAllDataForPath(string rawPath, out EnumerationOptions options, out string rawPathTrim, out int control, out string mask)
+        {
+            options = new EnumerationOptions();
+            options.RecurseSubdirectories = false;
+            TrimPathToVailidOne(rawPath, out rawPathTrim, out control, out mask);
+            mask = ReverseString(mask);
+        }
+
+        /// <summary>
+        /// Метод, создающий новый путь по вводу пользователя используя полученную маску.
+        /// </summary>
+        /// <param name="newPath">Доработанный путь.</param>
+        /// <param name="rawPathTrim">Путь, который ввёл пользователь, обрезанный до существующего.</param>
+        /// <param name="dataFile">Файлы, найденные по маске от пользователя.</param>
+        /// <param name="">Директории, найденные по маске от пользователя.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее успех или провал в дополнении пути.</item>
+        /// </list>
+        /// </returns>
+        private static bool CreateTruePath(out string newPath, string rawPathTrim, string[] dataFile,
+            string[] dataDirect)
+        {
+            if (dataFile.Length == 0 && dataDirect.Length != 0)
+            {
+                if (dataDirect.Length == 1)
+                {
+                    newPath = dataDirect[0] + Path.DirectorySeparatorChar;
+                    return true;
+                }
+                return CommonPath(out newPath, dataDirect);
+            }
+            if (dataFile.Length != 0)
+            {
+                if (dataFile.Length >= 2)
+                {
+                    if (Path.GetFileNameWithoutExtension(dataFile[0]) == Path.GetFileNameWithoutExtension(dataFile[1]))
+                    {
+                        newPath = $"{rawPathTrim}{Path.GetFileNameWithoutExtension(dataFile[0])}.";
+                        return true;
+                    }
+                    return CommonPath(out newPath, dataFile);
+                }
+                else
+                {
+                    return ReturnDefaultDataForPathCreation(out newPath, dataFile);
+                }
+            }
+            return ReturnDefaultDataForPathCreation(out newPath, dataFile);
+        }
+
+        private static bool ReturnDefaultDataForPathCreation(out string newPath, string[] dataFile)
+        {
+            newPath = dataFile[0];
+            return false;
+        }
+
+        /// <summary>
+        /// Метод, обрезающий ввод пользователя до существующего, а то что было обрезано возвращает в 
+        /// качестве маски поиска.
+        /// </summary>
+        /// <param name="rawPath">Путь, введённый пользователем.</param>
+        /// <param name="rawPathTrim">Доработанный путь, обрезан до существующего.</param>
+        /// <param name="control">Число обрезанных символов.</param>
+        /// <param name="mask">Обрезанные символы в качестве маски (порядок искажён).</param>
+        private static void TrimPathToVailidOne(string rawPath, out string rawPathTrim, out int control,
+            out string mask)
+        {
+            rawPathTrim = $"{rawPath}";
+            control = 0;
+            mask = "";
+            // Пока директория не существует, мы будем обрезать путь, а обрезанное заносить в маску.
+            while (!Directory.Exists(rawPathTrim))
+            {
+                if (rawPathTrim.Length == 0)
+                {
+                    break;
+                }
+                mask += rawPathTrim[^1];
+                rawPathTrim = rawPathTrim[..^1];
+                control += 1;
+            }
+        }
+
+        /// <summary>
+        /// Метод, находящий общий путь у нескольких путей.
+        /// </summary>
+        /// <param name="newPath">Общий путь у всех принятых путей.</param>
+        /// <param name="dataFile">Массив путей.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее успех или провал в нахождении общего пути.</item>
+        /// </list>
+        /// </returns>
         private static bool CommonPath(out string newPath, string[] dataFile)
         {
             string commonPath = "";
             bool isPathValid = true;
             int indexChar = 0;
+            // Сравниваем каждый символ из первого совпадения с другими, выделяя общий для всех путь.
             foreach (var charControl in dataFile[0])
             {
-                if (!isPathValid) break;
                 foreach (var path in dataFile)
                 {
-                    if (path[indexChar] != charControl)
+                    if ($"{(path)[indexChar]}".ToLower() != $"{charControl}".ToLower())
                     {
                         isPathValid = false;
                         break;
                     }
                 }
-
+                if (!isPathValid) break;
                 if (isPathValid)
                 {
                     commonPath += charControl;
                     indexChar += 1;
                 }
             }
-
             newPath = $"{commonPath}";
             return true;
         }
 
+        /// <summary>
+        /// Метод, заменяющий стандартный метод из пространства имён Система.
+        /// </summary>
+        /// <param name="nowDirectory">Текущая рабочая директория.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает ввод пользователя.</item>
+        /// </list>
+        /// </returns>
         public static string ReadLine(string nowDirectory)
         {
             ConsoleKeyInfo key;
             string data = "";
             while (true)
             {
+                // Cчитываем клавишу.
                 key = Console.ReadKey();
-
                 if (key.Key == ConsoleKey.Enter)
                 {
                     return data;
                 }
                 else if (key.Key == ConsoleKey.Tab)
                 {
-                    AddSomePath(nowDirectory + Path.DirectorySeparatorChar + data, out string newPath);
-                    newPath = newPath.Replace(nowDirectory + Path.DirectorySeparatorChar, "");
-                    data = newPath;
-                    int currentLineCursor = Console.CursorTop;
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, currentLineCursor);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(data);
-                    Console.ResetColor();
+                    data = TabMethod(nowDirectory, data);
                 }
                 else if (key.Key == ConsoleKey.Backspace)
                 {
-                    int currentLineCursor = Console.CursorTop;
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, currentLineCursor);
-                    if (data.Length != 0)
-                    {
-                        data = data[..^1];
-                    }
-                    Console.Write(data);
+                    data = BackspaceMethod(data);
                 }
                 else if (key.KeyChar == 10)
                 {
@@ -874,21 +1522,78 @@ namespace Peergrade003
                 }
                 else
                 {
-                    bool isCharValid = true;
-                    if ((int)key.KeyChar == 0 || (int)key.KeyChar == 10 || (int)key.KeyChar == 9)
-                        isCharValid = false;
-                    if (isCharValid)
-                    {
-                        data += key.KeyChar;
-                        Console.Write((key.KeyChar).ToString()[..^1]);
-                    }
-
+                    data = ReturnKeyCharInfo(key, data);
                 }
             }
-
-
         }
 
+        private static string ReturnKeyCharInfo(ConsoleKeyInfo key, string data)
+        {
+            // Если символ является для нас подходящим - записываем его.
+            bool isCharValid = true;
+            if ((int)key.KeyChar == 0 || (int)key.KeyChar == 10 || (int)key.KeyChar == 9)
+                isCharValid = false;
+            if (isCharValid)
+            {
+                data += key.KeyChar;
+                Console.Write((key.KeyChar).ToString()[..^1]);
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Метод, преобразовывающий текущий ввод пользователя согласно
+        /// его файловой системе и его вводу, чтобы дополнить введённую строку.
+        /// </summary>
+        /// <param name="nowDirectory">Текущая директория работы.</param>
+        /// <param name="">Текущий ввод пользователя.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает преобразованный путь до файла или папки.</item>
+        /// </list>
+        /// </returns>
+        private static string TabMethod(string nowDirectory, string data)
+        {
+            // Вызываем метод дополнения пути.
+            AddSomePath(nowDirectory + Path.DirectorySeparatorChar + data, out string newPath);
+            newPath = newPath.Replace(nowDirectory + Path.DirectorySeparatorChar, "");
+            data = newPath;
+            ClearConsoleLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(data);
+            Console.ResetColor();
+            return data;
+        }
+
+        /// <summary>
+        /// Метод, убирающий символ из строки.
+        /// </summary>
+        /// <param name="data">Текущая строка.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает новую обрезанную строку.</item>
+        /// </list>
+        /// </returns>
+        private static string BackspaceMethod(string data)
+        {
+            ClearConsoleLine();
+            if (data.Length != 0)
+            {
+                data = data[..^1];
+            }
+            Console.Write(data);
+            return data;
+        }
+
+        /// <summary>
+        /// Метод, очищающий строку консоли.
+        /// </summary>
+        private static void ClearConsoleLine()
+        {
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, Console.CursorTop);
+        }
     }
 
     class Environment
@@ -898,7 +1603,18 @@ namespace Peergrade003
         /// </summary>
         public static void SplashScreen()
         {
-            Console.WriteLine("+");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("────────────────────────────────────────────────────────────────────────" +
+                "───────────────────────────────────────────────");
+            Console.WriteLine("                    ░▐█▀▀░▐██▒██░░░░▐█▀▀     ▒▐██▄▒▄██▌─░▄█▀▄─▒██▄░▒█▌─░▄" +
+                "█▀▄─░▐█▀▀▀─░▐█▀▀▒▐█▀▀▄\n" +
+                              "                    ░▐█▀▀─░█▌▒██░░░░▐█▀▀     ░▒█░▒█░▒█░░▐█▄▄▐█▒▐█▒█▒█░░▐█▄▄" +
+                              "▐█░▐█░▀█▌░▐█▀▀▒▐█▒▐█\n" +
+                              "                    ░▐█──░▐██▒██▄▄█░▐█▄▄     ▒▐█░░░░▒█▌░▐█─░▐█▒██░▒██▌░▐█─░" +
+                              "▐█░▐██▄█▌░▐█▄▄▒▐█▀▄▄\n" +
+                              "──────────────────────────────── Лучший файловый менеджер за последние 0,00" +
+                              "001 наносекунды ────────────────────────────\n");
+            Console.ResetColor();
         }
 
         /// <summary>
@@ -906,7 +1622,18 @@ namespace Peergrade003
         /// </summary>
         public static void Instructions()
         {
-            Console.WriteLine("+");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Добро пожаловать в маленький файловый менеджер!\nТут вы сможете оперировать файловой системой своего компьютера," +
+                " создавать, искать," +
+                " просматривать файлы, директории.\nВам также будет доступно удобное дополнение пути по клавише TAB.\nВ любой момент вы можете выйти" +
+                " из действия прописав вместо пути к директории или файлу команду ?END?.\n");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Предупреждение для проверяющих вне .exe или стандартной консоли VisualStudio,\nбудте готовы к визульными багам при вводе пути!\n" +
+                "В основном предупреждение касается проверяющих в среде Rider, в последних версиях в нем, к сожалению, сломана консоль.\n" +
+                "Проблема заключается в том, что консроль Rider'а неправильно исполняет смещение курсора и перезапись строки.\n" +
+                "И с этим ничего не поделаешь, ждём новых обновлений этой прекрасной среды разработки!\n");
+            Console.ResetColor();
         }
 
         /// <summary>
@@ -927,7 +1654,9 @@ namespace Peergrade003
                 "| [10] Поиск по маске\n" +
                 "| [11] Расширеный поиск по маске\n" +
                 "| [12] Копирование файлов по маске\n" +
-                "| [13] Сравнение двух текстовых файлов\n");
+                "| [13] Сравнение двух текстовых файлов");
+            Console.WriteLine("| [14] (EXTRA) Перейти к тестовой папке\n");
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
             Console.ResetColor();
         }
 
@@ -952,13 +1681,16 @@ namespace Peergrade003
         public static void CopyMethodMenu()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Выберете что делать с файлами.\n");
+            Console.WriteLine("Выберите что делать с файлами.\n");
             Console.WriteLine("| [1] Перезаписать файл\n" +
                 "| [2] Оставить без изменений\n");
             Console.ResetColor();
 
         }
 
+        /// <summary>
+        /// Метод, выводящий общую ошибку, которая оказалась непойманной.
+        /// </summary>
         public static void GreatError()
         {
             Console.WriteLine("ErrorGraet");
@@ -978,7 +1710,7 @@ namespace Peergrade003
                     Console.Write("Нажмите любую кнопку, чтобы продолжить!");
                     Console.ResetColor();
                     Console.ReadKey();
-                    //Если пользователь додумался нажать не Enter,
+                    //Если пользователь решил нажать не Enter,
                     //мы все равно перезаписываем верхнюю строку на пустую.
                     Console.SetCursorPosition(0, Console.CursorTop - 1);
                     Console.WriteLine("");
@@ -997,12 +1729,21 @@ namespace Peergrade003
             Console.ResetColor();
         }
 
-        public static void NowDirectoryInfo(string nowDirectory)
+        /// <summary>
+        /// Метод, выводящий на экран информацию о текущей директории работы.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до текущей директории работы.</param>
+        public static void NowDirectoryInfo(string nowDirectory, string nowDrive)
         {
-            Console.WriteLine($"Директория сейчас: {nowDirectory}");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("─────────────────────────────────────────────────────────────────────" +
+                "──────────────────────────────────────────────────");
+            Console.WriteLine($"Текущий диск: {nowDrive}\nТекущая директория: {nowDirectory}");
+            Console.WriteLine("──────────────────────────────────────────────────────────────────────" +
+                "─────────────────────────────────────────────────\n");
+            Console.ResetColor();
         }
     }
-
 
     class Input
     {
@@ -1018,8 +1759,8 @@ namespace Peergrade003
         /// </returns>
         public static bool GetAction(string actionChoiceData, out ushort actionChoice)
         {
-            // Если введёное число не подходит под выбор действия - выводим ошибку.
-            if (!ushort.TryParse(actionChoiceData, out actionChoice) || actionChoice == 0 || actionChoice > 13)
+            // Если введённое число не подходит под выбор действия - выводим ошибку.
+            if (!ushort.TryParse(actionChoiceData, out actionChoice) || actionChoice == 0 || actionChoice > 14)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Такого действия не предусмотрено, пожалуйста повторите ввод!");
@@ -1029,6 +1770,16 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, возвращающий номер диска, выбранного пользователем.
+        /// </summary>
+        /// <param name="driveChoiceData">Строка, означающая ввод пользователя.</param>
+        /// <param name="numDrives">Число доступных дисков.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool GetDrive(string driveChoiceData, int numDrives, out int driveChoice)
         {
             if (!int.TryParse(driveChoiceData, out driveChoice) || driveChoice <= 0 || driveChoice > numDrives)
@@ -1043,63 +1794,142 @@ namespace Peergrade003
 
         }
 
-
-        public static bool GetDirectoryPath(string directoryData, string nowDrive, out string directoryPath, bool IsDirectoryCreationNeeded)
+        /// <summary>
+        /// Метод, возвращающий путь до директории.
+        /// </summary>
+        /// <param name="directoryData">Строка, означающая ввод пользователя.</param>
+        /// <param name="nowDrive">Текущий рабочий диск.</param>
+        /// <param name="isDirectoryCreationNeeded">Нужно ли создавать новую директорию.</param>
+        /// <param name="directoryPath">Путь до новой директории.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
+        public static bool GetDirectoryPath(string directoryData, string nowDrive, out string directoryPath,
+            bool isDirectoryCreationNeeded)
         {
             if (directoryData == null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Старайтесь не вводить пустые строки!");
-                Console.ResetColor();
+                GetDirectoryPathEnvironment("error_null");
                 directoryPath = null;
                 return false;
             }
             if (Directory.Exists($"{nowDrive}{directoryData}"))
             {
-                string workPath = Path.GetFullPath($"{nowDrive}{directoryData}");
-                if (workPath[^1] != Path.DirectorySeparatorChar)
-                    workPath = workPath + Path.DirectorySeparatorChar;
-                directoryPath = workPath;
+                directoryPath = ClearDirectoryPath(directoryData, nowDrive);
                 return true;
             }
-            else if (!Directory.Exists($"{nowDrive}{directoryData}") && IsDirectoryCreationNeeded)
+            else if (!Directory.Exists($"{nowDrive}{directoryData}") && isDirectoryCreationNeeded)
             {
-                try
-                {
-                    Console.WriteLine($"{directoryData}");
-                    string workPath = Path.GetFullPath($"{nowDrive}{directoryData}");
-                    if (workPath[^1] != Path.DirectorySeparatorChar)
-                        workPath = workPath + Path.DirectorySeparatorChar;
-                    directoryPath = workPath;
-                    Directory.CreateDirectory(directoryPath);
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\nСоздана директория {directoryPath}\n");
-                    Console.ResetColor();
-                }
-                catch
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Невозможно создать директорию по такому пути, пожалуйста, повторите ввод.");
-                    Console.ResetColor();
-                    directoryPath = null;
-                    return false;
-                }
-                return true;
+                return TryToCreateDirectory(directoryData, nowDrive, out directoryPath);
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Такой директории не существует, пожалуйста, повторите ввод.");
-                Console.ResetColor();
+                GetDirectoryPathEnvironment("not_exists");
                 directoryPath = null;
                 return false;
             }
         }
 
+        private static bool TryToCreateDirectory(string directoryData, string nowDrive, out string directoryPath)
+        {
+            try
+            {
+                directoryPath = CreateNewDirectory(directoryData, nowDrive);
+            }
+            catch
+            {
+                GetDirectoryPathEnvironment("error_directory");
+                directoryPath = null;
+                return false;
+            }
+            return true;
+        }
+
+        private static void GetDirectoryPathEnvironment(string workType)
+        {
+            switch (workType)
+            {
+                case "error_null":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Старайтесь не вводить пустые строки!");
+                    Console.ResetColor();
+                    break;
+                case "error_directory":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно создать директорию по такому пути, пожалуйста, повторите ввод.");
+                    Console.ResetColor();
+                    break;
+                case "not_exists":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Такой директории не существует, пожалуйста, повторите ввод.");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Метод, производящий доработку пути до системно-корректного.
+        /// </summary>
+        /// <param name="directoryData">Путь до директории.</param>
+        /// <param name="nowDrive">Текущий диск системы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает строку с обработанным путём до директории.</item>
+        /// </list>
+        /// </returns>
+        private static string ClearDirectoryPath(string directoryData, string nowDrive)
+        {
+            string directoryPath;
+            string workPath = Path.GetFullPath($"{nowDrive}{directoryData}");
+            if (workPath[^1] != Path.DirectorySeparatorChar)
+                workPath = workPath + Path.DirectorySeparatorChar;
+            directoryPath = workPath;
+            return directoryPath;
+        }
+
+        /// <summary>
+        /// Метод, создающий новую директорию.
+        /// </summary>
+        /// <param name="directoryData">Путь до директории.</param>
+        /// <param name="nowDrive">Текущий диск системы.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает путь до новой директории.</item>
+        /// </list>
+        /// </returns>
+        private static string CreateNewDirectory(string directoryData, string nowDrive)
+        {
+            string directoryPath;
+            Console.WriteLine($"{directoryData}");
+            string workPath = Path.GetFullPath($"{nowDrive}{directoryData}");
+            if (workPath[^1] != Path.DirectorySeparatorChar)
+                workPath = workPath + Path.DirectorySeparatorChar;
+            directoryPath = workPath;
+            Directory.CreateDirectory(directoryPath);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nСоздана директория {directoryPath}\n");
+            Console.ResetColor();
+            return directoryPath;
+        }
+
+        /// <summary>
+        /// Метод, запрашивающий путь до новой директории.
+        /// </summary>
+        /// <param name="nowDrive">Текущий рабочий диск.</param>
+        /// <param name="directoryPath">Новый путь до новой директории.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool AskForDirectory(string nowDrive, out string directoryPath)
         {
             string directoryData;
             Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────" +
+                "────────────────────────────────────────────\n");
             Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!\n" +
                 "\nДополненный путь будет подсвечиваться ");
             Console.ResetColor();
@@ -1109,7 +1939,7 @@ namespace Peergrade003
             do
             {
                 Console.WriteLine($"Введите путь до директории исключая название своего диска {nowDrive}.\n" +
-                    $"Например для доступа к дериктории {nowDrive}Test вы должны написать просто Test.");
+                    $"Например для доступа к директории {nowDrive}Test вы должны написать просто Test.");
                 directoryData = ManageTools.ReadLine(nowDrive);
                 if (directoryData == "?END?")
                 {
@@ -1123,10 +1953,22 @@ namespace Peergrade003
             return true;
         }
 
-        public static bool AskForDirectory(string nowDrive, out string directoryPath, bool IsDirectoryCreationNeeded)
+        /// <summary>
+        /// Метод, запрашивающий путь до новой директории.
+        /// </summary>
+        /// <param name="nowDrive">Текущий рабочий диск.</param>
+        /// <param name="directoryPath">Новый путь до новой директории.</param>
+        /// <param name="isDirectoryNeeded">Нужно ли создавать новую директорию.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
+        public static bool AskForDirectory(string nowDrive, out string directoryPath, bool isDirectoryNeeded)
         {
             string directoryData;
             Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
             Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!" +
                 "\nДополненный путь будет подсвечиваться ");
             Console.ResetColor();
@@ -1150,6 +1992,17 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, возвращающий путь до существующего файла.
+        /// </summary>
+        /// <param name="fileData">Строка, означающая ввод пользователя.</param>
+        /// <param name="nowDirectory">Текущая рабочая директория.</param>
+        /// <param name="filePath">Путь до файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool GetFilePath(string fileData, string nowDirectory, out string filePath)
         {
             if (fileData == null)
@@ -1174,7 +2027,19 @@ namespace Peergrade003
                 return false;
             }
         }
-       
+
+        /// <summary>
+        /// Метод, возвращающий путь до существующего файла.
+        /// </summary>
+        /// <param name="fileData">Строка, означающая ввод пользователя.</param>
+        /// <param name="nowDirectory">Текущая рабочая директория.</param>
+        /// <param name="isTxtNeded">Нужен ли файл формата .txt.</param>
+        /// <param name="filePath">Путь до файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool GetFilePath(string fileData, string nowDirectory, bool isTxtNeded, out string filePath)
         {
             if (fileData == null)
@@ -1201,11 +2066,23 @@ namespace Peergrade003
             else return true;
         }
 
+        /// <summary>
+        /// Метод, запрашивающий путь до файла.
+        /// </summary>
+        /// <param name="nowDirectory">Текущая рабочая директория.</param>
+        /// <param name="filePath">Новый путь до файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool AskForFile(string nowDirectory, out string filePath)
         {
             string fileData;
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!\nДополненный путь будет подсвечиваться ");
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
+            Console.Write("\nНажатием на кнопку TAB, вы сможете дополнить свой путь, даже убрать лишнее!\n" +
+                "Дополненный путь будет подсвечиваться ");
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("зелёным цветом\n\n");
@@ -1228,6 +2105,17 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, запрашивающий путь до файла.
+        /// </summary>
+        /// <param name="nowDirectory">Текущая рабочая директория.</param>
+        /// <param name="isTxtNeeded">Нужен ли только текстовый файл.</param>
+        /// <param name="filePath">Новый путь до файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         public static bool AskForFile(string nowDirectory, bool isTxtNeeded, out string filePath)
         {
             string fileData;
@@ -1256,23 +2144,31 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, запрашивающий метод декодирования/кодирования файлов.
+        /// </summary>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает строковое представление кодировки.</item>
+        /// </list>
+        /// </returns>
         public static string AskForEncoding()
         {
             Input.AskForCoddingMethod(out ushort choice);
-            string encoding = "UTF-8";
+            string encoding = "utf-8";
             switch (choice)
             {
                 case 1:
-                    encoding = "UTF-8";
+                    encoding = Encoding.UTF8.BodyName;
                     break;
                 case 2:
-                    encoding = "Unicode";
+                    encoding = Encoding.Unicode.BodyName;
                     break;
                 case 3:
-                    encoding = "ASCII";
+                    encoding = Encoding.ASCII.BodyName;
                     break;
                 case 4:
-                    encoding = "UTF-32";
+                    encoding = Encoding.UTF32.BodyName;
                     break;
             }
 
@@ -1303,10 +2199,10 @@ namespace Peergrade003
         /// Метод, возвращающий номер метода кодирования/декодирования информации.
         /// </summary>
         /// <param name="methodChoiceData">Строка, означающая ввод пользователя.</param>
+        /// <param name="methodChoice">Числовое представление выбора кодирования/декодирования информации.</param>
         /// <returns>
         /// <list type="bullet">
         /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении метода!</item>
-        /// <item>Число типа ushort, означающее выбор кодирования/декодирования информации.</item>
         /// </list>
         /// </returns>
         public static bool GetMethod(string methodChoiceData, out ushort methodChoice)
@@ -1324,13 +2220,9 @@ namespace Peergrade003
         }
 
         /// <summary>
-        /// Метод, запрашивающий и возвращающий номер метода кодирования/декодирования информации.
+        /// Метод, запрашивающий метод копирования файлов.
         /// </summary>
-        /// <returns>
-        /// <list type="bullet">
-        /// <item>Возвращает номер метода в виде числа типа ushort.</item>
-        /// </list>
-        /// </returns>
+        /// <param name="isRewriteNeeded">Нужно ли перезаписывать файлы с тем же именем.</param>
         public static void AskForCopyMethod(out bool isRewriteNeeded)
         {
             string methodChoiceData;
@@ -1358,6 +2250,17 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, возвращающий числовое представление действия копирования.
+        /// </summary>
+        /// <param name="methodChoiceData">Строка, означающая ввод пользователя.</param>
+        /// <param name="methodChoice">Числовое представление выбора типа копирования информации.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему
+        /// в получении метода копирования!</item>
+        /// </list>
+        /// </returns>
         public static bool GetCopyMethod(string methodChoiceData, out ushort methodChoice)
         {
             if (!ushort.TryParse(methodChoiceData, out methodChoice) || methodChoice == 0 || methodChoice > 2)
@@ -1372,44 +2275,101 @@ namespace Peergrade003
 
         }
 
-        public static void AskForCreationFileName(string path ,out string filePath)
+        /// <summary>
+        /// Метод, запрашивающий имя файла для его создания.
+        /// </summary>
+        /// <param name="path">Путь текущей директории.</param>
+        /// <param name="filePath">Путь до нового файла.</param>
+        public static void AskForCreationFileName(string path, out string filePath)
         {
             string nameData;
             // Пока пользователь не введёт подходящий, запрашивать его снова.
             do
             {
-                Console.WriteLine("Введите имя текстового файла без расширения (все недопустимые символы будут автоматически удалены из названия)");
+                Console.WriteLine("Введите имя текстового файла без расширения " +
+                    "(все недопустимые символы будут автоматически удалены из названия)\n" +
+                    "Если вы введете название уже существуещего файла, он будет перезаписан.");
                 Console.Write("Название: ");
                 nameData = Console.ReadLine();
             } while (!GetCreationFileName(path, nameData, out filePath));
             filePath = $"{path}/{filePath}";
         }
 
+        /// <summary>
+        /// Метод, возвращающий корректное имя файла и путь для его создания.
+        /// </summary>
+        /// <param name="path">Путь до текущей директории.</param>
+        /// <param name="nameData">Ввод пользователя.</param>
+        /// <param name="fileName">Скорректированное имя файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных.</item>
+        /// </list>
+        /// </returns>
         public static bool GetCreationFileName(string path, string nameData, out string fileName)
         {
-            if (nameData == null)
+            if (nameData == null || (nameData.Split(' ', StringSplitOptions.RemoveEmptyEntries)).Length == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Старайтесь не вводить пустые строки!");
-                Console.ResetColor();
+                GetCreationFileNameEnvironment("error_null");
+                fileName = null;
+                return false;
+            }
+            else if (nameData.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0] == " ")
+            {
+                GetCreationFileNameEnvironment("error_name");
                 fileName = null;
                 return false;
             }
             nameData = ManageTools.RemoveInvalidChars(nameData);
-            if (nameData.Length+path.Length > 235)
+            if (nameData.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Вы задали слишком длинное имя файла, оно превышает ограничение длины пути." +
-                    "\nПожалуйста повторите ввод!");
-                Console.ResetColor();
+                GetCreationFileNameEnvironment("error_name_del");
+                fileName = null;
+                return false;
+            }
+            if (nameData.Length + path.Length > 235)
+            {
+                GetCreationFileNameEnvironment("to_long");
                 fileName = null;
                 return false;
             }
             fileName = nameData;
             return true;
-
         }
 
+        private static void GetCreationFileNameEnvironment(string workType)
+        {
+            switch (workType)
+            {
+                case "error_null":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Старайтесь не вводить пустые строки!");
+                    Console.ResetColor();
+                    break;
+                case "error_name":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Введено пустое имя файла!");
+                    Console.ResetColor();
+                    break;
+                case "error_name_del":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Введено пустое имя файла или " +
+                        "содержащее только недопустимые символы!");
+                    Console.ResetColor();
+                    break;
+                case "to_long":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Вы задали слишком длинное имя файла, оно превышает ограничение длины пути." +
+                        "\nПожалуйста повторите ввод!");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Метод, запрашивающий текст для создания файла.
+        /// </summary>
+        /// <param name="data">Строка для записи файла.</param>
         public static void AskForTextCreationFIle(out string data)
         {
             string rawData;
@@ -1423,6 +2383,16 @@ namespace Peergrade003
 
         }
 
+        /// <summary>
+        /// Метод, возвращающий корректный текст для записи в новый файл.
+        /// </summary>
+        /// <param name="rawData">Ввод пользователя.</param>
+        /// <param name="data">Проверенный текст для записи в файл.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных.</item>
+        /// </list>
+        /// </returns>
         public static bool GetTextCreationFIle(string rawData, out string data)
         {
             if (rawData == null)
@@ -1433,10 +2403,10 @@ namespace Peergrade003
                 data = null;
                 return false;
             }
-            if (rawData.Length > 1000000)
+            if (rawData.Length > 10024)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Вы задали слишком большое колличество символов.\n" +
+                Console.WriteLine("Вы задали слишком большое количество символов.\n" +
                     "Пожалуйста повторите ввод!");
                 Console.ResetColor();
                 data = null;
@@ -1447,6 +2417,10 @@ namespace Peergrade003
 
         }
 
+        /// <summary>
+        /// Метод, запрашивающий маску поиска от пользователя.
+        /// </summary>
+        /// <param name="mask">Корректная маска для поиска.</param>
         public static void AskForMask(out string mask)
         {
             string rawData;
@@ -1459,30 +2433,50 @@ namespace Peergrade003
 
         }
 
+        /// <summary>
+        /// Метод, проверяющий размер файла.
+        /// </summary>
+        /// <param name="path">Путь до проверяемого файла.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение bool, означающее превысил ли пользователь лимит на размер файла.</item>
+        /// </list>
+        /// </returns>
+        public static bool CheckSizeOfFile(string path)
+        {
+            long length = new FileInfo(path).Length;
+            if (length > 1000486760)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Считывание отменено, размер файла слишком большой!\n" +
+                    "Получен отказ на считывание файла больше 1 ГБ.");
+                Console.ResetColor();
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Метод, возвращающий корректную маску поиска.
+        /// </summary>
+        /// <param name="rawData">Ввод пользователя.</param>
+        /// <param name="mask">Проверенная маска поиска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных.</item>            
+        /// </list>
+        /// </returns>
         public static bool GetMask(string rawData, out string mask)
         {
-            if (rawData == null)
+            if ((rawData.Split(' ', StringSplitOptions.RemoveEmptyEntries)).Length == 0 || rawData == null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Старайтесь не вводить пустые строки!");
-                Console.ResetColor();
+                GetMaskEnvironment("error_null");
                 mask = null;
                 return false;
             }
-            if ((rawData.Split(' ', StringSplitOptions.RemoveEmptyEntries)).Length == 0)
+            if (rawData.Length > 1024)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Введена пустая маска!");
-                Console.ResetColor();
-                mask = null;
-                return false;
-            }
-            if (rawData.Length > 10000)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Вы задали слишком большое колличество символов." +
-                    "Пожалуйста повторите ввод!");
-                Console.ResetColor();
+                GetMaskEnvironment("error_long");
                 mask = null;
                 return false;
             }
@@ -1492,10 +2486,7 @@ namespace Peergrade003
                 {
                     if (rawData[i] == item)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Маска содержит недопустимые символы." +
-                            "Пожалуйста повторите ввод!");
-                        Console.ResetColor();
+                        GetMaskEnvironment("error_mask");
                         mask = null;
                         return false;
                     }
@@ -1505,19 +2496,37 @@ namespace Peergrade003
             return true;
         }
 
+        private static void GetMaskEnvironment(string workType)
+        {
+            switch (workType)
+            {
+                case "error_null":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Введена пустая маска!");
+                    Console.ResetColor();
+                    break;
+                case "error_long":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Вы задали слишком большое количество символов." +
+                        "Пожалуйста повторите ввод!");
+                    Console.ResetColor();
+                    break;
+                case "error_mask":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Маска содержит недопустимые символы." +
+                        "Пожалуйста повторите ввод!");
+                    Console.ResetColor();
+                    break;
+            }
+        }
 
         /// <summary>
-        /// Метод, возвращающий и запрашивающий от пользователя границы генерации чисел.
+        /// Метод, возвращающий и запрашивающий от пользователя количество складываемых файлов.
         /// </summary>
-        /// <returns>
-        /// <list type="bullet">
-        /// <item>Возвращает значение типа int, означающее значение границ генерации.</item>
-        /// </list>
-        /// </returns>
+        /// <param name="filesNum">Количество складываемых файлов.</param>
         public static void AskForNumFiles(out int filesNum)
         {
             string numDataRaw;
-            // Пока пользователь не введёт подходящую границу генерации, запрашивать ёё снова.
             do
             {
                 Console.Write("Введите число файлов для сложения от 2 до 10: ");
@@ -1529,19 +2538,15 @@ namespace Peergrade003
         /// <summary>
         /// Метод, возвращающий int число в диапазоне [0, 10], полученное от пользователя.
         /// </summary>
-        /// <returns>
         /// <param name="numDataRaw">Строка, означающая ввод пользователя.</param>
-        /// <list type="bullet">
-        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении числа!</item>
-        /// <item>Число типа int.</item>
-        /// </list>
-        /// </returns>
+        /// <param name="num">Число, означающее количество складываемых файлов.</param>
         public static bool GetNumFiles(string numDataRaw, out int num)
         {
             if (!int.TryParse(numDataRaw, out num) || num < 2 || num > 10)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Это не число, или число, которое не принадлижит [2, 10]. Пожалуйста, повторите ввод.");
+                Console.WriteLine("Это не число, или число, которое не принадлижит [2, 10]." +
+                    " Пожалуйста, повторите ввод.");
                 Console.ResetColor();
                 return false;
             }
