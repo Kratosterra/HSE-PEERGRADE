@@ -231,13 +231,31 @@ namespace Peergrade003
             }
         }
 
-        private static bool ReturnNewDirectory(out string nowDirectory, out string nowDrive, int driveChoice, DriveInfo[] allDrives)
+        /// <summary>
+        /// Метод, устанавливающий диск и текущую директорию.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <param name="driveChoice">Выбор пользователя в числовом формате.</param>
+        /// <param name="allDrives">Индексатор, содержащий текущие диски в системе.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
+        private static bool ReturnNewDirectory(out string nowDirectory, out string nowDrive,
+            int driveChoice, DriveInfo[] allDrives)
         {
             nowDirectory = (allDrives[driveChoice - 1].Name).ToString();
             nowDrive = (allDrives[driveChoice - 1].Name).ToString();
             return true;
         }
 
+        /// <summary>
+        /// Метод, показывающий установленный текущий диск пользователю.
+        /// </summary>
+        /// <param name="driveChoice">Выбор пользователя в числовом формате.</param>
+        /// <param name="allDrives">Индексатор, содержащий текущие диски в системе.</param>
         private static void DisplayMethodInformationDriveSelection(int driveChoice, DriveInfo[] allDrives)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -245,6 +263,16 @@ namespace Peergrade003
             Console.ResetColor();
         }
 
+        /// <summary>
+        /// Метод, сменяющий текущий диск на null при ошибке.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="nowDrive">Путь до нового текущего диска.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         private static bool ReturnErrorDirectory(out string nowDirectory, out string nowDrive)
         {
             nowDirectory = null;
@@ -471,6 +499,11 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void OutputtingFileContentEnvironment(string workType, string nowDirectory)
         {
             switch (workType)
@@ -569,6 +602,11 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void CopyFileContentEnvironment(string workType, string nowDirectory)
         {
             switch (workType)
@@ -668,6 +706,11 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void FileTransferEnvironment(string workType, string nowDirectory)
         {
             switch (workType)
@@ -778,6 +821,11 @@ namespace Peergrade003
             }
         }
 
+
+        /// <summary>
+        /// Метод, отображающий информацию о том, что файл успешно создан.
+        /// </summary>
+        /// <param name="filePath"> Строка, содержащая путь до созданного файла.</param>
         private static void DisplayCreatingTextFileInfo(string filePath)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -785,6 +833,11 @@ namespace Peergrade003
             Console.ResetColor();
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя по поводу создания текстового файла.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void CreatingTextFileEnvironment(string workType, string nowDirectory)
         {
             switch (workType)
@@ -869,6 +922,11 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя по поводу обьеденения файлов.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до новой текущей директории.</param>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void MergingMultipleFilesEnvironment(string workType, string nowDirectory)
         {
             switch (workType)
@@ -924,6 +982,10 @@ namespace Peergrade003
             DisplayResaultOfWriteFiles(data);
         }
 
+        /// <summary>
+        /// Метод, выводящий результат записывания файла при обьединении.
+        /// </summary>
+        /// <param name="data">Список файлов для обьединении.</param>
         private static void DisplayResaultOfWriteFiles(string[] data)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -932,6 +994,10 @@ namespace Peergrade003
             Console.ResetColor();
         }
 
+        /// <summary>
+        /// Метод, выводящий результат записывания файла при обьединении.
+        /// </summary>
+        /// <param name="filesNum">Количество обьеденяемых файлов.</param>
         private static void DisplayInfoNumOfFiles(int filesNum)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -998,6 +1064,16 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, проводящий поиск по маске с заданными значениями.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="NeedRecurse">Нужно ли искать в поддиректориях текущей директорий.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение, означающее статус выполнения.</item>
+        /// </list>
+        /// </returns>
         private static bool TryToSearchByMask(string nowDirectory, bool NeedRecurse)
         {
             // Запрашиваем маску для поиска.
@@ -1041,7 +1117,7 @@ namespace Peergrade003
                 GetDataForCopyByMask(out bool isRewriteNeeded, out string mask);
                 bool condition = Input.AskForDirectory(nowDrive, out string directoryPath, true);
                 if (!condition) return false;
-                string[] dataFile = FindAllDirectoriesByMask(nowDirectory, mask);
+                string[] dataFile = FindAllFilesForCopyMask(nowDirectory, mask);
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 if (dataFile.Length == 0) Console.WriteLine("\nФайлов не найдено\n");
                 else
@@ -1064,7 +1140,17 @@ namespace Peergrade003
             }
         }
 
-        private static string[] FindAllDirectoriesByMask(string nowDirectory, string mask)
+        /// <summary>
+        /// Метод, проводящий специализированный поиск по маске.
+        /// </summary>
+        /// <param name="nowDirectory"> Строка, содержащая путь до текущей директории работы программы.</param>
+        /// <param name="mask">Содержит маску, полученную от пользователя.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает массив строк, содержащих пути к найденным файлам.</item>
+        /// </list>
+        /// </returns>
+        private static string[] FindAllFilesForCopyMask(string nowDirectory, string mask)
         {
             var options = new EnumerationOptions();
             options.RecurseSubdirectories = true;
@@ -1203,6 +1289,11 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, показывающий текущую тестовую директорию и диск.
+        /// </summary>
+        /// <param name="nowDirectory">Путь до тестовой директории.</param>
+        /// <param name="nowDrive">Путь до тестового диска.</param>
         private static void DisplayNowTestDirectory(string nowDrive, string nowDirectory)
         {
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -1347,12 +1438,32 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, возвращающий валидное значение пути.
+        /// </summary>
+        /// <param name="rawPathTrim">Обрезанный до валидного путь.</param>
+        /// <param name="newPath">Обновлённый ввод.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение равное false.</item>
+        /// </list>
+        /// </returns>
         private static bool ReturnValidUserPath(out string newPath, string rawPathTrim)
         {
             newPath = rawPathTrim;
             return false;
         }
 
+        /// <summary>
+        /// Метод, возвращающий при ошибке валидное значение пути.
+        /// </summary>
+        /// <param name="rawPathTrim">Обрезанный до валидного путь.</param>
+        /// <param name="newPath">Обновлённый ввод.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение равное false.</item>
+        /// </list>
+        /// </returns>
         private static bool ReturnExceptionDataForAddPath(string rawPath, out string newPath)
         {
             TrimPathToVailidOne(rawPath, out string rawPathTrim, out _, out _);
@@ -1360,13 +1471,31 @@ namespace Peergrade003
             return false;
         }
 
-        private static void FindPathVariation(EnumerationOptions options, string rawPathTrim, string mask, out string[] dataFile, out string[] dataDirect)
+        /// <summary>
+        /// Метод, находящий все папки и файлы подходящие под ввод пользователя.
+        /// </summary>
+        /// <param name="options">Настройки поиска.</param>
+        /// <param name="rawPathTrim">Обрезанный до валидного путь.</param>
+        /// <param name="mask">Маска, основанная на вводе пользователя.</param>
+        /// <param name="dataFile">Массив с файлами, найденными по вводу пользователя.</param>
+        /// <param name="dataDirect">Массив с директориями, найденными по вводу пользователя.</param>
+        private static void FindPathVariation(EnumerationOptions options, string rawPathTrim, string mask,
+            out string[] dataFile, out string[] dataDirect)
         {
             dataFile = Directory.GetFiles(rawPathTrim, mask + "*", options);
             dataDirect = Directory.GetDirectories(rawPathTrim, mask + "*", options);
         }
 
-        private static void FindAllDataForPath(string rawPath, out EnumerationOptions options, out string rawPathTrim, out int control, out string mask)
+        /// <summary>
+        /// Метод, получающий и создающий всю информацию для достоения пути.
+        /// </summary>
+        /// <param name="options">Настройки поиска.</param>
+        /// <param name="rawPathTrim">Обрезанный до валидного путь.</param>
+        /// <param name="mask">Маска, основанная на вводе пользователя.</param>
+        /// <param name="rawPath">Строка, содержащая ввод пользователя.</param>
+        /// <param name="control">Количество обрезанных символов до получения валидного пути.</param>
+        private static void FindAllDataForPath(string rawPath, out EnumerationOptions options, out string rawPathTrim,
+            out int control, out string mask)
         {
             options = new EnumerationOptions();
             options.RecurseSubdirectories = false;
@@ -1417,6 +1546,16 @@ namespace Peergrade003
             return ReturnDefaultDataForPathCreation(out newPath, dataFile);
         }
 
+        /// <summary>
+        /// Метод, устанавливающий первый файл в списке подходящих по маске.
+        /// </summary>
+        /// <param name="newPath">Доработанный путь.</param>
+        /// <param name="dataFile">Файлы, найденные по маске от пользователя.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает bool значение равное false.</item>
+        /// </list>
+        /// </returns>
         private static bool ReturnDefaultDataForPathCreation(out string newPath, string[] dataFile)
         {
             newPath = dataFile[0];
@@ -1527,6 +1666,16 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, дополняющий строку нажатой пользователем кнопкой.
+        /// </summary>
+        /// <param name="key">Нажатая кнопка.</param>
+        /// <param name="data">Дополненная информация о вводе пользователя.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает обработанный ввод пользователя.</item>
+        /// </list>
+        /// </returns>
         private static string ReturnKeyCharInfo(ConsoleKeyInfo key, string data)
         {
             // Если символ является для нас подходящим - записываем его.
@@ -1590,9 +1739,7 @@ namespace Peergrade003
         /// </summary>
         private static void ClearConsoleLine()
         {
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
         }
     }
 
@@ -1832,6 +1979,17 @@ namespace Peergrade003
             }
         }
 
+        /// <summary>
+        /// Метод, производящий попытку создания директории по заданным данным.
+        /// </summary>
+        /// <param name="directoryData">Строка, означающая ввод пользователя.</param>
+        /// <param name="nowDrive">Текущий рабочий диск.</param>
+        /// <param name="directoryPath">Путь до новой директории.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение типа bool, которое означает успех или проблему в получении данных!</item>
+        /// </list>
+        /// </returns>
         private static bool TryToCreateDirectory(string directoryData, string nowDrive, out string directoryPath)
         {
             try
@@ -1847,6 +2005,10 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя по поводу поиска и создания директории.
+        /// </summary>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void GetDirectoryPathEnvironment(string workType)
         {
             switch (workType)
@@ -2337,6 +2499,10 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя по поводу создания файла.
+        /// </summary>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void GetCreationFileNameEnvironment(string workType)
         {
             switch (workType)
@@ -2496,6 +2662,10 @@ namespace Peergrade003
             return true;
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию для пользователя по поводу получения маски.
+        /// </summary>
+        /// <param name="workType">Тип вывода для пользователя.</param>
         private static void GetMaskEnvironment(string workType)
         {
             switch (workType)
