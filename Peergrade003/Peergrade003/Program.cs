@@ -1244,7 +1244,172 @@ namespace Peergrade003
         /// </returns>
         public static bool DifferencesBetweenFiles(string nowDirectory, string nowDrive)
         {
-            return false;
+            DisplayNowDirectory(nowDirectory);
+            DifferencesBetweenFilesEnvironment("start", nowDirectory);
+            try
+            {
+                // Запрашиваем файл.
+                DifferencesBetweenFilesEnvironment("file_old", nowDirectory);
+                bool condition = Input.AskForFile(nowDirectory, true, out string filePathFirst);
+                if (!condition) return false;
+                condition = Input.CheckSizeOfFile(filePathFirst);
+                if (!condition) return false;
+                // Запрашиваем файл.
+                DifferencesBetweenFilesEnvironment("file_new", nowDirectory);
+                condition = Input.AskForFile(nowDirectory, true, out string filePathSecond);
+                if (!condition) return false;
+                condition = Input.CheckSizeOfFile(filePathSecond);
+                if (!condition) return false;
+                try
+                {
+                    SetDiffOutput(filePathFirst, filePathSecond);
+                    return true;
+                }
+                catch
+                {
+                    DifferencesBetweenFilesEnvironment("error", nowDirectory);
+                    return false;
+                }
+            }
+            catch
+            {
+                DifferencesBetweenFilesEnvironment("big_error", nowDirectory);
+                return false;
+            }
+
+        }
+
+        private static void SetDiffOutput(string filePathFirst, string filePathSecond)
+        {
+            string[] firstFile = File.ReadAllLines(filePathFirst);
+            string[] secondFile = File.ReadAllLines(filePathSecond);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\n──────────────────────────────── Результат\n");
+            Console.ResetColor();
+            foreach (var item in CreateDiffDataString(
+                FindLongestCommonSubsequenceSubMatrix(firstFile, secondFile),
+                firstFile, secondFile, firstFile.Length, secondFile.Length).Split("\n"))
+            {
+                SetColorMaskForDiffText(item);
+            }
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("───────────────────────────────────────────────────────────────────────────────────────" +
+            "────────────────────────────────\n");
+            Console.ResetColor();
+        }
+
+        private static void SetColorMaskForDiffText(string item)
+        {
+            if (item.Length != 0)
+            {
+                if (item[0] != ' ')
+                {
+                    if (item[0] == '=')
+                    {
+                        Console.WriteLine(item[1..]);
+                    }
+                    else if (item[0] == '+')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(item);
+                        Console.ResetColor();
+                    }
+                    else if (item[0] == '-')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(item);
+                        Console.ResetColor();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(item);
+                }
+            }
+            else
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        private static void DifferencesBetweenFilesEnvironment(string workType, string nowDirectory)
+        {
+            switch (workType)
+            {
+                case "start":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\n──────────────────────────────── Вывод разницы между двумя файлами" +
+                        $" на экран\nЕсли вы оказались в ситуации, когда в вашей директории нет файлов, пропишите ?END?.\n");
+                    Console.ResetColor();
+                    break;
+                case "big_error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ошибка при получении данных, возможно файл занят другим процессом.");
+                    Console.ResetColor();
+                    break;
+                case "error":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невозможно прочитать файлы, возможно они заняты другим процессом.");
+                    Console.ResetColor();
+                    break;
+                case "file_old":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВведите путь до старой версии файла.\n");
+                    Console.ResetColor();
+                    break;
+                case "file_new":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"\nВведите путь до новой версии файла.\n");
+                    Console.ResetColor();
+                    break;
+            }
+
+        }
+
+        private static int[,] FindLongestCommonSubsequenceSubMatrix(string[] fileOld, string[] fileNew)
+        {
+            int[,] subMatrix = new int[fileOld.Length + 1, fileNew.Length + 1];
+            for (int i = 1; i <= fileOld.Length; i++)
+            {
+                for (int j = 1; j <= fileNew.Length; j++)
+                {
+                    if (fileOld[i - 1] == fileNew[j - 1])
+                    {
+                        subMatrix[i, j] = subMatrix[i - 1, j - 1] + 1;
+                    }
+                    else
+                    {
+                        if (subMatrix[i - 1, j] > subMatrix[i, j - 1])
+                        {
+                            subMatrix[i, j] = subMatrix[i - 1, j];
+                        }
+                        else
+                        {
+                            subMatrix[i, j] = subMatrix[i, j - 1];
+                        }
+                    }
+                }
+            }
+            return subMatrix;
+        }
+
+        private static string CreateDiffDataString(int[,] subMatrix, string[] fileOld, string[] fileNew, int i, int j)
+        {
+            string dataAns = "";
+
+            if (i > 0 && j > 0 && fileOld[i - 1] == fileNew[j - 1])
+            {
+                return $"{CreateDiffDataString(subMatrix, fileOld, fileNew, i - 1, j - 1)}={fileOld[i - 1]}\n";
+            }
+            else if (j > 0 && (i == 0 || (subMatrix[i, j - 1] > subMatrix[i - 1, j])))
+            {
+                return $"{CreateDiffDataString(subMatrix, fileOld, fileNew, i, j - 1)}+| {fileNew[j - 1]}\n";
+            }
+            else if (i > 0 && (j == 0 || (subMatrix[i, j - 1] <= subMatrix[i - 1, j])))
+            {
+                return $"{CreateDiffDataString(subMatrix, fileOld, fileNew, i - 1, j)}-| {fileOld[i - 1]}\n";
+            }
+            return $"{dataAns}\n";
         }
 
         /// <summary>
@@ -2611,11 +2776,11 @@ namespace Peergrade003
         public static bool CheckSizeOfFile(string path)
         {
             long length = new FileInfo(path).Length;
-            if (length > 1000486760)
+            if (length > 268435456)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Считывание отменено, размер файла слишком большой!\n" +
-                    "Получен отказ на считывание файла больше 1 ГБ.");
+                    "Получен отказ на считывание файла больше 256 МБ.");
                 Console.ResetColor();
                 return false;
             }
