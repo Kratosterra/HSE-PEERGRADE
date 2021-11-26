@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,8 +14,12 @@ namespace Peergrade004
 {
     public partial class FormMain : Form
     {
+        public int fontSize = 12;
+        public FontFamily fontFaсe = FontFamily.GenericMonospace;
+        private FontSettings fontSettings;
         private List<string> fileList = new List<string>();
         private List<bool> fileChangeList = new List<bool>();
+
         public FormMain()
         {
             InitializeComponent();
@@ -22,9 +27,9 @@ namespace Peergrade004
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-
+            ReadAllOldTabs();
+            ExecuteSetings();
         }
-
 
         private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -38,11 +43,13 @@ namespace Peergrade004
             richTextBox.Dock = DockStyle.Fill;
             tabPage.Controls.Add(richTextBox);
             MainTabControl.TabPages.Add(tabPage);
+            tabPage.Click += FormMain_Activated;
             fileList.Add("-");
             fileChangeList.Add(false);
             richTextBox.BorderStyle = BorderStyle.None;
             richTextBox.TextChanged += IfTextChanged;
             richTextBox.MouseDown += RichTextBox_MouseDown;
+            richTextBox.Click += FormMain_Activated;
 
         }
 
@@ -131,6 +138,7 @@ namespace Peergrade004
                             {
                                 data = " ";
                             }
+
                             if (Path.GetExtension(openFileDialogOne.FileName) == ".rtf")
                             {
                                 GetTextFromRichTextBox().Rtf = data;
@@ -139,6 +147,7 @@ namespace Peergrade004
                             {
                                 GetTextFromRichTextBox().Text = data;
                             }
+
                             TabPage tabPage = MainTabControl.SelectedTab;
                             tabPage.Text = Path.GetFileName(openFileDialogOne.FileName);
                             fileList[tabPage.TabIndex] = openFileDialogOne.FileName;
@@ -178,6 +187,7 @@ namespace Peergrade004
             {
                 return false;
             }
+
             return true;
         }
 
@@ -208,6 +218,7 @@ namespace Peergrade004
                                 return;
                             }
                         }
+
                         using (StreamWriter streamWriter = new StreamWriter(fileList[tabPage.TabIndex]))
                         {
                             if (Path.GetExtension(fileList[tabPage.TabIndex]) == ".rtf")
@@ -277,6 +288,7 @@ namespace Peergrade004
                             streamWriter.Write(GetTextFromRichTextBox().Text);
                         }
                     }
+
                     tabPage.Text = Path.GetFileName(fileList[tabPage.TabIndex]);
                     fileChangeList[tabPage.TabIndex] = false;
 
@@ -325,13 +337,14 @@ namespace Peergrade004
                     for (int i = 0; i < MainTabControl.TabCount; i++)
                     {
                         TabPage tabPage = MainTabControl.TabPages[i];
-                        if (fileList[tabPage.TabIndex] == "-" && !isThisAutomaticSave)
+                        if (fileList[tabPage.TabIndex] == "-" && tabPage.Text[0] == '*' && !isThisAutomaticSave)
                         {
                             MessageBox.Show($"Сохранение Безымянного файла\n" +
-                                            $"Если вы закройте окно сохранения файла, он не будет сохранён!", "Cохранение");
+                                            $"Если вы закройте окно сохранения файла, он не будет сохранён!",
+                                "Cохранение");
                             SaveFile(tabPage);
                         }
-                        else if (fileList[tabPage.TabIndex] == "-" && isThisAutomaticSave)
+                        else if (fileList[tabPage.TabIndex] == "-")
                         {
 
                         }
@@ -339,7 +352,7 @@ namespace Peergrade004
                         {
                             SaveFile(tabPage);
                         }
-                        
+
                     }
 
                     if (!isThisAutomaticSave)
@@ -370,10 +383,11 @@ namespace Peergrade004
                 if (userAnswer == DialogResult.Yes)
                 {
                     SaveAllTabs();
+                    SaveAllOpenTabsInFile();
                 }
                 else if (userAnswer == DialogResult.No)
                 {
-
+                    SaveAllOpenTabsInFile();
                 }
                 else
                 {
@@ -388,7 +402,7 @@ namespace Peergrade004
 
                 if (userAnswer == DialogResult.Yes)
                 {
-                    
+                    SaveAllOpenTabsInFile();
                 }
                 else if (userAnswer == DialogResult.No)
                 {
@@ -405,85 +419,113 @@ namespace Peergrade004
 
         private void ItalicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Font oldFont;
-            Font newFont;                                                           
-
-            oldFont = GetTextFromRichTextBox().SelectionFont;
-            if (oldFont.Italic == true)
+            try
             {
-                newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Italic);
-                this.ItalicsToolStripMenuItem.Checked = false;
+                Font oldFont;
+                Font newFont;
+
+                oldFont = GetTextFromRichTextBox().SelectionFont;
+                if (oldFont.Italic == true)
+                {
+                    newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Italic);
+                }
+                else
+                {
+                    newFont = new Font(oldFont, oldFont.Style | FontStyle.Italic);
+                }
+
+                GetTextFromRichTextBox().SelectionFont = newFont;
+                GetTextFromRichTextBox().Focus();
             }
-            else
+            catch
             {
-                newFont = new Font(oldFont, oldFont.Style | FontStyle.Italic);
-                this.ItalicsToolStripMenuItem.Checked = true;
+                MessageBox.Show("Невозможно применить шрифт!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            GetTextFromRichTextBox().SelectionFont = newFont;    
-            GetTextFromRichTextBox().Focus();
         }
 
         private void BoldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Font oldFont;
-            Font newFont;
-
-            oldFont = GetTextFromRichTextBox().SelectionFont;
-            if (oldFont.Bold == true)
+            try
             {
-                newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Bold);
-                this.BoldToolStripMenuItem.Checked = false;
+                Font oldFont;
+                Font newFont;
+
+                oldFont = GetTextFromRichTextBox().SelectionFont;
+                if (oldFont.Bold == true)
+                {
+                    newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Bold);
+                }
+                else
+                {
+                    newFont = new Font(oldFont, oldFont.Style | FontStyle.Bold);
+                }
+
+                GetTextFromRichTextBox().SelectionFont = newFont;
+                GetTextFromRichTextBox().Focus();
             }
-            else
+            catch
             {
-                newFont = new Font(oldFont, oldFont.Style | FontStyle.Bold);
-                this.BoldToolStripMenuItem.Checked = true;
+                MessageBox.Show("Невозможно применить шрифт!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            GetTextFromRichTextBox().SelectionFont = newFont;
-            GetTextFromRichTextBox().Focus();
         }
 
         private void UnderlinedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Font oldFont;
-            Font newFont;
-            oldFont = GetTextFromRichTextBox().SelectionFont;
-            if (oldFont.Underline == true)
+            try
             {
-                newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Underline);
-                this.UnderlinedToolStripMenuItem.Checked = false;
+                Font oldFont;
+                Font newFont;
+                oldFont = GetTextFromRichTextBox().SelectionFont;
+                if (oldFont.Underline == true)
+                {
+                    newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Underline);
+                }
+                else
+                {
+                    newFont = new Font(oldFont, oldFont.Style | FontStyle.Underline);
+                }
+
+                GetTextFromRichTextBox().SelectionFont = newFont;
+                GetTextFromRichTextBox().Focus();
             }
-            else
+            catch
             {
-                newFont = new Font(oldFont, oldFont.Style | FontStyle.Underline);
-                this.UnderlinedToolStripMenuItem.Checked = true;
+                MessageBox.Show("Невозможно применить шрифт!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            GetTextFromRichTextBox().SelectionFont = newFont;
-            GetTextFromRichTextBox().Focus();
         }
 
-        private void StrikethroughToolStripMenuItem_Click(object sender, EventArgs e)
+        private void StrikeoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Font oldFont;
-            Font newFont;
 
-            oldFont = GetTextFromRichTextBox().SelectionFont;
-            if (oldFont.Strikeout == true)
+            try
             {
-                newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Strikeout);
-                this.StrikethroughToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                newFont = new Font(oldFont, oldFont.Style | FontStyle.Strikeout);
-                this.StrikethroughToolStripMenuItem.Checked = true;
-            }
+                Font oldFont;
+                Font newFont;
 
-            GetTextFromRichTextBox().SelectionFont = newFont;
-            GetTextFromRichTextBox().Focus();
+                oldFont = GetTextFromRichTextBox().SelectionFont;
+                if (oldFont.Strikeout == true)
+                {
+                    newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Strikeout);
+                }
+                else
+                {
+                    newFont = new Font(oldFont, oldFont.Style | FontStyle.Strikeout);
+                }
+
+                GetTextFromRichTextBox().SelectionFont = newFont;
+                GetTextFromRichTextBox().Focus();
+            }
+            catch
+            {
+                MessageBox.Show("Невозможно применить шрифт!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -504,14 +546,260 @@ namespace Peergrade004
                 case MouseButtons.Right:
                 {
                     contextMenuStrip1.Show(this, new Point(e.X, e.Y));
-                }
                     break;
+                }
             }
         }
 
         private void GetAllTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GetTextFromRichTextBox().SelectAll();
+        }
+
+        private void SaveAllOpenTabsInFile()
+        {
+            try
+            {
+                using (StreamWriter streamWriter = new StreamWriter("HideInformationTabs.txt"))
+                {
+                    for (int i = 0; i < fileList.Count; i++)
+                    {
+                        if (fileList[i] != "-")
+                        {
+                            streamWriter.WriteLine(fileList[i]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Вкладки не будут автоматически открыты при следующем запуске", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ReadAllOldTabs()
+        {
+            try
+            {
+                if (File.Exists("HideInformationTabs.txt"))
+                {
+                    List<string> data = new List<string>();
+                    using (StreamReader streamRider = new StreamReader("HideInformationTabs.txt"))
+                    {
+                        string line = streamRider.ReadLine();
+                        while (line != null)
+                        {
+                            data.Add(line);
+                            line = streamRider.ReadLine();
+                        }
+
+                    }
+
+                    File.Create("HideInformationTabs.txt").Close();
+                    AddAllOldTabs(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Произошла ошибка при автоматическом открытии старых вкаладок.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddAllOldTabs(List<string> dataPath)
+        {
+            try
+            {
+                for (int i = 0; i < dataPath.Count; i++)
+                {
+                    try
+                    {
+                        if (File.Exists(dataPath[i]))
+                        {
+                            using (StreamReader streamData = new StreamReader(dataPath[i]))
+                            {
+                                if (CheckSizeOfFile(dataPath[i]))
+                                {
+                                    string data = streamData.ReadToEnd();
+                                    if (string.IsNullOrEmpty(data))
+                                    {
+                                        data = " ";
+                                    }
+
+                                    CreateNewTab(out TabPage tabPage, out RichTextBox richTextBox);
+                                    if (Path.GetExtension(dataPath[i]) == ".rtf")
+                                    {
+                                        richTextBox.Rtf = data;
+                                    }
+                                    else
+                                    {
+                                        richTextBox.Text = data;
+                                    }
+
+                                    tabPage.Text = Path.GetFileName(dataPath[i]);
+                                    fileList[tabPage.TabIndex] = dataPath[i];
+                                    fileChangeList[tabPage.TabIndex] = false;
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Произошла ошибка при открытии старых вкладок!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSettings formSettings = new FormSettings();
+            formSettings.Show();
+        }
+
+        private void FontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fontSettings = new FontSettings();
+            fontSettings.Show();
+        }
+
+        private void FormMain_Activated(object sender, EventArgs e)
+        {
+            try
+            {
+                ExecuteSetings();
+                if (fontSettings != null && fontSettings.fontFaсe != null && fontSettings.fontSize != 0)
+                {
+                    fontSize = fontSettings.fontSize;
+                    fontFaсe = fontSettings.fontFaсe;
+                    GetTextFromRichTextBox().Font = new Font(fontFaсe, fontSize);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void timerSave_Tick(object sender, EventArgs e)
+        {
+            LableNotification.Visible = true;
+            SaveAllTabs(true);
+            LableNotification.Visible = false;
+        }
+
+        public List<string> ReadSettingsFromFile()
+        {
+            try
+            {
+                if (File.Exists("Settings.txt"))
+                {
+                    List<string> data = new List<string>();
+                    using (StreamReader streamRider = new StreamReader("Settings.txt"))
+                    {
+                        string line = streamRider.ReadLine();
+                        while (line != null)
+                        {
+                            data.Add(line);
+                            line = streamRider.ReadLine();
+                        }
+
+                    }
+
+                    return data;
+                }
+
+                return null;
+            }
+            catch
+            {
+                MessageBox.Show($"Произошла ошибка при чтении настроек.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        private void ExecuteSetings()
+        {
+            List<string> data = ReadSettingsFromFile();
+            if (data != null)
+            {
+                SetSettingsFormMain(data);
+            }
+        }
+
+
+        private void SetSettingsFormMain(List<string> data)
+        {
+            try
+            {
+                timerSave.Interval = Int32.Parse(data[0]);
+                SetThemeFormMain(data[1]);
+            }
+            catch
+            {
+                MessageBox.Show($"Произошла ошибка при применении настроек.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        }
+
+        private void SetThemeFormMain(string name)
+        {
+            switch (name)
+            {
+                case "White Theme":
+                {
+                    SetWhiteThemeFormMain();
+                    break;
+                }
+                case "Black Theme":
+                {
+                    SetBlackThemeFormMain();
+                    break;
+                }
+                case "Hollow Purple Theme":
+                {
+                    SetPurpleThemeFormMain();
+                    break;
+                }
+                case "Delicious Teal Theme":
+                {
+                    SetTealThemeFormMain();
+                    break;
+                }
+
+            }
+        }
+
+        private void SetWhiteThemeFormMain()
+        {
+            menuStrip.BackColor = Color.WhiteSmoke;
+            toolStrip.BackColor = Color.WhiteSmoke;
+        }
+
+
+        private void SetBlackThemeFormMain()
+        {
+            menuStrip.BackColor = Color.SlateGray;
+            toolStrip.BackColor = Color.SlateGray;
+        }
+
+        private void SetPurpleThemeFormMain()
+        {
+            menuStrip.BackColor = Color.Purple; 
+            toolStrip.BackColor = Color.Purple; 
+        }
+        private void SetTealThemeFormMain()
+        {
+            menuStrip.BackColor = Color.Aquamarine;
+            toolStrip.BackColor = Color.Aquamarine;
         }
     }
 }
