@@ -61,11 +61,14 @@ namespace Peergrade004
             this.CloseTabToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SaveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ItalicToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.BoldToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.UnderlineToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.StrikeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.openFileDialogOne = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogOne = new System.Windows.Forms.SaveFileDialog();
             this.timerSave = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GetAllTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CutExtendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyExtendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,13 +78,11 @@ namespace Peergrade004
             this.BoldContextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UnderlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StrikeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FontOfChoisenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LableNotification = new System.Windows.Forms.Label();
-            this.BoldToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.UnderlineToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.StrikeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
+            this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -344,6 +345,7 @@ namespace Peergrade004
             this.CloseTabToolStripButton.Name = "CloseTabToolStripButton";
             this.CloseTabToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.CloseTabToolStripButton.Text = "Закрыть данную вкладку";
+            this.CloseTabToolStripButton.Click += new System.EventHandler(this.CloseTabToolStripButton_Click);
             // 
             // SaveToolStripButton
             // 
@@ -365,8 +367,38 @@ namespace Peergrade004
             this.ItalicToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ItalicToolStripButton.Name = "ItalicToolStripButton";
             this.ItalicToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.ItalicToolStripButton.Text = "toolStripButton4";
+            this.ItalicToolStripButton.Text = "Курсив";
             this.ItalicToolStripButton.Click += new System.EventHandler(this.ItalicsToolStripMenuItem_Click);
+            // 
+            // BoldToolStripButton
+            // 
+            this.BoldToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.BoldToolStripButton.Image = global::Peergrade004.Properties.Resources.B;
+            this.BoldToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BoldToolStripButton.Name = "BoldToolStripButton";
+            this.BoldToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.BoldToolStripButton.Text = "Жирный ";
+            this.BoldToolStripButton.Click += new System.EventHandler(this.BoldToolStripMenuItem_Click);
+            // 
+            // UnderlineToolStripButton
+            // 
+            this.UnderlineToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.UnderlineToolStripButton.Image = global::Peergrade004.Properties.Resources.P;
+            this.UnderlineToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.UnderlineToolStripButton.Name = "UnderlineToolStripButton";
+            this.UnderlineToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.UnderlineToolStripButton.Text = "Подчёркнутый";
+            this.UnderlineToolStripButton.Click += new System.EventHandler(this.UnderlinedToolStripMenuItem_Click);
+            // 
+            // StrikeToolStripButton
+            // 
+            this.StrikeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.StrikeToolStripButton.Image = global::Peergrade004.Properties.Resources._39569;
+            this.StrikeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.StrikeToolStripButton.Name = "StrikeToolStripButton";
+            this.StrikeToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.StrikeToolStripButton.Text = "Перечёркнутый";
+            this.StrikeToolStripButton.Click += new System.EventHandler(this.StrikeoutToolStripMenuItem_Click);
             // 
             // MainTabControl
             // 
@@ -390,18 +422,19 @@ namespace Peergrade004
             // 
             this.timerSave.Enabled = true;
             this.timerSave.Interval = 10000;
-            this.timerSave.Tick += new System.EventHandler(this.timerSave_Tick);
+            this.timerSave.Tick += new System.EventHandler(this.TimerSave_Tick);
             // 
-            // contextMenuStrip1
+            // ContextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.GetAllTextToolStripMenuItem,
             this.CutExtendToolStripMenuItem,
             this.CopyExtendToolStripMenuItem,
             this.InsertExtendToolStripMenuItem,
-            this.FormatExtendToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 114);
+            this.FormatExtendToolStripMenuItem,
+            this.FontOfChoisenToolStripMenuItem});
+            this.ContextMenuStrip.Name = "contextMenuStrip1";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(180, 136);
             // 
             // GetAllTextToolStripMenuItem
             // 
@@ -470,6 +503,13 @@ namespace Peergrade004
             this.StrikeToolStripMenuItem.Text = "Зачеркнутый";
             this.StrikeToolStripMenuItem.Click += new System.EventHandler(this.StrikeoutToolStripMenuItem_Click);
             // 
+            // FontOfChoisenToolStripMenuItem
+            // 
+            this.FontOfChoisenToolStripMenuItem.Name = "FontOfChoisenToolStripMenuItem";
+            this.FontOfChoisenToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.FontOfChoisenToolStripMenuItem.Text = "Шрифт";
+            this.FontOfChoisenToolStripMenuItem.Click += new System.EventHandler(this.FontOfChoisenToolStripMenuItem_Click);
+            // 
             // LableNotification
             // 
             this.LableNotification.AutoSize = true;
@@ -481,36 +521,6 @@ namespace Peergrade004
             this.LableNotification.TabIndex = 4;
             this.LableNotification.Text = "Автоматическое сохранение завершено";
             this.LableNotification.Visible = false;
-            // 
-            // BoldToolStripButton
-            // 
-            this.BoldToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.BoldToolStripButton.Image = global::Peergrade004.Properties.Resources.B;
-            this.BoldToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.BoldToolStripButton.Name = "BoldToolStripButton";
-            this.BoldToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.BoldToolStripButton.Text = "toolStripButton1";
-            this.BoldToolStripButton.Click += new System.EventHandler(this.BoldToolStripMenuItem_Click);
-            // 
-            // UnderlineToolStripButton
-            // 
-            this.UnderlineToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.UnderlineToolStripButton.Image = global::Peergrade004.Properties.Resources.P;
-            this.UnderlineToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.UnderlineToolStripButton.Name = "UnderlineToolStripButton";
-            this.UnderlineToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.UnderlineToolStripButton.Text = "toolStripButton1";
-            this.UnderlineToolStripButton.Click += new System.EventHandler(this.UnderlinedToolStripMenuItem_Click);
-            // 
-            // StrikeToolStripButton
-            // 
-            this.StrikeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.StrikeToolStripButton.Image = global::Peergrade004.Properties.Resources._39569;
-            this.StrikeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.StrikeToolStripButton.Name = "StrikeToolStripButton";
-            this.StrikeToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.StrikeToolStripButton.Text = "toolStripButton1";
-            this.StrikeToolStripButton.Click += new System.EventHandler(this.StrikeoutToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -534,7 +544,7 @@ namespace Peergrade004
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.ContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -577,7 +587,7 @@ namespace Peergrade004
         private System.Windows.Forms.OpenFileDialog openFileDialogOne;
         private System.Windows.Forms.SaveFileDialog saveFileDialogOne;
         private System.Windows.Forms.Timer timerSave;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem GetAllTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CutExtendToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CopyExtendToolStripMenuItem;
@@ -592,6 +602,7 @@ namespace Peergrade004
         private System.Windows.Forms.ToolStripButton BoldToolStripButton;
         private System.Windows.Forms.ToolStripButton UnderlineToolStripButton;
         private System.Windows.Forms.ToolStripButton StrikeToolStripButton;
+        private System.Windows.Forms.ToolStripMenuItem FontOfChoisenToolStripMenuItem;
     }
 }
 

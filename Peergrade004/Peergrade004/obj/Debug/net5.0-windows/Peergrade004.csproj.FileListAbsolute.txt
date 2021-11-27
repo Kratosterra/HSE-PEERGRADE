@@ -19,3 +19,4 @@ C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debu
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debug\net5.0-windows\Peergrade004.Properties.Resources.resources
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debug\net5.0-windows\Peergrade004.FormSettings.resources
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debug\net5.0-windows\Peergrade004.FontSettings.resources
+C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debug\net5.0-windows\Peergrade004.MiniFontSettingsForm.resources

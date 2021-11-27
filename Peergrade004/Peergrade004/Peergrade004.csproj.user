@@ -10,5 +10,8 @@
     <Compile Update="FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MiniFontSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

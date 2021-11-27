@@ -14,9 +14,10 @@ namespace Peergrade004
 {
     public partial class FormMain : Form
     {
-        public int fontSize = 12;
-        public FontFamily fontFaсe = FontFamily.GenericMonospace;
+        public int fontSize = 14;
+        public FontFamily fontFaсe = new Font("Times New Roman", 14).FontFamily;
         private FontSettings fontSettings;
+        private MiniFontSettingsForm miniFontSettings;
         private List<string> fileList = new List<string>();
         private List<bool> fileChangeList = new List<bool>();
 
@@ -46,6 +47,7 @@ namespace Peergrade004
             tabPage.Click += FormMain_Activated;
             fileList.Add("-");
             fileChangeList.Add(false);
+            richTextBox.Font = new Font("Times New Roman",12);
             richTextBox.BorderStyle = BorderStyle.None;
             richTextBox.TextChanged += IfTextChanged;
             richTextBox.MouseDown += RichTextBox_MouseDown;
@@ -425,17 +427,18 @@ namespace Peergrade004
                 Font newFont;
 
                 oldFont = GetTextFromRichTextBox().SelectionFont;
-                if (oldFont.Italic == true)
+                if (oldFont != null && oldFont.Italic == true)
                 {
                     newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Italic);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-                else
+                else if (oldFont != null && oldFont.Italic == false)
                 {
                     newFont = new Font(oldFont, oldFont.Style | FontStyle.Italic);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-
-                GetTextFromRichTextBox().SelectionFont = newFont;
-                GetTextFromRichTextBox().Focus();
             }
             catch
             {
@@ -453,17 +456,18 @@ namespace Peergrade004
                 Font newFont;
 
                 oldFont = GetTextFromRichTextBox().SelectionFont;
-                if (oldFont.Bold == true)
+                if (oldFont != null && oldFont.Bold == true)
                 {
                     newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Bold);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-                else
+                else if (oldFont != null && oldFont.Bold == false)
                 {
                     newFont = new Font(oldFont, oldFont.Style | FontStyle.Bold);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-
-                GetTextFromRichTextBox().SelectionFont = newFont;
-                GetTextFromRichTextBox().Focus();
             }
             catch
             {
@@ -480,17 +484,18 @@ namespace Peergrade004
                 Font oldFont;
                 Font newFont;
                 oldFont = GetTextFromRichTextBox().SelectionFont;
-                if (oldFont.Underline == true)
+                if (oldFont != null && oldFont.Underline == true)
                 {
                     newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Underline);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-                else
+                else if (oldFont != null && oldFont.Underline == false)
                 {
                     newFont = new Font(oldFont, oldFont.Style | FontStyle.Underline);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-
-                GetTextFromRichTextBox().SelectionFont = newFont;
-                GetTextFromRichTextBox().Focus();
             }
             catch
             {
@@ -509,17 +514,18 @@ namespace Peergrade004
                 Font newFont;
 
                 oldFont = GetTextFromRichTextBox().SelectionFont;
-                if (oldFont.Strikeout == true)
+                if (oldFont != null && oldFont.Strikeout == true)
                 {
                     newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Strikeout);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-                else
+                else if (oldFont != null && oldFont.Strikeout == false)
                 {
                     newFont = new Font(oldFont, oldFont.Style | FontStyle.Strikeout);
+                    GetTextFromRichTextBox().SelectionFont = newFont;
+                    GetTextFromRichTextBox().Focus();
                 }
-
-                GetTextFromRichTextBox().SelectionFont = newFont;
-                GetTextFromRichTextBox().Focus();
             }
             catch
             {
@@ -545,7 +551,7 @@ namespace Peergrade004
             {
                 case MouseButtons.Right:
                 {
-                    contextMenuStrip1.Show(this, new Point(e.X, e.Y));
+                    ContextMenuStrip.Show(this, new Point(e.X, e.Y));
                     break;
                 }
             }
@@ -674,11 +680,20 @@ namespace Peergrade004
             try
             {
                 ExecuteSetings();
+                if (miniFontSettings != null && miniFontSettings.fontSize != 0 && miniFontSettings.fontFaсe != null)
+                {
+                    GetTextFromRichTextBox().SelectionFont = new Font(miniFontSettings.fontFaсe, miniFontSettings.fontSize);
+                    GetTextFromRichTextBox().Focus();
+                    miniFontSettings.fontFaсe = null;
+                    miniFontSettings.fontSize = 0;
+                }
                 if (fontSettings != null && fontSettings.fontFaсe != null && fontSettings.fontSize != 0)
                 {
                     fontSize = fontSettings.fontSize;
                     fontFaсe = fontSettings.fontFaсe;
                     GetTextFromRichTextBox().Font = new Font(fontFaсe, fontSize);
+                    fontSettings.fontSize = 0;
+                    fontSettings.fontFaсe = null;
                 }
             }
             catch
@@ -687,7 +702,7 @@ namespace Peergrade004
             }
         }
 
-        private void timerSave_Tick(object sender, EventArgs e)
+        private void TimerSave_Tick(object sender, EventArgs e)
         {
             LableNotification.Visible = true;
             SaveAllTabs(true);
@@ -728,12 +743,11 @@ namespace Peergrade004
         private void ExecuteSetings()
         {
             List<string> data = ReadSettingsFromFile();
-            if (data != null)
+            if (data != null && data.Count > 1)
             {
                 SetSettingsFormMain(data);
             }
         }
-
 
         private void SetSettingsFormMain(List<string> data)
         {
@@ -784,7 +798,6 @@ namespace Peergrade004
             toolStrip.BackColor = Color.WhiteSmoke;
         }
 
-
         private void SetBlackThemeFormMain()
         {
             menuStrip.BackColor = Color.SlateGray;
@@ -796,10 +809,54 @@ namespace Peergrade004
             menuStrip.BackColor = Color.Purple; 
             toolStrip.BackColor = Color.Purple; 
         }
+       
         private void SetTealThemeFormMain()
         {
             menuStrip.BackColor = Color.Aquamarine;
             toolStrip.BackColor = Color.Aquamarine;
+        }
+
+        private void CloseTabToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MainTabControl.TabCount == 0)
+                {
+                    MessageBox.Show("Удалять нечего, не открыто ни одной вкладки!" +
+                                    "", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    DialogResult userAnswer = MessageBox.Show("Вы действительно хотите закрыть вкладку?\n" +
+                                                              "Все несохранённые данные будут потеряны.", "Закрытие вкладки",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (userAnswer == DialogResult.Yes)
+                    {
+                        TabPage tabPage = MainTabControl.SelectedTab;
+                        fileList[tabPage.TabIndex] = "-";
+                        fileChangeList[tabPage.TabIndex] = false;
+                        MainTabControl.TabPages.Remove(tabPage);
+                    }
+                    else if (userAnswer == DialogResult.No)
+                    {
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Произошла ошибка во время удаления вкладки!" +
+                                "", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void FontOfChoisenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            miniFontSettings = new MiniFontSettingsForm();
+            miniFontSettings.Show();
         }
     }
 }

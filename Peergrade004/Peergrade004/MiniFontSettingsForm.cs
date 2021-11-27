@@ -5,30 +5,32 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Peergrade004
 {
-    public partial class FontSettings : Form
+    public partial class MiniFontSettingsForm : Form
     {
         public int fontSize = 0;
         public FontFamily fontFaсe;
 
-
-        public FontSettings()
+        public MiniFontSettingsForm()
         {
             InitializeComponent();
             ExecuteSetings();
+        }
+
+        private void ButtonAccept_Click(object sender, EventArgs e)
+        {
+            this.Hide();
         }
 
         private void NumericUpDownFontSize_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-                LabelExampleShow.Font = new Font(LabelExampleShow.Font.FontFamily, (int)NumericUpDownFontSize.Value);
                 fontSize = (int)NumericUpDownFontSize.Value;
             }
             catch
@@ -44,10 +46,10 @@ namespace Peergrade004
             {
                 if (ComboBoxFontChoice.SelectedItem.ToString() != null)
                 {
-                    LabelExampleShow.Font = new Font(ComboBoxFontChoice.SelectedItem.ToString() ?? string.Empty,
+                    Font font = new Font(ComboBoxFontChoice.SelectedItem.ToString() ?? string.Empty,
                         (int)NumericUpDownFontSize.Value);
-                    fontFaсe = LabelExampleShow.Font.FontFamily;
-                    fontSize = (int) NumericUpDownFontSize.Value;
+                    fontFaсe = font.FontFamily;
+                    fontSize = (int)NumericUpDownFontSize.Value;
                 }
             }
             catch
@@ -55,11 +57,6 @@ namespace Peergrade004
                 MessageBox.Show("Ошибка при выборе типа шрифта!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void ButtonAccept_Click(object sender, EventArgs e)
-        {
-            this.Hide();
         }
 
         public List<string> ReadSettingsFromFile()
@@ -106,6 +103,7 @@ namespace Peergrade004
         {
             try
             {
+
                 SetThemeFormSettings(data[1]);
             }
             catch
@@ -149,7 +147,6 @@ namespace Peergrade004
             this.BackColor = Color.WhiteSmoke;
         }
 
-
         private void SetBlackThemeFormSettings()
         {
             this.BackColor = Color.SlateGray;
@@ -164,5 +161,6 @@ namespace Peergrade004
         {
             this.BackColor = Color.Aquamarine;
         }
+
     }
 }

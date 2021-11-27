@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.XPath;
 
 namespace Peergrade004
 {
@@ -19,26 +20,58 @@ namespace Peergrade004
             ExecuteSetings();
         }
 
-        private void trackBarTiming_Scroll(object sender, EventArgs e)
+        private void TrackBarTiming_Scroll(object sender, EventArgs e)
         {
-            labelTimingShow.Text = $"Период сохранения файлов: {trackBarTiming.Value + 1} мин";
+            LabelTimingShow.Text = $"Период сохранения файлов: {TrackBarTiming.Value + 1} мин";
         }
 
-        private void buttonTimingAssept_Click(object sender, EventArgs e)
+        private void ButtonTimingAssept_Click(object sender, EventArgs e)
         {
             try
             {
                 using (StreamWriter streamWriter = new StreamWriter("Settings.txt", false))
                 {
-                    int timing = (trackBarTiming.Value + 1) * 1000 * 60;
+                    int timing = (TrackBarTiming.Value + 1) * 1000 * 60;
                     streamWriter.WriteLine(timing);
                     string themeName;
-                    if (radioButtonBlack.Checked == true) themeName = radioButtonBlack.Text;
-                    else if (radioButtonWhite.Checked == true) themeName = radioButtonWhite.Text;
-                    else if (radioButtonPurple.Checked == true) themeName = radioButtonPurple.Text;
-                    else if (radioButtonTeal.Checked == true) themeName = radioButtonTeal.Text;
+                    if (RadioButtonBlack.Checked == true) themeName = RadioButtonBlack.Text;
+                    else if (RadioButtonWhite.Checked == true) themeName = RadioButtonWhite.Text;
+                    else if (RadioButtonPurple.Checked == true) themeName = RadioButtonPurple.Text;
+                    else if (RadioButtonTeal.Checked == true) themeName = RadioButtonTeal.Text;
                     else themeName = "None";
                     streamWriter.WriteLine(themeName);
+                    timing = (TrackBarAutoSaveTime.Value + 1) * 1000 * 60;
+                    streamWriter.WriteLine(timing);
+                    string colour = null;
+                    if (ComboBoxKeyWords.SelectedItem != null)
+                    {
+                        colour = ComboBoxKeyWords.SelectedItem.ToString();
+                    }
+
+                    streamWriter.WriteLine(colour ?? "None");
+                    colour = null;
+                    if (ComboBoxClassNames.SelectedItem != null)
+                    {
+                        colour = ComboBoxClassNames.SelectedItem.ToString();
+                    }
+
+                    streamWriter.WriteLine(colour ?? "None");
+                    colour = null;
+                    if (ComboBoxVariables.SelectedItem != null)
+                    {
+                        colour = ComboBoxVariables.SelectedItem.ToString();
+                    }
+
+                    streamWriter.WriteLine(colour ?? "None");
+                    colour = null;
+                    if (ComboBoxComments.SelectedItem != null)
+                    {
+                        colour = ComboBoxComments.SelectedItem.ToString();
+                    }
+
+                    streamWriter.WriteLine(colour ?? "None");
+                    colour = null;
+                    streamWriter.WriteLine(LableWayCompil.Text);
                 }
             }
             catch (Exception ex)
@@ -86,20 +119,28 @@ namespace Peergrade004
         private void ExecuteSetings()
         {
             List<string> data = ReadSettingsFromFile();
-            if (data != null)
+            if (data != null && data.Count > 1)
             {
                 SetSettingsFormSettings(data);
             }
         }
 
-
         private void SetSettingsFormSettings(List<string> data)
         {
             try
             {
-                trackBarTiming.Value = (Int32.Parse(data[0])-1) / (1000*60);
-                labelTimingShow.Text = $"Период сохранения файлов: {trackBarTiming.Value + 1} мин";
+                TrackBarTiming.Value = (Int32.Parse(data[0]) - 1) / (1000 * 60);
+                LabelTimingShow.Text = $"Период сохранения файлов: {TrackBarTiming.Value + 1} мин";
                 SetThemeFormSettings(data[1]);
+                TrackBarAutoSaveTime.Value = (Int32.Parse(data[2]) - 1) / (1000 * 60);
+                LableAutoSaveOneFile.Text = $"Частота резервного копирования: {TrackBarAutoSaveTime.Value + 1} мин";
+                if (data[3] != "None") ComboBoxKeyWords.SelectedItem = (object) data[3];
+                if (data[4] != "None") ComboBoxClassNames.SelectedItem = (object) data[4];
+                if (data[5] != "None") ComboBoxVariables.SelectedItem = (object) data[5];
+                if (data[6] != "None") ComboBoxComments.SelectedItem = (object) data[6];
+                LableWayCompil.Text = data[7];
+                LableWayToCompil.Text = $"Компилятор: {Path.GetFileName(data[7])}";
+
             }
             catch
             {
@@ -115,28 +156,28 @@ namespace Peergrade004
             {
                 case "White Theme":
                 {
-                    radioButtonWhite.Checked = true;
+                    RadioButtonWhite.Checked = true;
                     SetWhiteThemeFormSettings();
                     break;
                 }
                 case "Black Theme":
-                    {
-                        radioButtonBlack.Checked = true;
-                        SetBlackThemeFormSettings();
-                        break;
-                    }
+                {
+                    RadioButtonBlack.Checked = true;
+                    SetBlackThemeFormSettings();
+                    break;
+                }
                 case "Hollow Purple Theme":
-                    {
-                        radioButtonPurple.Checked = true;
-                        SetPurpleThemeFormSettings();
-                        break;
-                    }
+                {
+                    RadioButtonPurple.Checked = true;
+                    SetPurpleThemeFormSettings();
+                    break;
+                }
                 case "Delicious Teal Theme":
-                    {
-                        radioButtonTeal.Checked = true;
-                        SetTealThemeFormSettings();
-                        break;
-                    }
+                {
+                    RadioButtonTeal.Checked = true;
+                    SetTealThemeFormSettings();
+                    break;
+                }
 
             }
         }
@@ -155,10 +196,42 @@ namespace Peergrade004
         {
             this.BackColor = Color.Purple;
         }
+
         private void SetTealThemeFormSettings()
         {
             this.BackColor = Color.Aquamarine;
         }
-    }
 
+        private void TrackBarAutoSaveTime_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                LableAutoSaveOneFile.Text = $"Частота резервного копирования: {TrackBarAutoSaveTime.Value + 1} мин";
+            }
+            catch
+            {
+                MessageBox.Show($"Произошла ошибка при применении настроек.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ButtonSetCompil_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog.FileName = "";
+                if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    LableWayCompil.Text = OpenFileDialog.FileName;
+                    LableWayToCompil.Text = $"Компилятор: {Path.GetFileName(OpenFileDialog.FileName)}";
+                }
+            }
+            catch
+            {
+                MessageBox.Show($"Произошла ошибка при выборе компилятора.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+    }
 }
