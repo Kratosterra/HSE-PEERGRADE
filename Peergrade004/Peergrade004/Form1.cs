@@ -14,10 +14,10 @@ namespace Peergrade004
 {
     public partial class FormMain : Form
     {
-        public int fontSize = 14;
-        public FontFamily fontFaсe = new Font("Times New Roman", 14).FontFamily;
         private FontSettings fontSettings;
         private MiniFontSettingsForm miniFontSettings;
+        public int fontSize = 14;
+        public FontFamily fontFaсe = new Font("Times New Roman", 14).FontFamily;
         private List<string> fileList = new List<string>();
         private List<bool> fileChangeList = new List<bool>();
 
@@ -106,7 +106,7 @@ namespace Peergrade004
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            openFileDialogOne.FileName = "";
+            OpenFileDialogOne.FileName = "";
             if (GetTextFromRichTextBox().Text != "")
             {
                 DialogResult userAnswer = MessageBox.Show("Хотите открыть файл в этой вкладке?\n" +
@@ -127,13 +127,13 @@ namespace Peergrade004
 
         private void OpenNewFile()
         {
-            if (openFileDialogOne.ShowDialog() == DialogResult.OK)
+            if (OpenFileDialogOne.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    using (StreamReader streamData = new StreamReader(openFileDialogOne.FileName))
+                    using (StreamReader streamData = new StreamReader(OpenFileDialogOne.FileName))
                     {
-                        if (CheckSizeOfFile(openFileDialogOne.FileName))
+                        if (CheckSizeOfFile(OpenFileDialogOne.FileName))
                         {
                             string data = streamData.ReadToEnd();
                             if (string.IsNullOrEmpty(data))
@@ -141,7 +141,7 @@ namespace Peergrade004
                                 data = " ";
                             }
 
-                            if (Path.GetExtension(openFileDialogOne.FileName) == ".rtf")
+                            if (Path.GetExtension(OpenFileDialogOne.FileName) == ".rtf")
                             {
                                 GetTextFromRichTextBox().Rtf = data;
                             }
@@ -151,8 +151,8 @@ namespace Peergrade004
                             }
 
                             TabPage tabPage = MainTabControl.SelectedTab;
-                            tabPage.Text = Path.GetFileName(openFileDialogOne.FileName);
-                            fileList[tabPage.TabIndex] = openFileDialogOne.FileName;
+                            tabPage.Text = Path.GetFileName(OpenFileDialogOne.FileName);
+                            fileList[tabPage.TabIndex] = OpenFileDialogOne.FileName;
                             fileChangeList[tabPage.TabIndex] = false;
                         }
                         else
@@ -209,10 +209,10 @@ namespace Peergrade004
                     {
                         if (fileList[tabPage.TabIndex] == "-")
                         {
-                            saveFileDialogOne.FileName = "";
-                            if (saveFileDialogOne.ShowDialog() == DialogResult.OK)
+                            SaveFileDialogOne.FileName = "";
+                            if (SaveFileDialogOne.ShowDialog() == DialogResult.OK)
                             {
-                                fileList[tabPage.TabIndex] = saveFileDialogOne.FileName;
+                                fileList[tabPage.TabIndex] = SaveFileDialogOne.FileName;
                                 tabPage.Text = Path.GetFileName(fileList[tabPage.TabIndex]);
                             }
                             else
@@ -223,13 +223,20 @@ namespace Peergrade004
 
                         using (StreamWriter streamWriter = new StreamWriter(fileList[tabPage.TabIndex]))
                         {
+                            RichTextBox richTextBox = tabPage.Controls[0] as RichTextBox;
                             if (Path.GetExtension(fileList[tabPage.TabIndex]) == ".rtf")
                             {
-                                streamWriter.Write(GetTextFromRichTextBox().Rtf);
+                                if (richTextBox != null)
+                                {
+                                    streamWriter.Write(richTextBox.Rtf);
+                                }
                             }
                             else
                             {
-                                streamWriter.Write(GetTextFromRichTextBox().Text);
+                                if (richTextBox != null)
+                                {
+                                    streamWriter.Write(richTextBox.Text);
+                                }
                             }
                         }
 
@@ -268,10 +275,10 @@ namespace Peergrade004
             {
                 try
                 {
-                    saveFileDialogOne.FileName = Path.GetFileName(fileList[tabPage.TabIndex]);
-                    if (saveFileDialogOne.ShowDialog() == DialogResult.OK)
+                    SaveFileDialogOne.FileName = Path.GetFileName(fileList[tabPage.TabIndex]);
+                    if (SaveFileDialogOne.ShowDialog() == DialogResult.OK)
                     {
-                        fileList[tabPage.TabIndex] = saveFileDialogOne.FileName;
+                        fileList[tabPage.TabIndex] = SaveFileDialogOne.FileName;
                         tabPage.Text = Path.GetFileName(fileList[tabPage.TabIndex]);
                     }
                     else
@@ -339,7 +346,8 @@ namespace Peergrade004
                     for (int i = 0; i < MainTabControl.TabCount; i++)
                     {
                         TabPage tabPage = MainTabControl.TabPages[i];
-                        if (fileList[tabPage.TabIndex] == "-" && tabPage.Text[0] == '*' && !isThisAutomaticSave)
+                        if (fileList[tabPage.TabIndex] == "-" && fileChangeList[tabPage.TabIndex]
+                                                              && !isThisAutomaticSave)
                         {
                             MessageBox.Show($"Сохранение Безымянного файла\n" +
                                             $"Если вы закройте окно сохранения файла, он не будет сохранён!",
@@ -350,11 +358,10 @@ namespace Peergrade004
                         {
 
                         }
-                        else
+                        else if(fileList[tabPage.TabIndex] != "-" && fileChangeList[tabPage.TabIndex] == true)
                         {
                             SaveFile(tabPage);
                         }
-
                     }
 
                     if (!isThisAutomaticSave)
@@ -753,7 +760,7 @@ namespace Peergrade004
         {
             try
             {
-                timerSave.Interval = Int32.Parse(data[0]);
+                TimerSave.Interval = Int32.Parse(data[0]);
                 SetThemeFormMain(data[1]);
             }
             catch
@@ -794,26 +801,26 @@ namespace Peergrade004
 
         private void SetWhiteThemeFormMain()
         {
-            menuStrip.BackColor = Color.WhiteSmoke;
-            toolStrip.BackColor = Color.WhiteSmoke;
+            MenuStrip.BackColor = Color.WhiteSmoke;
+            ToolStrip.BackColor = Color.WhiteSmoke;
         }
 
         private void SetBlackThemeFormMain()
         {
-            menuStrip.BackColor = Color.SlateGray;
-            toolStrip.BackColor = Color.SlateGray;
+            MenuStrip.BackColor = Color.SlateGray;
+            ToolStrip.BackColor = Color.SlateGray;
         }
 
         private void SetPurpleThemeFormMain()
         {
-            menuStrip.BackColor = Color.Purple; 
-            toolStrip.BackColor = Color.Purple; 
+            MenuStrip.BackColor = Color.Purple; 
+            ToolStrip.BackColor = Color.Purple; 
         }
        
         private void SetTealThemeFormMain()
         {
-            menuStrip.BackColor = Color.Aquamarine;
-            toolStrip.BackColor = Color.Aquamarine;
+            MenuStrip.BackColor = Color.Aquamarine;
+            ToolStrip.BackColor = Color.Aquamarine;
         }
 
         private void CloseTabToolStripButton_Click(object sender, EventArgs e)
