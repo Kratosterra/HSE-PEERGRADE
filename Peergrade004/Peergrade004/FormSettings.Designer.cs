@@ -298,7 +298,7 @@ namespace Peergrade004
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(528, 450);
+            this.ClientSize = new System.Drawing.Size(529, 451);
             this.Controls.Add(this.ComboBoxKeyWords);
             this.Controls.Add(this.LableWayCompil);
             this.Controls.Add(this.ButtonSetCompil);
@@ -322,6 +322,8 @@ namespace Peergrade004
             this.Controls.Add(this.buttonTimingAssept);
             this.Controls.Add(this.labelMSeconds);
             this.Controls.Add(this.LabelTimingShow);
+            this.MaximumSize = new System.Drawing.Size(545, 490);
+            this.MinimumSize = new System.Drawing.Size(545, 490);
             this.Name = "FormSettings";
             this.Text = "Настройки";
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarTiming)).EndInit();

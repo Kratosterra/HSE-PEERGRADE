@@ -1,8 +1,8 @@
 60000
 White Theme
 60000
-None
-None
-None
-None
-НЕТ
+Фиолетовый
+Зелёный
+Жёлтый
+Красный
+F:\Kratosterra\Загрузки\TeamsSetupx64_s_8D97107AFDC864D-7-0_.exe
