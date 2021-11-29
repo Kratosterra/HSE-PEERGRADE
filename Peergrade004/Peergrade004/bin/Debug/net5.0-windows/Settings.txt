@@ -1,8 +1,8 @@
 60000
-White Theme
+Hollow Purple Theme
 60000
-Фиолетовый
-Зелёный
-Жёлтый
-Красный
-F:\Kratosterra\Загрузки\TeamsSetupx64_s_8D97107AFDC864D-7-0_.exe
+None
+None
+None
+None
+C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe

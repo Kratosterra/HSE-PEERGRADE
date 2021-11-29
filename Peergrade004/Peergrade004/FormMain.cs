@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Microsoft.CSharp;
+using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Security.Policy;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Peergrade004
@@ -550,7 +552,11 @@ namespace Peergrade004
 
         private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().Redo();
+            if (GetTextFromRichTextBox().CanRedo)
+            {
+                if (GetTextFromRichTextBox().RedoActionName != "Delete")
+                    GetTextFromRichTextBox().Redo();
+            }
         }
 
         private void RichTextBox_MouseDown(object sender, MouseEventArgs e)
@@ -916,7 +922,9 @@ namespace Peergrade004
                                 di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                             }
                             string[] allFiles = Directory.GetFiles(destPath);
-                            string filePathSave = $"{destPath}/({DateTime.Now.Hour}-{DateTime.Now.Minute}-{DateTime.Now.Second}) {Path.GetFileName(fileList[tabPage.TabIndex])}";
+                            string filePathSave = $"{destPath}/" +
+                                                  $"(Время {DateTime.Now.ToString("HH-mm-ss")})" +
+                                                  $" {Path.GetFileName(fileList[tabPage.TabIndex])}";
                             if (allFiles.Length <= 10)
                             {
                                 using (StreamWriter streamWriter = new StreamWriter(filePathSave))
@@ -1101,6 +1109,111 @@ namespace Peergrade004
             catch
             {
                 MessageBox.Show("Невозможно открыть файл автосохранения, возможно он уже был удалён системой", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (GetTextFromRichTextBox().CanUndo)
+            {
+                if (GetTextFromRichTextBox().RedoActionName != "Delete")
+                    GetTextFromRichTextBox().Undo();
+            }
+        }
+
+        private void StartCompilingToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage tabPage = MainTabControl.SelectedTab;
+                if (tabPage != null)
+                {
+                    if (Path.GetExtension(fileList[tabPage.TabIndex]) == ".cs")
+                    {
+                        SaveFile(tabPage);
+                        string source = fileList[tabPage.TabIndex];
+                        List<string> data = ReadSettingsFromFile();
+                        string compil = null;
+                        try
+                        {
+                            if (data != null)
+                            {
+                                compil = data[7];
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Перед компиляцией укажите путь к вашему csc.exe в настройках!", "Настройка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+
+                        if (compil == null) compil = "НЕТ";
+                        if (compil == "НЕТ")
+                        {
+                            MessageBox.Show("Перед компиляцией укажите путь к вашему csc.exe", "Настройка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        if (compil[^7..] != "csc.exe")
+                        {
+                            MessageBox.Show("Установите правильный компилятор в настройках!\n" +
+                                            "Требуется csc.exe", "Отказ",
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            return;
+                        }
+                        string command = $@"{compil} /t:exe {source}";
+                        Process cmd = new Process();
+                        cmd.StartInfo = new ProcessStartInfo(@"cmd.exe");
+                        cmd.StartInfo.CreateNoWindow = true;
+                        cmd.StartInfo.RedirectStandardInput = true;
+                        cmd.StartInfo.UseShellExecute = false;
+                        cmd.StartInfo.RedirectStandardOutput = true;
+                        cmd.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+                        cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        cmd.Start();
+                        cmd.StandardInput.WriteLine(command);
+                        cmd.StandardInput.WriteLine("exit");
+                        StreamReader srIncoming = cmd.StandardOutput;
+                        string value = srIncoming.ReadToEnd();
+                        if (value.Contains("error CS"))
+                        {
+                            string info = null;
+                            string[] datas = value.Split("\n");
+                            for (int i = 0; i < datas.Length; i++)
+                            {
+                                if (datas[i].Contains("error CS"))
+                                {
+                                    info += $"{datas[i]}\n";
+                                }
+                            }
+                            MessageBox.Show($"Ошибки:\n{info}", "Ошибка при компиляции!",
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Программа успешно скомпилирована.\n" +
+                                            $"Исполняемый файл с именем файла можно найти в корневой папке приложения!", "Успех!",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Невозможно скомпилировать данный файл! Он не формата *.cs", "Отказ",
+                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Отсутсвуют вкладки!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Произошла неизвестная ошибка при компиляции!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
