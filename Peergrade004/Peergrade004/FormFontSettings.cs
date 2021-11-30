@@ -21,7 +21,7 @@ namespace Peergrade004
         public FontSettings()
         {
             InitializeComponent();
-            ExecuteSetings();
+            ExecuteSettings();
         }
 
         private void NumericUpDownFontSize_ValueChanged(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace Peergrade004
                     LabelExampleShow.Font = new Font(ComboBoxFontChoice.SelectedItem.ToString() ?? string.Empty,
                         (int)NumericUpDownFontSize.Value);
                     fontFaсe = LabelExampleShow.Font.FontFamily;
-                    fontSize = (int) NumericUpDownFontSize.Value;
+                    fontSize = (int)NumericUpDownFontSize.Value;
                 }
             }
             catch
@@ -93,7 +93,7 @@ namespace Peergrade004
             }
         }
 
-        private void ExecuteSetings()
+        private void ExecuteSettings()
         {
             List<string> data = ReadSettingsFromFile();
             if (data != null && data.Count > 1)
@@ -148,7 +148,6 @@ namespace Peergrade004
         {
             this.BackColor = Color.WhiteSmoke;
         }
-
 
         private void SetBlackThemeFormSettings()
         {

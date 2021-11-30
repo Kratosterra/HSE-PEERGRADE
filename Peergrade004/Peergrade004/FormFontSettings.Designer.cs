@@ -29,6 +29,7 @@ namespace Peergrade004
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FontSettings));
             this.LabelExample = new System.Windows.Forms.Label();
             this.LabelExampleShow = new System.Windows.Forms.Label();
             this.NumericUpDownFontSize = new System.Windows.Forms.NumericUpDown();
@@ -137,6 +138,7 @@ namespace Peergrade004
             this.Controls.Add(this.NumericUpDownFontSize);
             this.Controls.Add(this.LabelExampleShow);
             this.Controls.Add(this.LabelExample);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(425, 230);
             this.MinimumSize = new System.Drawing.Size(425, 230);
             this.Name = "FontSettings";

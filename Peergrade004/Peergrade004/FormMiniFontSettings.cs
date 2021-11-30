@@ -19,7 +19,7 @@ namespace Peergrade004
         public MiniFontSettingsForm()
         {
             InitializeComponent();
-            ExecuteSetings();
+            ExecuteSettings();
         }
 
         private void ButtonAccept_Click(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace Peergrade004
             }
         }
 
-        private void ExecuteSetings()
+        private void ExecuteSettings()
         {
             List<string> data = ReadSettingsFromFile();
             if (data != null && data.Count > 1)

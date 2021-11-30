@@ -17,7 +17,7 @@ namespace Peergrade004
         public FormSettings()
         {
             InitializeComponent();
-            ExecuteSetings();
+            ExecuteSettings();
         }
 
         private void TrackBarTiming_Scroll(object sender, EventArgs e)
@@ -116,7 +116,7 @@ namespace Peergrade004
             }
         }
 
-        private void ExecuteSetings()
+        private void ExecuteSettings()
         {
             List<string> data = ReadSettingsFromFile();
             if (data != null && data.Count > 1)

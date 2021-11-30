@@ -29,6 +29,7 @@ namespace Peergrade004
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MiniFontSettingsForm));
             this.LabelInfoSize = new System.Windows.Forms.Label();
             this.NumericUpDownFontSize = new System.Windows.Forms.NumericUpDown();
             this.LabelInfoFace = new System.Windows.Forms.Label();
@@ -114,6 +115,7 @@ namespace Peergrade004
             this.Controls.Add(this.ComboBoxFontChoice);
             this.Controls.Add(this.LabelInfoSize);
             this.Controls.Add(this.NumericUpDownFontSize);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(400, 200);
             this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "MiniFontSettingsForm";

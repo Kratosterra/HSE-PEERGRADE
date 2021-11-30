@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
@@ -22,6 +23,7 @@ namespace Peergrade004
         public FontFamily fontFaсe = new Font("Times New Roman", 14).FontFamily;
         private List<string> fileList = new List<string>();
         private List<bool> fileChangeList = new List<bool>();
+        PictureBox startPictureBox = new PictureBox();
 
         public FormMain()
         {
@@ -31,8 +33,40 @@ namespace Peergrade004
         private void FormMain_Load(object sender, EventArgs e)
         {
             ReadAllOldTabs();
-            ExecuteSetings();
+            ExecuteSettings();
             DeleteAutoSaveDirectory();
+            CreateStartMenu();
+        }
+
+        private void CreateStartMenu()
+        {
+            startPictureBox.Location = new Point(400, 54);
+            startPictureBox.Size = new Size(600, 548);
+            startPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            this.Controls.Add(startPictureBox);
+
+            PictureBox CreatePictureBox = new PictureBox();
+            CreatePictureBox.Location = new Point(10, 350);
+            CreatePictureBox.Size = new Size(300, 100);
+            CreatePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            CreatePictureBox.Image = Properties.Resources.CREATE;
+            CreatePictureBox.Click += NewTabToolStripMenuItem_Click;
+            this.Controls.Add(CreatePictureBox);
+
+            PictureBox OpenPictureBox = new PictureBox();
+            OpenPictureBox.Location = new Point(10, 440);
+            OpenPictureBox.Size = new Size(307, 70);
+            OpenPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            OpenPictureBox.Image = Properties.Resources.OPEN;
+            OpenPictureBox.Click += OpenToolStripMenuItem_Click;
+            this.Controls.Add(OpenPictureBox);
+
+            PictureBox ThemePictureBox = new PictureBox();
+            ThemePictureBox.Location = new Point(0, 250);
+            ThemePictureBox.Size = new Size(380, 100);
+            ThemePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            ThemePictureBox.Image = Properties.Resources.NOTEPAD_;
+            this.Controls.Add(ThemePictureBox);
         }
 
         private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,34 +76,54 @@ namespace Peergrade004
 
         private void CreateNewTab(out TabPage tabPage, out RichTextBox richTextBox)
         {
-            tabPage = new TabPage("Безымянный");
-            richTextBox = new RichTextBox();
-            richTextBox.Dock = DockStyle.Fill;
-            tabPage.Controls.Add(richTextBox);
-            MainTabControl.TabPages.Add(tabPage);
-            tabPage.Click += FormMain_Activated;
-            fileList.Add("-");
-            fileChangeList.Add(false);
-            richTextBox.Font = new Font("Times New Roman",12);
-            richTextBox.BorderStyle = BorderStyle.None;
-            richTextBox.TextChanged += IfTextChanged;
-            richTextBox.MouseDown += RichTextBox_MouseDown;
-            richTextBox.Click += FormMain_Activated;
-
+            try
+            {
+                tabPage = new TabPage("Безымянный");
+                richTextBox = new RichTextBox();
+                richTextBox.Dock = DockStyle.Fill;
+                tabPage.Controls.Add(richTextBox);
+                MainTabControl.TabPages.Add(tabPage);
+                tabPage.Click += FormMain_Activated;
+                fileList.Add("-");
+                fileChangeList.Add(false);
+                richTextBox.Font = new Font("Times New Roman", 12);
+                richTextBox.BorderStyle = BorderStyle.None;
+                richTextBox.TextChanged += IfTextChanged;
+                richTextBox.MouseDown += RichTextBox_MouseDown;
+                richTextBox.Click += FormMain_Activated;
+                MainTabControl.Visible = true;
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при создании новой вкладки!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabPage = null;
+                richTextBox = null;
+            }
         }
 
         private void IfTextChanged(object sender, EventArgs e)
         {
             TabPage tabPage = MainTabControl.SelectedTab;
-            if (fileChangeList[tabPage.TabIndex] == false)
+            if (tabPage != null)
             {
-                fileChangeList[tabPage.TabIndex] = true;
-                tabPage.Text = $"*{tabPage.Text}";
+                try
+                {
+                    if (fileChangeList[tabPage.TabIndex] == false)
+                    {
+                        fileChangeList[tabPage.TabIndex] = true;
+                        tabPage.Text = $"*{tabPage.Text}";
+                    }
+                }
+                catch
+                {
+                }
             }
         }
 
         private RichTextBox GetTextFromRichTextBox()
         {
+
             RichTextBox richTextBox = null;
             TabPage tabPage = MainTabControl.SelectedTab;
             if (tabPage != null)
@@ -82,49 +136,86 @@ namespace Peergrade004
                 CreateNewTab(out TabPage newTabPage, out RichTextBox richTextBoxNew);
                 return richTextBoxNew;
             }
-
         }
 
         private void CutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().Cut();
+            try
+            {
+                GetTextFromRichTextBox().Cut();
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при вырезании текста!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().Copy();
+            try
+            {
+                GetTextFromRichTextBox().Copy();
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при копировании текста!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void InsertToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().Paste();
+            try
+            {
+                GetTextFromRichTextBox().Paste();
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при вставке текста!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().Clear();
+            try
+            {
+                GetTextFromRichTextBox().Clear();
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при удалении всего текста!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            OpenFileDialogOne.FileName = "";
-            if (GetTextFromRichTextBox().Text != "")
+            try
             {
-                DialogResult userAnswer = MessageBox.Show("Хотите открыть файл в этой вкладке?\n" +
-                                                          "Все несохранённые данные будут потеряны!", "Открытие файла",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                OpenFileDialogOne.FileName = "";
+                if (GetTextFromRichTextBox().Text != "")
+                {
+                    DialogResult userAnswer = MessageBox.Show("Хотите открыть файл в этой вкладке?\n" +
+                                                              "Все несохранённые данные будут потеряны!", "Открытие файла",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                if (userAnswer == DialogResult.Yes)
+                    if (userAnswer == DialogResult.Yes)
+                    {
+                        OpenNewFile();
+                    }
+                }
+                else
                 {
                     OpenNewFile();
                 }
             }
-            else
+            catch
             {
-                OpenNewFile();
+                MessageBox.Show("Возникла ошибка при при открытии файла, вероятно она связана с вашей системой!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void OpenNewFile()
@@ -187,13 +278,22 @@ namespace Peergrade004
 
         private static bool CheckSizeOfFile(string path)
         {
-            long length = new FileInfo(path).Length;
-            if (length > 1073741824)
+            try
             {
+                long length = new FileInfo(path).Length;
+                if (length > 1073741824)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при попытке получить размер файла!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-
-            return true;
         }
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -361,7 +461,7 @@ namespace Peergrade004
                         {
 
                         }
-                        else if(fileList[tabPage.TabIndex] != "-" && fileChangeList[tabPage.TabIndex] == true)
+                        else if (fileList[tabPage.TabIndex] != "-" && fileChangeList[tabPage.TabIndex] == true)
                         {
                             SaveFile(tabPage);
                         }
@@ -386,42 +486,48 @@ namespace Peergrade004
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-            if (fileChangeList.Contains(true))
+            try
             {
-                DialogResult userAnswer = MessageBox.Show("Хотите сохранить несохранёные файлы?", "Выход",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (fileChangeList.Contains(true))
+                {
+                    DialogResult userAnswer = MessageBox.Show("Хотите сохранить несохранёные файлы?", "Выход",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
-                if (userAnswer == DialogResult.Yes)
-                {
-                    SaveAllTabs();
-                    SaveAllOpenTabsInFile();
-                }
-                else if (userAnswer == DialogResult.No)
-                {
-                    SaveAllOpenTabsInFile();
+                    if (userAnswer == DialogResult.Yes)
+                    {
+                        SaveAllTabs();
+                        SaveAllOpenTabsInFile();
+                    }
+                    else if (userAnswer == DialogResult.No)
+                    {
+                        SaveAllOpenTabsInFile();
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                    }
                 }
                 else
                 {
-                    e.Cancel = true;
+                    DialogResult userAnswer = MessageBox.Show("Вы точно хотите выйти?\n" +
+                                                              "(не обнаружено несохранёных файлов)", "Выход",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (userAnswer == DialogResult.Yes)
+                    {
+                        SaveAllOpenTabsInFile();
+                    }
+                    else if (userAnswer == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                    }
                 }
             }
-            else
+            catch
             {
-                DialogResult userAnswer = MessageBox.Show("Вы точно хотите выйти?\n" +
-                                                          "(не обнаружено несохранёных файлов)", "Выход",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (userAnswer == DialogResult.Yes)
-                {
-                    SaveAllOpenTabsInFile();
-                }
-                else if (userAnswer == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
+                MessageBox.Show("Произошла ошибка при завершении работы программы, сохранение данных не производится!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void CloseAppToolStripMenuItem_Click(object sender, EventArgs e)
@@ -546,34 +652,65 @@ namespace Peergrade004
 
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormMain form = new FormMain();
-            form.Show();
+            try
+            {
+                FormMain form = new FormMain();
+                form.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Невозможно открыть новое окно!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GetTextFromRichTextBox().CanRedo)
+            try
             {
-                if (GetTextFromRichTextBox().RedoActionName != "Delete")
-                    GetTextFromRichTextBox().Redo();
+                if (GetTextFromRichTextBox().CanRedo)
+                {
+                    if (GetTextFromRichTextBox().RedoActionName != "Delete")
+                        GetTextFromRichTextBox().Redo();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка при отмене действия!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void RichTextBox_MouseDown(object sender, MouseEventArgs e)
         {
-            switch (e.Button)
+            try
             {
-                case MouseButtons.Right:
+                switch (e.Button)
                 {
-                    ContextMenuStrip.Show(this, new Point(e.X, e.Y));
-                    break;
+                    case MouseButtons.Right:
+                    {
+                        ContextMainMenuStrip.Show(this, new Point(e.X, e.Y));
+                        break;
+                    }
                 }
+            }
+            catch
+            {
+
             }
         }
 
         private void GetAllTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GetTextFromRichTextBox().SelectAll();
+            try
+            {
+                GetTextFromRichTextBox().SelectAll();
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка при выборе всего текста!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void SaveAllOpenTabsInFile()
@@ -591,9 +728,10 @@ namespace Peergrade004
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"Вкладки не будут автоматически открыты при следующем запуске", "Ошибка",
+                MessageBox.Show($"Ошибка сохранения вкладок!\n" +
+                                $"Вкладки не будут автоматически открыты при следующем запуске", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -679,21 +817,37 @@ namespace Peergrade004
 
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormSettings formSettings = new FormSettings();
-            formSettings.Show();
+            try
+            {
+                FormSettings formSettings = new FormSettings();
+                formSettings.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Невозможно открыть новое окно!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void FontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fontSettings = new FontSettings();
-            fontSettings.Show();
+            try
+            {
+                fontSettings = new FontSettings();
+                fontSettings.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Невозможно открыть новое окно!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void FormMain_Activated(object sender, EventArgs e)
         {
             try
             {
-                ExecuteSetings();
+                ExecuteSettings();
                 if (miniFontSettings != null && miniFontSettings.fontSize != 0 && miniFontSettings.fontFaсe != null)
                 {
                     GetTextFromRichTextBox().SelectionFont = new Font(miniFontSettings.fontFaсe, miniFontSettings.fontSize);
@@ -718,9 +872,16 @@ namespace Peergrade004
 
         private void TimerSave_Tick(object sender, EventArgs e)
         {
-            LableNotification.Visible = true;
-            SaveAllTabs(true);
-            LableNotification.Visible = false;
+            try
+            {
+                LableNotification.Visible = true;
+                SaveAllTabs(true);
+                LableNotification.Visible = false;
+            }
+            catch
+            {
+
+            }
         }
 
         public List<string> ReadSettingsFromFile()
@@ -754,13 +915,27 @@ namespace Peergrade004
             }
         }
 
-        private void ExecuteSetings()
+        private void ExecuteSettings()
         {
-            List<string> data = ReadSettingsFromFile();
-            if (data != null && data.Count > 1)
+            try
             {
-                SetSettingsFormMain(data);
+                List<string> data = ReadSettingsFromFile();
+                if (data == null)
+                {
+                    this.BackColor = Color.WhiteSmoke;
+                    startPictureBox.Image = Properties.Resources.White;
+                }
+                if (data != null && data.Count > 1)
+                {
+                    SetSettingsFormMain(data);
+                }
             }
+            catch
+            {
+                MessageBox.Show("Ошибка при исполнении настроек!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void SetSettingsFormMain(List<string> data)
@@ -776,7 +951,7 @@ namespace Peergrade004
                 MessageBox.Show($"Произошла ошибка при применении настроек.", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
         private void SetThemeFormMain(string name)
@@ -784,26 +959,25 @@ namespace Peergrade004
             switch (name)
             {
                 case "White Theme":
-                {
-                    SetWhiteThemeFormMain();
-                    break;
-                }
+                    {
+                        SetWhiteThemeFormMain();
+                        break;
+                    }
                 case "Black Theme":
-                {
-                    SetBlackThemeFormMain();
-                    break;
-                }
+                    {
+                        SetBlackThemeFormMain();
+                        break;
+                    }
                 case "Hollow Purple Theme":
-                {
-                    SetPurpleThemeFormMain();
-                    break;
-                }
+                    {
+                        SetPurpleThemeFormMain();
+                        break;
+                    }
                 case "Delicious Teal Theme":
-                {
-                    SetTealThemeFormMain();
-                    break;
-                }
-
+                    {
+                        SetTealThemeFormMain();
+                        break;
+                    }
             }
         }
 
@@ -811,24 +985,32 @@ namespace Peergrade004
         {
             MenuStrip.BackColor = Color.WhiteSmoke;
             ToolStrip.BackColor = Color.WhiteSmoke;
+            startPictureBox.Image = Properties.Resources.White;
+            this.BackColor = Color.WhiteSmoke;
         }
 
         private void SetBlackThemeFormMain()
         {
             MenuStrip.BackColor = Color.SlateGray;
             ToolStrip.BackColor = Color.SlateGray;
+            startPictureBox.Image = Properties.Resources.Dark;
+            this.BackColor = Color.SlateGray;
         }
 
         private void SetPurpleThemeFormMain()
         {
-            MenuStrip.BackColor = Color.Purple; 
-            ToolStrip.BackColor = Color.Purple; 
+            MenuStrip.BackColor = Color.Purple;
+            ToolStrip.BackColor = Color.Purple;
+            startPictureBox.Image = Properties.Resources.Purple;
+            this.BackColor = Color.Purple;
         }
-       
+
         private void SetTealThemeFormMain()
         {
             MenuStrip.BackColor = Color.Aquamarine;
             ToolStrip.BackColor = Color.Aquamarine;
+            startPictureBox.Image = Properties.Resources.Teal;
+            this.BackColor = Color.Aquamarine;
         }
 
         private void CloseTabToolStripButton_Click(object sender, EventArgs e)
@@ -854,6 +1036,10 @@ namespace Peergrade004
                         fileChangeList[tabPage.TabIndex] = false;
                         MainTabControl.TabPages.Remove(tabPage);
                         DeleteAutoSaveFileInformation(tabPage);
+                        if (MainTabControl.TabPages.Count == 0)
+                        {
+                            MainTabControl.Visible = false;
+                        }
                     }
                     else if (userAnswer == DialogResult.No)
                     {
@@ -893,8 +1079,16 @@ namespace Peergrade004
 
         private void FontOfChoisenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            miniFontSettings = new MiniFontSettingsForm();
-            miniFontSettings.Show();
+            try
+            {
+                miniFontSettings = new MiniFontSettingsForm();
+                miniFontSettings.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Невозможно открыть новое окно!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void DoCopyOfAllFiels()
@@ -937,7 +1131,7 @@ namespace Peergrade004
                                             streamWriter.Write(richTextBox.Rtf);
                                         }
                                     }
-                                    else 
+                                    else
                                     {
                                         if (richTextBox != null)
                                         {
@@ -974,9 +1168,10 @@ namespace Peergrade004
                     }
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                MessageBox.Show($"Ошибка при автоматическом автосохранении!");
+                MessageBox.Show("Ошибка при создании резервной копии файлов!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -1093,7 +1288,7 @@ namespace Peergrade004
                                 fileChangeList[tabPage.TabIndex] = true;
                                 if (tabPage.Text[0] != '*')
                                 {
-                                    tabPage.Text = '*'+tabPage.Text;
+                                    tabPage.Text = '*' + tabPage.Text;
                                 }
                             }
                             else
@@ -1115,11 +1310,20 @@ namespace Peergrade004
 
         private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (GetTextFromRichTextBox().CanUndo)
+            try
             {
-                if (GetTextFromRichTextBox().RedoActionName != "Delete")
-                    GetTextFromRichTextBox().Undo();
+                if (GetTextFromRichTextBox().CanUndo)
+                {
+                    if (GetTextFromRichTextBox().RedoActionName != "Delete")
+                        GetTextFromRichTextBox().Undo();
+                }
             }
+            catch
+            {
+                MessageBox.Show("Ошибка при откате действия!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void StartCompilingToolStripButton_Click(object sender, EventArgs e)
@@ -1152,7 +1356,7 @@ namespace Peergrade004
                         if (compil == null) compil = "НЕТ";
                         if (compil == "НЕТ")
                         {
-                            MessageBox.Show("Перед компиляцией укажите путь к вашему csc.exe", "Настройка",
+                            MessageBox.Show("Перед компиляцией укажите путь к вашему csc.exe в настройках", "Настройка",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
@@ -1194,7 +1398,7 @@ namespace Peergrade004
                         else
                         {
                             MessageBox.Show($"Программа успешно скомпилирована.\n" +
-                                            $"Исполняемый файл с именем файла можно найти в корневой папке приложения!", "Успех!",
+                                            $"Исполняемый файл с именем файла можно найти в корневой папке приложения!\n", "Успех!",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
 
@@ -1211,7 +1415,7 @@ namespace Peergrade004
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Произошла неизвестная ошибка при компиляции!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);

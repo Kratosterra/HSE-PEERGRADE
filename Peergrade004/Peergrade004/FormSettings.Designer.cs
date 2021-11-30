@@ -29,6 +29,7 @@ namespace Peergrade004
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
             this.LabelTimingShow = new System.Windows.Forms.Label();
             this.labelMSeconds = new System.Windows.Forms.Label();
             this.buttonTimingAssept = new System.Windows.Forms.Button();
@@ -148,6 +149,7 @@ namespace Peergrade004
             // 
             this.TrackBarAutoSaveTime.Location = new System.Drawing.Point(268, 28);
             this.TrackBarAutoSaveTime.Name = "TrackBarAutoSaveTime";
+            this.TrackBarAutoSaveTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TrackBarAutoSaveTime.Size = new System.Drawing.Size(162, 45);
             this.TrackBarAutoSaveTime.TabIndex = 11;
             this.TrackBarAutoSaveTime.Scroll += new System.EventHandler(this.TrackBarAutoSaveTime_Scroll);
@@ -322,6 +324,7 @@ namespace Peergrade004
             this.Controls.Add(this.buttonTimingAssept);
             this.Controls.Add(this.labelMSeconds);
             this.Controls.Add(this.LabelTimingShow);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(545, 490);
             this.MinimumSize = new System.Drawing.Size(545, 490);
             this.Name = "FormSettings";
