@@ -7,8 +7,28 @@
   "targets": {
     ".NETCoreApp,Version=v5.0": {
       "Peergrade004/1.0.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp": "4.1.0.0",
+          "Microsoft.CodeAnalysis": "4.1.0.0"
+        },
         "runtime": {
           "Peergrade004.dll": {}
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp/4.1.0.0": {
+        "runtime": {
+          "Microsoft.CodeAnalysis.CSharp.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.100.21.56604"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis/4.1.0.0": {
+        "runtime": {
+          "Microsoft.CodeAnalysis.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.100.21.56604"
+          }
         }
       }
     }
@@ -16,6 +36,16 @@
   "libraries": {
     "Peergrade004/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CodeAnalysis.CSharp/4.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CodeAnalysis/4.1.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

@@ -12,6 +12,9 @@ using System.Resources;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+
 
 namespace Peergrade004
 {
@@ -143,6 +146,7 @@ namespace Peergrade004
             CloseTabToolStripButton.Visible = isObjectEnable;
             NewTabToolStripButton.Visible = isObjectEnable;
             SettingsToolStripButton.Visible = isObjectEnable;
+            FormatCodeToolStripButton.Visible = isObjectEnable;
         }
 
         /// <summary>
@@ -208,7 +212,7 @@ namespace Peergrade004
             // Устанавливаем шрифт и стиль края.
             richTextBox.Font = new Font("Times New Roman", 12);
             richTextBox.BorderStyle = BorderStyle.None;
-            // Подписываемся на необходимые события
+            // Подписываемся на необходимые события.
             richTextBox.TextChanged += IfTextChanged;
             richTextBox.MouseDown += RichTextBox_MouseDown;
             richTextBox.Click += FormMain_Activated;
@@ -264,6 +268,7 @@ namespace Peergrade004
                         s_fileChangeList[tabPage.TabIndex] = true;
                         tabPage.Text = $"*{tabPage.Text}";
                     }
+
                 }
                 catch
                 {
@@ -1863,10 +1868,16 @@ namespace Peergrade004
 
         }
 
+        /// <summary>
+        /// Событие, возникающее при необходимости скомпилировать файл.
+        /// </summary>
+        /// <param name="sender">Обьект который инициализировал событие.</param>
+        /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
         private void StartCompilingToolStripButton_Click(object sender, EventArgs e)
         {
             try
             {
+                // Пробуем начать компиляцию.
                 if (TryToExecuteCompilationProcess()) return;
             }
             catch
@@ -1876,13 +1887,24 @@ namespace Peergrade004
             }
         }
 
+        /// <summary>
+        /// Метод, производящий попытку скомпилировать файл.
+        /// </summary>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение bool, означающее статус операции.</item>
+        /// </list>
+        /// </returns>
         private bool TryToExecuteCompilationProcess()
         {
             TabPage tabPage = MainTabControl.SelectedTab;
+            // Проверяем существование вкладки, если она существует, запускаем процесс компиляции.
             if (tabPage != null)
             {
+                // Проверяем, что файл в формате .cs.
                 if (Path.GetExtension(s_fileList[tabPage.TabIndex]) == ".cs")
                 {
+                    // Приступаем к компиляциии файла во вкладке.
                     if (StartCompilationWork(tabPage)) return true;
                 }
                 else
@@ -1900,20 +1922,47 @@ namespace Peergrade004
             return false;
         }
 
+        /// <summary>
+        /// Метод, производящий сохранение файла компиляции, настройку и старт исполнения команды.
+        /// </summary>
+        /// <param name="tabPage">Обьект, содержащий информации об вкладке приложения.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение bool, означающее статус операции.</item>
+        /// </list>
+        /// </returns>
         private bool StartCompilationWork(TabPage tabPage)
         {
+            // Сохраняем файл.
             SaveFile(tabPage);
+            // Считываем путь до файла.
             string source = s_fileList[tabPage.TabIndex];
+            // Получаем текущие настройки.
             List<string> data = ReadSettingsFromFile();
             string compil = null;
+            // Проверяем настройки и получаем адрес компилятора.
             if (CheckCompilationSettings(data, ref compil)) return true;
+            // Выполняем команду компиляции и получаем ответ командной строки.
             var value = OpenCmdAndExecuteCommand(compil, source);
+            // Выводим итог.
             PrintCommandExecutionData(value, source);
             return false;
         }
 
+        /// <summary>
+        /// Метод, производящий получение пути до компилятора и совершающий его первичную проверку.
+        /// </summary>
+        /// <param name="data">Список, содержащий список настроек приложения.</param>
+        /// <param name="compil">Строка, содержащая путь до компилятора.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает значение bool, означающее статус операции.</item>
+        /// </list>
+        /// </returns>
         private static bool CheckCompilationSettings(List<string> data, ref string compil)
         {
+
+            // Выводим ошибку в случае отсутсвия настроек.
             try
             {
                 if (data != null)
@@ -1928,7 +1977,7 @@ namespace Peergrade004
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
             }
-
+            // Выводим ошибку в случае отсутсвия компилятора.
             if (compil == null) compil = "НЕТ";
             if (compil == "НЕТ")
             {
@@ -1937,7 +1986,7 @@ namespace Peergrade004
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
             }
-
+            // Выводим ошибку в случае не подходящего нам .exe.
             if (compil[^7..] != "csc.exe")
             {
                 MessageBox.Show("Установите правильный компилятор в настройках!\n" +
@@ -1949,8 +1998,16 @@ namespace Peergrade004
             return false;
         }
 
+        /// <summary>
+        /// Метод, выводящий информацию о компиляции на экран пользователя.
+        /// </summary>
+        /// <param name="value">Строка, содержащая вывод консоли.</param>
+        /// <param name="source">Строка, содержащая путь до файла, который пытались компилировать.</param>
         private static void PrintCommandExecutionData(string value, string source)
         {
+            // Если вывод консоли содержит ошибки компилятора - выводим их.
+            // Если выходного файла не было создано - выводим ошибку.
+            // Если компиляция прошла без ошибок и у нас имеется выходной файл - успех.
             if (value.Contains("error CS"))
             {
                 string info = null;
@@ -1983,23 +2040,98 @@ namespace Peergrade004
             }
         }
 
+        /// <summary>
+        /// Метод, открывающий командную строку и исполняющий необходимую для компиляции команду.
+        /// </summary>
+        /// <param name="compil">Путь до исполняемого файла компилятора.</param>
+        /// <param name="source">Пусть до файла, который требуется скомпилировать.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает строку, которая является выводом консоли.</item>
+        /// </list>
+        /// </returns>
         private string OpenCmdAndExecuteCommand(string compil, string source)
         {
+            // Создание команды.
             string command = $@"{compil} /t:exe {source}";
+            // Создаём новый процесс.
             Process cmd = new Process();
             cmd.StartInfo = new ProcessStartInfo(@"cmd.exe");
+            // Производим настройку поведения командной строки.
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.RedirectStandardInput = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.StartInfo.RedirectStandardOutput = true;
             cmd.StartInfo.StandardOutputEncoding = Encoding.UTF8;
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            // Запускаем процесс.
             cmd.Start();
+            // Вводим необходимую команду и выходим из консоли.
             cmd.StandardInput.WriteLine(command);
             cmd.StandardInput.WriteLine("exit");
+            // Возвращаем вывод консоли.
             StreamReader srIncoming = cmd.StandardOutput;
             string value = srIncoming.ReadToEnd();
             return value;
+        }
+
+        /// <summary>
+        /// Метод, производящий форматирование кода.
+        /// </summary>
+        /// <param name="strCode">Строка, содержащая строку с неформатированным кодом.</param>
+        /// <returns>
+        /// <list type="bullet">
+        /// <item>Возвращает строку, которая является форматированным кодом.</item>
+        /// </list>
+        /// </returns>
+        private string AutoFormatCsCode(string strCode)
+        {
+            // Получаем дерево синтаксиса и парсим с его помощью код.
+            var tree = CSharpSyntaxTree.ParseText(strCode);
+            // Производим форматирование кода.
+            var root = tree.GetRoot().NormalizeWhitespace();
+            // Приводим форматированный код к строке.
+            var formatCsCode = root.ToFullString();
+            return formatCsCode;
+        }
+
+        /// <summary>
+        /// Событие, возникающие при необходимости форматировать код.
+        /// </summary>
+        /// <param name="sender">Обьект который инициализировал событие.</param>
+        /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
+        private void FormatCodeToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage tabPage = MainTabControl.SelectedTab;
+                // Проверяем существование вкладки, если она существует, запускаем процесс форматирования.
+                if (tabPage != null)
+                {
+                    // Проверяем, что файл в формате .cs.
+                    if (Path.GetExtension(s_fileList[tabPage.TabIndex]) == ".cs")
+                    {
+                        string data = GetSelectedRichTextBox().Text;
+                        // Преобразуем текст.
+                        GetSelectedRichTextBox().Text = AutoFormatCsCode(data);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Невозможно форматировать данный файл! Он не формата *.cs", "Отказ",
+                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Нечего форматировать, ведь отсутсвуют вкладки!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch
+            {
+                MessageBox.Show($"Произошла неизвестная ошибка при форматировании!", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

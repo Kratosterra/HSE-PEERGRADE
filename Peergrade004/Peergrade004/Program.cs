@@ -7,10 +7,13 @@ using System.Windows.Forms;
 
 namespace Peergrade004
 {
+    /// <summary>
+    ///  Основной класс, содержащий точку входа.
+    /// </summary>
     static class Program
     {
         /// <summary>
-        ///  The main entry point for the application.
+        /// Главная входная точка в приложение.
         /// </summary>
         [STAThread]
         static void Main()

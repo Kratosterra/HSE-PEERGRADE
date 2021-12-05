@@ -143,6 +143,26 @@ namespace Peergrade004.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap format_code {
+            get {
+                object obj = ResourceManager.GetObject("format-code", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap formatcode {
+            get {
+                object obj = ResourceManager.GetObject("formatcode", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap It {
             get {
                 object obj = ResourceManager.GetObject("It", resourceCulture);
@@ -267,6 +287,16 @@ namespace Peergrade004.Properties {
         internal static System.Drawing.Bitmap Teal {
             get {
                 object obj = ResourceManager.GetObject("Teal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap web_code {
+            get {
+                object obj = ResourceManager.GetObject("web-code", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

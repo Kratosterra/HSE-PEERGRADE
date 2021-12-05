@@ -70,6 +70,7 @@ namespace Peergrade004
             this.StrikeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.StartCompilingToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SettingsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.FormatCodeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OpenFileDialogOne = new System.Windows.Forms.OpenFileDialog();
             this.SaveFileDialogOne = new System.Windows.Forms.SaveFileDialog();
@@ -87,6 +88,7 @@ namespace Peergrade004
             this.FontOfChoisenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LableNotification = new System.Windows.Forms.Label();
             this.TimerAutoSave = new System.Windows.Forms.Timer(this.components);
+            this.FormatCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.ToolStrip.SuspendLayout();
             this.ContextMainMenuStrip.SuspendLayout();
@@ -259,7 +261,8 @@ namespace Peergrade004
             this.BoldToolStripMenuItem,
             this.UnderlinedToolStripMenuItem,
             this.StrikethroughToolStripMenuItem,
-            this.FontToolStripMenuItem});
+            this.FontToolStripMenuItem,
+            this.FormatCodeToolStripMenuItem});
             this.FormatToolStripMenuItem.Name = "FormatToolStripMenuItem";
             this.FormatToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.FormatToolStripMenuItem.Text = "Формат";
@@ -300,7 +303,7 @@ namespace Peergrade004
             // 
             this.FontToolStripMenuItem.Name = "FontToolStripMenuItem";
             this.FontToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.FontToolStripMenuItem.Text = "Шрифт";
+            this.FontToolStripMenuItem.Text = "Шрифт...";
             this.FontToolStripMenuItem.Click += new System.EventHandler(this.FontToolStripMenuItem_Click);
             // 
             // SettingsToolStripMenuItem
@@ -359,7 +362,8 @@ namespace Peergrade004
             this.UnderlineToolStripButton,
             this.StrikeToolStripButton,
             this.StartCompilingToolStripButton,
-            this.SettingsToolStripButton});
+            this.SettingsToolStripButton,
+            this.FormatCodeToolStripButton});
             this.ToolStrip.Location = new System.Drawing.Point(0, 24);
             this.ToolStrip.Name = "ToolStrip";
             this.ToolStrip.Size = new System.Drawing.Size(824, 25);
@@ -446,9 +450,11 @@ namespace Peergrade004
             // 
             // StartCompilingToolStripButton
             // 
+            this.StartCompilingToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.StartCompilingToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.StartCompilingToolStripButton.Image = global::Peergrade004.Properties.Resources.arrow_gc80cead99_1920;
             this.StartCompilingToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.StartCompilingToolStripButton.Margin = new System.Windows.Forms.Padding(0, 1, 545, 2);
             this.StartCompilingToolStripButton.Name = "StartCompilingToolStripButton";
             this.StartCompilingToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.StartCompilingToolStripButton.Text = "Скомпилировать";
@@ -463,6 +469,17 @@ namespace Peergrade004
             this.SettingsToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.SettingsToolStripButton.Text = "Настройки";
             this.SettingsToolStripButton.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
+            // 
+            // FormatCodeToolStripButton
+            // 
+            this.FormatCodeToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.FormatCodeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.FormatCodeToolStripButton.Image = global::Peergrade004.Properties.Resources.format_code;
+            this.FormatCodeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FormatCodeToolStripButton.Name = "FormatCodeToolStripButton";
+            this.FormatCodeToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.FormatCodeToolStripButton.Text = "Форматировать код";
+            this.FormatCodeToolStripButton.Click += new System.EventHandler(this.FormatCodeToolStripButton_Click);
             // 
             // MainTabControl
             // 
@@ -599,6 +616,13 @@ namespace Peergrade004
             this.TimerAutoSave.Interval = 10000;
             this.TimerAutoSave.Tick += new System.EventHandler(this.TimerAutoSave_Tick);
             // 
+            // FormatCodeToolStripMenuItem
+            // 
+            this.FormatCodeToolStripMenuItem.Name = "FormatCodeToolStripMenuItem";
+            this.FormatCodeToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.FormatCodeToolStripMenuItem.Text = "Форматирование кода";
+            this.FormatCodeToolStripMenuItem.Click += new System.EventHandler(this.FormatCodeToolStripButton_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -692,6 +716,8 @@ namespace Peergrade004
         private System.Windows.Forms.ToolStripButton StartCompilingToolStripButton;
         private System.Windows.Forms.ToolStripMenuItem CompilThisToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton SettingsToolStripButton;
+        private System.Windows.Forms.ToolStripButton FormatCodeToolStripButton;
+        private System.Windows.Forms.ToolStripMenuItem FormatCodeToolStripMenuItem;
     }
 }
 
