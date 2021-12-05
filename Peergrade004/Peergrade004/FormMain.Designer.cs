@@ -373,6 +373,7 @@ namespace Peergrade004
             this.NewTabToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.NewTabToolStripButton.Image = global::Peergrade004.Properties.Resources._17340;
             this.NewTabToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.NewTabToolStripButton.Margin = new System.Windows.Forms.Padding(10, 1, 0, 2);
             this.NewTabToolStripButton.Name = "NewTabToolStripButton";
             this.NewTabToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.NewTabToolStripButton.Text = "Новая вкладка";
@@ -384,6 +385,7 @@ namespace Peergrade004
             this.CloseTabToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.CloseTabToolStripButton.Image = global::Peergrade004.Properties.Resources.kisspng_computer_icons_icon_design_close_icon_5b45abb757d510_7808943515312925993598;
             this.CloseTabToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CloseTabToolStripButton.Margin = new System.Windows.Forms.Padding(0, 1, 15, 2);
             this.CloseTabToolStripButton.Name = "CloseTabToolStripButton";
             this.CloseTabToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.CloseTabToolStripButton.Text = "Закрыть данную вкладку";
@@ -484,7 +486,8 @@ namespace Peergrade004
             // SaveFileDialogOne
             // 
             this.SaveFileDialogOne.DefaultExt = "txt";
-            this.SaveFileDialogOne.Filter = "Text files(*.txt)|*.txt|Rich Text Format files(*.rtf)|*.rtf|C# files(*.cs)|*.cs";
+            this.SaveFileDialogOne.Filter = "Text files(*.txt)|*.txt|Rich Text Format files(*.rtf)|*.rtf|C# files(*.cs)|*.cs|A" +
+    "ll files(*.*)|*.*";
             // 
             // TimerSave
             // 

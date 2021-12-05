@@ -15,43 +15,53 @@ namespace Peergrade004
         [STAThread]
         static void Main()
         {
-            // Add handler to handle the exception raised by main threads
+            // Перехватываем все исключения, поднятые основным ядром.
             Application.ThreadException +=
-                new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+                new System.Threading.ThreadExceptionEventHandler(ApplicationThreadException);
 
-            // Add handler to handle the exception raised by additional threads
+            // Перехватываем все исключения, поднятые другими ядрами.
             AppDomain.CurrentDomain.UnhandledException +=
-                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+                new UnhandledExceptionEventHandler(CurrentDomainUnhandledException);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
-
-            // Stop the application and all the threads in suspended state.
-            Environment.Exit(-1);
         }
 
-        static void Application_ThreadException
-            (object sender, System.Threading.ThreadExceptionEventArgs e)
-        {// All exceptions thrown by the main thread are handled over this method
-
+        /// <summary>
+        /// Событие, ответственное за работу с исключениями в основном ядре приложения.
+        /// </summary>
+        /// <param name="sender">Обьект который инициализировал событие.</param>
+        /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
+        static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            // Показываем информацию.
             ShowExceptionDetails(e.Exception);
         }
 
-        static void CurrentDomain_UnhandledException
+        /// <summary>
+        /// Событие, ответственное за работу с исключениями в побочных ядрах приложения.
+        /// </summary>
+        /// <param name="sender">Обьект который инициализировал событие.</param>
+        /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
+        static void CurrentDomainUnhandledException
             (object sender, UnhandledExceptionEventArgs e)
-        {// All exceptions thrown by additional threads are handled in this method
-
+        {
+            // Показываем информацию.
             ShowExceptionDetails(e.ExceptionObject as Exception);
 
-            // Suspend the current thread for now to stop the exception from throwing.
+            // Приостанавливаем работу побочного ядра.
             Thread.CurrentThread.Suspend();
         }
 
-        static void ShowExceptionDetails(Exception Ex)
+        /// <summary>
+        /// Метод, выводящий на экран информацию об ошибке на экран.
+        /// </summary>
+        /// <param name="ex">Переменная, содержащая информацию об ошибке.</param>
+        static void ShowExceptionDetails(Exception ex)
         {
-            // Do logging of exception details
-            MessageBox.Show(Ex.Message, Ex.TargetSite.ToString(),
+            // Выводим детали ошибки.
+            MessageBox.Show(ex.Message, ex.TargetSite.ToString(),
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
