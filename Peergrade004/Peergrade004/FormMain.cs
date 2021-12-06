@@ -19,7 +19,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace Peergrade004
 {
     /// <summary>
-    /// Класс, содержащий события и методы для реализации событий основной формы Notepad+.
+    /// Класс, содержащий события и методы для реализации событий основной формы Notepad+.                             
     /// </summary>
     public partial class FormMain : Form
     {
@@ -191,7 +191,7 @@ namespace Peergrade004
         }
 
         /// <summary>
-        /// Метод, производящий попытку содать новую вкладку и разместить на ней окно для ввода текста.
+        /// Метод, производящий попытку создать новую вкладку и разместить на ней окно для ввода текста.
         /// </summary>
         /// <param name="tabPage">Содержит вкладку приложения.</param>
         /// <param name="richTextBox">Содержит RichTextBox, который размещён на вкладке.</param>
@@ -238,7 +238,6 @@ namespace Peergrade004
             // Если её нет - создаём вкладку вместе с пустым RichTextBox.
             if (tabPage != null)
             {
-
                 richTextBox = tabPage.Controls[0] as RichTextBox;
                 return richTextBox;
             }
@@ -765,7 +764,8 @@ namespace Peergrade004
             }
             catch
             {
-                MessageBox.Show("Произошла ошибка при завершении работы программы, сохранение данных не производится!",
+                MessageBox.Show("Произошла ошибка при завершении работы программы, " +
+                                "сохранение данных не производится!",
                     "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -781,7 +781,8 @@ namespace Peergrade004
             // Иначе спрашиваем, хочет ли пользователь выйти.
             if (s_fileChangeList.Contains(true))
             {
-                DialogResult userAnswer = MessageBox.Show("Хотите сохранить несохранёные файлы?", "Выход",
+                DialogResult userAnswer = MessageBox.Show("Хотите сохранить несохранёные файлы?",
+                    "Выход",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
                 if (userAnswer == DialogResult.Yes)
@@ -1104,7 +1105,8 @@ namespace Peergrade004
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при автоматическом открытии старых вкаладок.", "Ошибка",
+                MessageBox.Show($"Произошла ошибка при автоматическом открытии старых вкаладок.", 
+                    "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1219,9 +1221,11 @@ namespace Peergrade004
                 // Исполняем настройки.
                 ExecuteSettings();
                 // Если таковы настройки - применяем новый шрифт.
-                if (s_miniFontSettings != null && s_miniFontSettings.FontSize != 0 && s_miniFontSettings.FontFaсe != null)
+                if (s_miniFontSettings != null && s_miniFontSettings.FontSize != 0 &&
+                    s_miniFontSettings.FontFaсe != null)
                 {
-                    GetSelectedRichTextBox().SelectionFont = new Font(s_miniFontSettings.FontFaсe, s_miniFontSettings.FontSize);
+                    GetSelectedRichTextBox().SelectionFont = new Font(s_miniFontSettings.FontFaсe,
+                        s_miniFontSettings.FontSize);
                     GetSelectedRichTextBox().Focus();
                     s_miniFontSettings.FontFaсe = null;
                     s_miniFontSettings.FontSize = 0;
@@ -1476,7 +1480,8 @@ namespace Peergrade004
                     DeleteAutoSaveFileInformation(tabPage);
                     // Удаляем вкладку.
                     MainTabControl.TabPages.Remove(tabPage);
-                    // Если вкладок больше нет, то показываем главное меню и деактивируем некторые элементы интерфеса.
+                    // Если вкладок больше нет, то показываем главное меню и деактивируем некторые
+                    // элементы интерфеса.
                     if (MainTabControl.TabPages.Count == 0)
                     {
                         MainTabControl.Visible = false;
@@ -1576,7 +1581,8 @@ namespace Peergrade004
             if (s_fileList[tabPage.TabIndex] != "-")
             {
                 string destPath = $"{path}/{tabPage.TabIndex}";
-                // Проверяем, существует ли локальная папка автосохранений для текущей вкладки, если нет - создаём её.
+                // Проверяем, существует ли локальная папка автосохранений для текущей вкладки,
+                // если нет - создаём её.
                 if (!Directory.Exists(destPath))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(destPath);
@@ -1880,7 +1886,7 @@ namespace Peergrade004
                 // Пробуем начать компиляцию.
                 if (TryToExecuteCompilationProcess()) return;
             }
-            catch
+            catch(Exception ex)
             {
                 MessageBox.Show($"Произошла неизвестная ошибка при компиляции!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1909,7 +1915,8 @@ namespace Peergrade004
                 }
                 else
                 {
-                    MessageBox.Show("Невозможно скомпилировать данный файл! Он не формата *.cs", "Отказ",
+                    MessageBox.Show("Невозможно скомпилировать данный файл! Он не формата *.cs",
+                        "Отказ",
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
@@ -2058,18 +2065,19 @@ namespace Peergrade004
             Process cmd = new Process();
             cmd.StartInfo = new ProcessStartInfo(@"cmd.exe");
             // Производим настройку поведения командной строки.
-            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.CreateNoWindow = true; //
             cmd.StartInfo.RedirectStandardInput = true;
             cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+            cmd.StartInfo.RedirectStandardOutput = true;//
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            cmd.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             // Запускаем процесс.
             cmd.Start();
             // Вводим необходимую команду и выходим из консоли.
             cmd.StandardInput.WriteLine(command);
             cmd.StandardInput.WriteLine("exit");
-            // Возвращаем вывод консоли.
+            //Возвращаем вывод консоли.
             StreamReader srIncoming = cmd.StandardOutput;
             string value = srIncoming.ReadToEnd();
             return value;

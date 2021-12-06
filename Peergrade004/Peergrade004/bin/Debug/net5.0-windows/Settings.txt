@@ -1,8 +1,8 @@
 60000
 White Theme
 60000
-Синий
 Красный
-Жёлтый
-Зелёный
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe
+Красный
+Красный
+Красный
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe

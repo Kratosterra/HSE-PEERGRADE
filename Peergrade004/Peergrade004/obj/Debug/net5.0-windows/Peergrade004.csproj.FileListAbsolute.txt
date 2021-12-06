@@ -23,3 +23,5 @@ C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debu
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\bin\Debug\net5.0-windows\Microsoft.CodeAnalysis.CSharp.dll
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\bin\Debug\net5.0-windows\Microsoft.CodeAnalysis.dll
 C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\obj\Debug\net5.0-windows\Peergrade004.csproj.CopyComplete
+C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\bin\Debug\net5.0-windows\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade004\Peergrade004\bin\Debug\net5.0-windows\System.Text.Encoding.CodePages.dll

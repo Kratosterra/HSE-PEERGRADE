@@ -13,6 +13,12 @@
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
       <HintPath>Microsoft\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Microsoft\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages">
+      <HintPath>Microsoft\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,9 @@
       "Peergrade004/1.0.0": {
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp": "4.1.0.0",
-          "Microsoft.CodeAnalysis": "4.1.0.0"
+          "Microsoft.CodeAnalysis": "4.1.0.0",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0.0",
+          "System.Text.Encoding.CodePages": "6.0.0.0"
         },
         "runtime": {
           "Peergrade004.dll": {}
@@ -30,6 +32,22 @@
             "fileVersion": "4.100.21.56604"
           }
         }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0.0": {
+        "runtime": {
+          "System.Runtime.CompilerServices.Unsafe.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "System.Text.Encoding.CodePages/6.0.0.0": {
+        "runtime": {
+          "System.Text.Encoding.CodePages.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
       }
     }
   },
@@ -45,6 +63,16 @@
       "sha512": ""
     },
     "Microsoft.CodeAnalysis/4.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.Runtime.CompilerServices.Unsafe/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.Text.Encoding.CodePages/6.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
