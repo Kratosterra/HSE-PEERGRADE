@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="1a9a5693eca1ee26dfdcd4e96d03a52f.jpg" />
+    <None Remove="pngwing.com %285%29.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="1a9a5693eca1ee26dfdcd4e96d03a52f.jpg" />
+    <Resource Include="pngwing.com (5).png" />
+  </ItemGroup>
+
+</Project>
