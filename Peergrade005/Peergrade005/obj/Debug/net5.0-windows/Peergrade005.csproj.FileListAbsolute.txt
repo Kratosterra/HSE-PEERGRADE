@@ -20,3 +20,9 @@ C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debu
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\ref\Peergrade005.dll
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005.pdb
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005.genruntimeconfig.cache
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debug\net5.0-windows\Microsoft.Win32.SystemEvents.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debug\net5.0-windows\System.Drawing.Common.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debug\net5.0-windows\runtimes\win\lib\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debug\net5.0-windows\runtimes\unix\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debug\net5.0-windows\runtimes\win\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005.csproj.CopyComplete

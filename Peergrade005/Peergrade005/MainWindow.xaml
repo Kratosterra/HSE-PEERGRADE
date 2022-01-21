@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Peergrade005"
         mc:Ignorable="d"
-        Title="Fractals" Height="540" Width="960" Background="White" Icon="/pngwing.com (5).png">
+        Title="Fractals" Height="540" Width="960" Background="White" Icon="/pngwing.com (5).png" SizeChanged="MainWindowKernel_SizeChanged">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -352,8 +352,8 @@
         <TextBlock x:Name="ImageTextBlock" Grid.Column="7" Grid.Row="0" Background="White" Text="Изображение" Grid.ColumnSpan="2" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
 
 
-        <ScrollViewer x:Name="ScrollViewer" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14" HorizontalScrollBarVisibility="Visible" Padding="0,0,0,0" Margin="3,3,3,3">
-            <Image x:Name ="MainImage"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14" Source="/1a9a5693eca1ee26dfdcd4e96d03a52f.jpg" Stretch="Uniform" Cursor="Arrow" RenderTransformOrigin="0.5,0.5" OpacityMask="Black" ScrollViewer.HorizontalScrollBarVisibility="Visible" Margin="3,3,0,0" >
+        <ScrollViewer x:Name="ScrollViewer" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14" HorizontalScrollBarVisibility="Visible" Padding="0,0,0,0" Margin="3,3,3,3" BorderThickness="1,1,1,1">
+            <Image x:Name ="MainImage"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14" Source="/1a9a5693eca1ee26dfdcd4e96d03a52f.jpg" Stretch="None" Cursor="Arrow" RenderTransformOrigin="0.5,0.5" OpacityMask="Black" ScrollViewer.HorizontalScrollBarVisibility="Visible" Margin="3,3,0,0" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1" ScaleY="1"/>
@@ -384,34 +384,34 @@
 
         <GroupBox x:Name="MainSettingsBox" Grid.Column="5" Header="Основные настройки" Grid.Row="3" Grid.ColumnSpan ="4" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3"/>
         <TextBlock x:Name="SectionLengthText" Grid.Column="5" Grid.Row="4" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Длина отрезка: 1" TextAlignment="Center" />
-        <Slider x:Name="SectionLengthSlider" Grid.Column="7" Grid.Row="4" Grid.ColumnSpan="2" Minimum="1" Maximum="550" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="SectionLengthSlider" Grid.Column="7" Grid.Row="4" Grid.ColumnSpan="2" Minimum="1" Maximum="550" Margin="0,0,6,0" SmallChange="1" ValueChanged="SectionLengthSlider_ValueChanged"/>
         <TextBlock x:Name="RecursionDeepText"  Grid.Column="5" Grid.Row="5" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Глубина рекурсии: 1" TextAlignment="Center" />
-        <Slider x:Name="RecursionDeepSlider" Grid.Column="7" Grid.Row="5" Grid.ColumnSpan="2" Minimum="1" Maximum="5" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="RecursionDeepSlider" Grid.Column="7" Grid.Row="5" Grid.ColumnSpan="2" Minimum="1" Maximum="20" Margin="0,0,6,0" SmallChange="1" ValueChanged="RecursionDeepSlider_ValueChanged"/>
 
         <GroupBox x:Name="FractalTreeSettingsBox" Grid.Column="5" Header="Настройки фрактального дерева" Grid.Row="6" Grid.ColumnSpan ="4" Grid.RowSpan ="4" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3"/>
-        <TextBlock x:Name="RelationText" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Отношение длин: 0.001" TextAlignment="Center" />
-        <Slider x:Name="RelationSlider" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="1000" Margin="0,0,6,0" SmallChange="1"/>
+        <TextBlock x:Name="RelationText" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Отношение длин: 0,001" TextAlignment="Center" />
+        <Slider x:Name="RelationSlider" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="999" Margin="0,0,6,0" SmallChange="1" ValueChanged="RelationSlider_ValueChanged"/>
         <TextBlock x:Name="FirstAngleText" Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Первый угол наклона: 0" TextAlignment="Center" />
-        <Slider x:Name="FirstAngleSlider" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="-179" Maximum="180" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="FirstAngleSlider" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="-179" Maximum="180" Margin="0,0,6,0" SmallChange="1" ValueChanged="FirstAngleSlider_ValueChanged"/>
         <TextBlock x:Name="SecondAngleText" Grid.Column="5" Grid.Row="9" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Второй угол наклона: 0" TextAlignment="Center" />
-        <Slider x:Name="SecondAngleSlider" Grid.Column="7" Grid.Row="9" Grid.ColumnSpan="2" Minimum="-179" Maximum="180" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="SecondAngleSlider" Grid.Column="7" Grid.Row="9" Grid.ColumnSpan="2" Minimum="-179" Maximum="180" Margin="0,0,6,0" SmallChange="1" ValueChanged="SecondAngleSlider_ValueChanged"/>
 
         <GroupBox x:Name="SetKantorBox" Grid.Column="5" Header="Настройки множества Кантора" Grid.Row="6" Grid.ColumnSpan ="4" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3" Visibility="Hidden"/>
         <TextBlock x:Name="SideText" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Сторона прямоугольника: 1" TextAlignment="Center" Visibility="Hidden"/>
-        <Slider x:Name="SideSlider" SmallChange="1" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="50" Visibility="Hidden" Margin="0,0,6,0"/>
+        <Slider x:Name="SideSlider" SmallChange="1" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="50" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="SideSlider_ValueChanged"/>
         <TextBlock x:Name="DistanceText" Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Расстояние: 1" TextAlignment="Center" Visibility="Hidden" />
-        <Slider x:Name="DistanceSlider" SmallChange="1" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="1" Maximum="100" Visibility="Hidden" Margin="0,0,6,0"/>
+        <Slider x:Name="DistanceSlider" SmallChange="1" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="1" Maximum="100" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="DistanceSlider_ValueChanged"/>
 
         <GroupBox x:Name="GradientSettingsBox" Grid.Column="5" Header="Настройкa цветов градиента" Grid.Row="10" Grid.ColumnSpan ="4" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3"/>
         <TextBlock x:Name="StartColourText" Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="1" FontWeight="Normal" FontStyle="Italic" Text="(0,0,0)" TextAlignment="Center" />
-        <Slider x:Name="StartColourRSlider" Grid.Column="6" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1"/>
-        <Slider x:Name="StartColourGSlider" Grid.Column="7" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1"/>
-        <Slider x:Name="StartColourBSlider" Grid.Column="8" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="StartColourRSlider" Grid.Column="6" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1" ValueChanged="StartColourRSlider_ValueChanged"/>
+        <Slider x:Name="StartColourGSlider" Grid.Column="7" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1" ValueChanged="StartColourGSlider_ValueChanged"/>
+        <Slider x:Name="StartColourBSlider" Grid.Column="8" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" Margin="0,0,6,0" SmallChange="1" ValueChanged="StartColourBSlider_ValueChanged"/>
         <TextBlock x:Name="EndColourText" Grid.Column="5" Grid.Row="12" Grid.ColumnSpan="1" FontWeight="Normal" FontStyle="Italic" Text="(0,0,0)" TextAlignment="Center" />
-        <Slider x:Name="EndColourRSlider" Grid.Column="6" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1"/>
-        <Slider  x:Name="EndColourGSlider" Grid.Column="7" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1"/>
-        <Slider x:Name="EndColourBSlider" Grid.Column="8" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" Margin="0,0,6,0" SmallChange="1"/>
+        <Slider x:Name="EndColourRSlider" Grid.Column="6" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1" ValueChanged="EndColourRSlider_ValueChanged"/>
+        <Slider  x:Name="EndColourGSlider" Grid.Column="7" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1" ValueChanged="EndColourGSlider_ValueChanged"/>
+        <Slider x:Name="EndColourBSlider" Grid.Column="8" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" Margin="0,0,6,0" SmallChange="1" ValueChanged="EndColourBSlider_ValueChanged"/>
 
-        <Button x:Name="CreateFractalButton" Style="{DynamicResource ButtonStyleMain}" Content="Построить фрактал" Grid.Row="14" Grid.Column="5" Grid.ColumnSpan="5" BorderThickness="1,1,1,1" BorderBrush="Black" Foreground="#FF040404" FontWeight="Bold" FontStyle="Normal" Background="White" Padding="3,3,3,3" Margin="3,3,3,3" Grid.RowSpan="2" />
+        <Button x:Name="CreateFractalButton" Style="{DynamicResource ButtonStyleMain}" Content="Построить фрактал" Grid.Row="14" Grid.Column="5" Grid.ColumnSpan="5" BorderThickness="1,1,1,1" BorderBrush="Black" Foreground="#FF040404" FontWeight="Bold" FontStyle="Normal" Background="White" Padding="3,3,3,3" Margin="3,3,3,3" Grid.RowSpan="2" Click="CreateFractalButton_Click" />
     </Grid>
 </Window>
