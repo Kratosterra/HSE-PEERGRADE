@@ -38,8 +38,8 @@ namespace Peergrade005
             MainWindowKernel.MinHeight = System.Windows.SystemParameters.PrimaryScreenHeight / 2;
             MainWindowKernel.MinWidth = System.Windows.SystemParameters.PrimaryScreenWidth / 2;
 
-            ScrollViewer.ScrollToHorizontalOffset(System.Windows.SystemParameters.PrimaryScreenWidth / 4);
-            ScrollViewer.ScrollToVerticalOffset(System.Windows.SystemParameters.PrimaryScreenHeight / 4);
+            ScrollViewer.ScrollToHorizontalOffset(System.Windows.SystemParameters.PrimaryScreenWidth / 3.5);
+            ScrollViewer.ScrollToVerticalOffset(System.Windows.SystemParameters.PrimaryScreenHeight / 3.5);
         }
 
         private void SetVisibilityMenu(bool fractalTreeVisible, bool kantorSetVisible)
@@ -67,6 +67,10 @@ namespace Peergrade005
             this.TypeFractalTextBlock.Text = "Тип фрактала: Фрактальное Дерево";
             SetVisibilityMenu(true, false);
             nowFractal = 0;
+            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Maximum = 350;
+            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Maximum = 12;
         }
 
         private void CurvedKochButton_Click(object sender, RoutedEventArgs e)
@@ -74,6 +78,10 @@ namespace Peergrade005
             this.TypeFractalTextBlock.Text = "Тип фрактала: Кривая Коха";
             SetVisibilityMenu(false, false);
             nowFractal = 1;
+            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Maximum = 1500;
+            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Maximum = 6;
         }
 
         private void CarpetButton_Click(object sender, RoutedEventArgs e)
@@ -81,6 +89,10 @@ namespace Peergrade005
             this.TypeFractalTextBlock.Text = "Тип фрактала: Ковер Серпинского";
             SetVisibilityMenu(false, false);
             nowFractal = 2;
+            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Maximum = 1000;
+            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Maximum = 5;
         }
 
         private void TriangleButton_Click(object sender, RoutedEventArgs e)
@@ -88,6 +100,10 @@ namespace Peergrade005
             this.TypeFractalTextBlock.Text = "Тип фрактала: Треугольник Серпинского";
             SetVisibilityMenu(false, false);
             nowFractal = 3;
+            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Maximum = 1000;
+            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Maximum = 6;
         }
 
         private void SetButton_Click(object sender, RoutedEventArgs e)
@@ -95,6 +111,10 @@ namespace Peergrade005
             this.TypeFractalTextBlock.Text = "Тип фрактала: Множество Кантора";
             SetVisibilityMenu(false, true);
             nowFractal = 4;
+            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Maximum = 350;
+            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Maximum = 10;
         }
 
         private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -187,21 +207,48 @@ namespace Peergrade005
                         Color.FromArgb(endRGB.Item1, endRGB.Item2, endRGB.Item3),
                         (int)FirstAngleSlider.Value,
                         (int)SecondAngleSlider.Value,
-                        ((int)RelationSlider.Value) / (double)1000);
+                        ((int)RelationSlider.Value) / (double)1000
+                        );
                     break;
                 case 1:
+                    fractal = new Snowflake(
+                        (int) SectionLengthSlider.Value,
+                        (ushort) (RecursionDeepSlider.Value + 1),
+                        Color.FromArgb(startRGB.Item1, startRGB.Item2, startRGB.Item3),
+                        Color.FromArgb(endRGB.Item1, endRGB.Item2, endRGB.Item3)
+                    );
                     break;
                 case 2:
+                    fractal = new Carpet(
+                        (int)SectionLengthSlider.Value,
+                        (ushort)(RecursionDeepSlider.Value),
+                        Color.FromArgb(startRGB.Item1, startRGB.Item2, startRGB.Item3),
+                        Color.FromArgb(endRGB.Item1, endRGB.Item2, endRGB.Item3)
+                    );
                     break;
                 case 3:
+                    fractal = new Triangle(
+                        (int)SectionLengthSlider.Value,
+                        (ushort)(RecursionDeepSlider.Value),
+                        Color.FromArgb(startRGB.Item1, startRGB.Item2, startRGB.Item3),
+                        Color.FromArgb(endRGB.Item1, endRGB.Item2, endRGB.Item3)
+                    );
                     break;
                 case 4:
+                    fractal = new Set(
+                        (int)SectionLengthSlider.Value,
+                        (ushort)(RecursionDeepSlider.Value),
+                        Color.FromArgb(startRGB.Item1, startRGB.Item2, startRGB.Item3),
+                        Color.FromArgb(endRGB.Item1, endRGB.Item2, endRGB.Item3),
+                        (int)SideSlider.Value,
+                        (int)DistanceSlider.Value
+                    );
                     break;
             }
             DrawFractal();
 
-            ScrollViewer.ScrollToHorizontalOffset(System.Windows.SystemParameters.PrimaryScreenWidth / 4);
-            ScrollViewer.ScrollToVerticalOffset(System.Windows.SystemParameters.PrimaryScreenHeight / 4);
+            ScrollViewer.ScrollToHorizontalOffset(System.Windows.SystemParameters.PrimaryScreenWidth / 3.5);
+            ScrollViewer.ScrollToVerticalOffset(System.Windows.SystemParameters.PrimaryScreenHeight / 3.5);
         }
 
         public ImageSource ImageSourceFromBitmap(Bitmap bmp)
@@ -240,6 +287,32 @@ namespace Peergrade005
                     new PointF(centerX, centerY + (float)fractal.LengthOfSegment),
                     new PointF(centerX, centerY)
                 };
+            }
+            if (fractal is Snowflake)
+            {
+                points = new PointF[] {
+                    new PointF(centerX - (float)fractal.LengthOfSegment / 2, centerY),
+                    new PointF(centerX + (float)fractal.LengthOfSegment / 2, centerY)
+                };
+            }
+            if (fractal is Carpet)
+            {
+                points = new PointF[] {
+                    new PointF(centerX - (float)fractal.LengthOfSegment / 2, centerY - (float)fractal.LengthOfSegment / 2)
+                };
+            }
+            if (fractal is Triangle)
+            {
+                points = new PointF[] {
+                    new PointF(centerX - (float)fractal.LengthOfSegment / 2, centerY + (float)fractal.LengthOfSegment / 2),
+                    new PointF(centerX + (float)fractal.LengthOfSegment / 2, centerY + (float)fractal.LengthOfSegment / 2),
+                    new PointF(centerX, centerY + (float)fractal.LengthOfSegment / 2 - (float)fractal.LengthOfSegment / 2 
+                        * (float)Math.Tan(Math.PI / 3))
+                };
+            }
+            if (fractal is Set)
+            {
+                points = new PointF[] { new PointF(centerX - (float)fractal.LengthOfSegment / 2, 10) };
             }
             return points;
         }

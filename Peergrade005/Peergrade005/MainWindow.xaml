@@ -347,7 +347,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="TypeFractalTextBlock" Grid.Column="0" Grid.Row="0" Background="White" Text="Тип фрактала: Фрактальное дерево" Grid.ColumnSpan="5" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
+        <TextBlock x:Name="TypeFractalTextBlock" Grid.Column="0" Grid.Row="0" Background="White" Text="Тип фрактала: Фрактальное Дерево" Grid.ColumnSpan="5" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
         <TextBlock x:Name="ZoomTextBlock" Grid.Column="5" Grid.Row="0" Background="White" Text="Масштаб: x1" Grid.ColumnSpan="2" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
         <TextBlock x:Name="ImageTextBlock" Grid.Column="7" Grid.Row="0" Background="White" Text="Изображение" Grid.ColumnSpan="2" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
 
@@ -398,9 +398,9 @@
 
         <GroupBox x:Name="SetKantorBox" Grid.Column="5" Header="Настройки множества Кантора" Grid.Row="6" Grid.ColumnSpan ="4" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3" Visibility="Hidden"/>
         <TextBlock x:Name="SideText" Grid.Column="5" Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Сторона прямоугольника: 1" TextAlignment="Center" Visibility="Hidden"/>
-        <Slider x:Name="SideSlider" SmallChange="1" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="50" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="SideSlider_ValueChanged"/>
+        <Slider x:Name="SideSlider" SmallChange="1" Grid.Column="7" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="40" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="SideSlider_ValueChanged"/>
         <TextBlock x:Name="DistanceText" Grid.Column="5" Grid.Row="8" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" Text="Расстояние: 1" TextAlignment="Center" Visibility="Hidden" />
-        <Slider x:Name="DistanceSlider" SmallChange="1" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="1" Maximum="100" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="DistanceSlider_ValueChanged"/>
+        <Slider x:Name="DistanceSlider" SmallChange="1" Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="2" Minimum="1" Maximum="80" Visibility="Hidden" Margin="0,0,6,0" ValueChanged="DistanceSlider_ValueChanged"/>
 
         <GroupBox x:Name="GradientSettingsBox" Grid.Column="5" Header="Настройкa цветов градиента" Grid.Row="10" Grid.ColumnSpan ="4" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,3" Padding="3,3,3,3"/>
         <TextBlock x:Name="StartColourText" Grid.Column="5" Grid.Row="11" Grid.ColumnSpan="1" FontWeight="Normal" FontStyle="Italic" Text="(0,0,0)" TextAlignment="Center" />
