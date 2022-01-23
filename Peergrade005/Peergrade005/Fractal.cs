@@ -8,65 +8,98 @@ using System.Windows;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
-using Point = System.Drawing.Point;
+using Point = System.Drawing.PointF;
+
 
 
 namespace Peergrade005
 {
+    /// <summary>
+    /// Класс, являюшиеся родительским для всех фракталов.
+    /// </summary>
     class Fractal
     {
-        private double lenghtOfSegment;
-        private ushort depthOfRecursion;
+        // Длина начального отрезка фрактала.
+        private double s_lenghtOfSegment;
+        // Глубина рекурсии.
+        private ushort s_depthOfRecursion;
+        // Наследуемый обьект графики.
         protected Graphics GraphicsFractal;
 
-        private Color startColor;
-        private Color endColor;
-        private Color[] colorsGradient;
+        // Начальный цвет градиента.
+        private Color s_startColor;
+        // Конечный цвет градиента.
+        private Color s_endColor;
+        // Массив цветов градиента.
+        private Color[] s_colorsGradient;
 
+        // Своство длинны начального отрезка фрактала.
         public double LengthOfSegment
         {
-            get => lenghtOfSegment;
-            private set => lenghtOfSegment = value;
+            get => s_lenghtOfSegment;
+            private set => s_lenghtOfSegment = value;
         }
 
+        // Cвойство глубины рекурсии.
         public ushort RecursionDepth
         {
-            get => depthOfRecursion;
+            get => s_depthOfRecursion;
             set
             {
-                depthOfRecursion = value;
+                s_depthOfRecursion = value;
+                // Cоздаём новый градиент в зависимости от глубины рекурсии.
                 CreateNewGradient(RecursionDepth);
             }
         }
 
+        // Поле для хранения и получения битовой карты фрактала.
         public Bitmap FractalBitmap { get; set; }
 
+        /// <summary>
+        /// Родительский конструктор класса Фрактал.
+        /// </summary>
+        /// <param name="segmentLength">Длина начального отрезка фрактала.</param>
+        /// <param name="recursionDepth">Глубина рекурсии.</param>
+        /// <param name="startColor">Начальный цвет градиента фрактала.</param>
+        /// <param name="endColor">Конечный цвет градиента фрактала.</param>
         public Fractal(double segmentLength, ushort recursionDepth, Color startColor, Color endColor)
         {
+            // Установка длины отрезка и глубины рекурсии.
             LengthOfSegment = segmentLength;
             RecursionDepth = recursionDepth;
-            this.startColor = startColor;
-            this.endColor = endColor;
+            // Установка цветов и создание нового градиента.
+            this.s_startColor = startColor;
+            this.s_endColor = endColor;
             CreateNewGradient(RecursionDepth);
         }
 
+        /// <summary>
+        /// Метод создания градиента фрактала.
+        /// </summary>
+        /// <param name="recursionDepth">Глубина рекурсии.</param>
         protected void CreateNewGradient(int recursionDepth)
         {
-            colorsGradient = new Color[recursionDepth];
-            Tools.ExecuteColorsGradient(recursionDepth, ref colorsGradient, startColor, endColor);
+            s_colorsGradient = new Color[recursionDepth];
+            // Создаём градиент.
+            Tools.ExecuteColorsGradient(recursionDepth, ref s_colorsGradient, s_startColor, s_endColor);
         }
 
-        public virtual void CreateFractal(PointF[] points, int recursion)
+        /// <summary>
+        /// Метод создания градиента фрактала.
+        /// </summary>
+        /// <param name="points">Начальные точки фрактала.</param>
+        /// <param name="recursion">Глубина рекурсии.</param>
+        public virtual void CreateFractal(Point[] points, int recursion)
         {
             GraphicsFractal = Graphics.FromImage(FractalBitmap);
-
+            // В зависимости от типа фрактала устанавливаем начальную точку создания фрактала.
             if (this is Tree || this is Snowflake || this is Triangle)
             {
-                Tools.CreateLine(points, recursion, ref GraphicsFractal, colorsGradient);
+                Tools.CreateLine(points, recursion, ref GraphicsFractal, s_colorsGradient);
             }
             else
             {
-                Tools.CreateRectangle(points, recursion, ref GraphicsFractal, colorsGradient);
+                Tools.CreateRectangle(points, recursion, ref GraphicsFractal, s_colorsGradient);
             }
         }
 
@@ -75,25 +108,25 @@ namespace Peergrade005
 
     class Tree : Fractal
     {
-        private double nowAngle;
-        private double firstAngle;
-        private double secondAngle;
+        private double s_nowAngle;
+        private double s_firstAngle;
+        private double s_secondAngle;
 
-        private PointF startPoint;
-        private PointF endPoint;
+        private Point s_startPoint;
+        private Point s_endPoint;
 
         private double Relation { get; set; }
 
         private double FirstAngle
         {
-            get => firstAngle;
-            set => firstAngle = value * Math.PI / 180;
+            get => s_firstAngle;
+            set => s_firstAngle = value * Math.PI / 180;
         }
 
         private double SecondAngle
         {
-            get => secondAngle;
-            set => secondAngle = value * Math.PI / 180;
+            get => s_secondAngle;
+            set => s_secondAngle = value * Math.PI / 180;
         }
 
 
@@ -107,7 +140,7 @@ namespace Peergrade005
         }
 
 
-        public override void CreateFractal(PointF[] points, int recursion)
+        public override void CreateFractal(Point[] points, int recursion)
         {
             if (recursion == 0) return;
             base.CreateFractal(points, recursion);
@@ -116,24 +149,24 @@ namespace Peergrade005
             CreateSomeFractals(points, recursion);
         }
 
-        private void WorkWithPoints(PointF[] points, int recursion)
+        private void WorkWithPoints(Point[] points, int recursion)
         {
             if (recursion == RecursionDepth)
             {
-                startPoint = new PointF(-1, -1);
-                endPoint = new PointF(-1, -1);
+                s_startPoint = new Point(-1, -1);
+                s_endPoint = new Point(-1, -1);
             }
 
-            foreach (PointF point in points)
+            foreach (Point point in points)
             {
-                startPoint.X = (point.X < startPoint.X || startPoint.X == -1) ? point.X : startPoint.X;
-                endPoint.X = (point.X > endPoint.X || endPoint.X == -1) ? point.X : endPoint.X;
-                startPoint.Y = (point.Y < startPoint.Y || startPoint.Y == -1) ? point.Y : startPoint.Y;
-                endPoint.Y = (point.Y > endPoint.Y || endPoint.Y == -1) ? point.Y : endPoint.Y;
+                s_startPoint.X = (point.X < s_startPoint.X || s_startPoint.X == -1) ? point.X : s_startPoint.X;
+                s_endPoint.X = (point.X > s_endPoint.X || s_endPoint.X == -1) ? point.X : s_endPoint.X;
+                s_startPoint.Y = (point.Y < s_startPoint.Y || s_startPoint.Y == -1) ? point.Y : s_startPoint.Y;
+                s_endPoint.Y = (point.Y > s_endPoint.Y || s_endPoint.Y == -1) ? point.Y : s_endPoint.Y;
             }
         }
 
-        private void CreateSomeFractals(PointF[] points, int recursion)
+        private void CreateSomeFractals(Point[] points, int recursion)
         {
             CreateIterrationOfFractal(
                 points[1],
@@ -146,129 +179,126 @@ namespace Peergrade005
         }
 
 
-        private void CreateIterrationOfFractal(PointF startPoint, double segmentLength, double angleOfVector,
+        private void CreateIterrationOfFractal(Point startPoint, double segmentLength, double angleOfVector,
             int directionOfCreation, int recursion)
         {
-            nowAngle += angleOfVector * directionOfCreation;
-
+            s_nowAngle += angleOfVector * directionOfCreation;
             CreateFractal(
-                new PointF[]
+                new Point[]
                 {
-                    startPoint, new PointF(
+                    startPoint, new Point(
                         (float) (startPoint.X - directionOfCreation *
-                            (segmentLength * Math.Sin(nowAngle * directionOfCreation))),
-                        (float) (startPoint.Y - (segmentLength * Math.Cos(nowAngle * directionOfCreation))))
+                            (segmentLength * Math.Sin(s_nowAngle * directionOfCreation))),
+                        (float) (startPoint.Y - (segmentLength * Math.Cos(s_nowAngle * directionOfCreation))))
                 },
                 recursion - 1);
-
-            nowAngle -= angleOfVector * directionOfCreation;
+            s_nowAngle -= angleOfVector * directionOfCreation;
         }
 
     }
 
     class Snowflake : Fractal
     {
-        private const float segmentFraction = 3;
+        private const float SegmentFraction = 3;
 
-        private const double snowflakeRotateAngle = Math.PI / 3;
+        private const double SnowflakeRotateAngle = Math.PI / 3;
 
         public Snowflake(float segmentLength, ushort recursionDepth, Color startColor, Color endColor)
             : base(segmentLength, recursionDepth, startColor, endColor)
         {
         }
 
-        public override void CreateFractal(PointF[] points, int recursionLevel)
+        public override void CreateFractal(Point[] points, int recursionLevel)
         {
-            float displacementSegmentX = (points[1].X - points[0].X) / segmentFraction;
-            float displacementSegmentY = (points[1].Y - points[0].Y) / segmentFraction;
+            float displacementSegmentX = (points[1].X - points[0].X) / SegmentFraction;
+            float displacementSegmentY = (points[1].Y - points[0].Y) / SegmentFraction;
 
             WorkWithPoints(points, displacementSegmentX, displacementSegmentY, out var pointOfFirstSegment,
                 out var pointOfThridSegment, out var pointOfSecondSegment);
             if (recursionLevel == RecursionDepth)
-                base.CreateFractal(new PointF[] {points[0], points[1]}, recursionLevel);
+                base.CreateFractal(new Point[] {points[0], points[1]}, recursionLevel);
             if (recursionLevel > 1)
             {
-                CreateSomeFractals(points, recursionLevel, pointOfFirstSegment, pointOfSecondSegment, pointOfThridSegment);
+                CreateSomeFractals(points, recursionLevel, pointOfFirstSegment,
+                    pointOfSecondSegment, pointOfThridSegment);
             }
         }
 
-        private void CreateSomeFractals(PointF[] points, int recursionLevel, PointF pointOfFirstSegment,
-            PointF pointOfSecondSegment, PointF pointOfThridSegment)
+        private void CreateSomeFractals(Point[] points, int recursionLevel, Point pointOfFirstSegment,
+            Point pointOfSecondSegment, Point pointOfThridSegment)
         {
-            base.CreateFractal(new PointF[] {pointOfFirstSegment, pointOfSecondSegment}, recursionLevel - 1);
-            base.CreateFractal(new PointF[] {pointOfSecondSegment, pointOfThridSegment}, recursionLevel - 1);
+            base.CreateFractal(new Point[] {pointOfFirstSegment, pointOfSecondSegment}, recursionLevel - 1);
+            base.CreateFractal(new Point[] {pointOfSecondSegment, pointOfThridSegment}, recursionLevel - 1);
             GraphicsFractal.DrawLine(new Pen(Color.White, 2f), pointOfFirstSegment, pointOfThridSegment);
-            CreateFractal(new PointF[] {points[0], pointOfFirstSegment}, recursionLevel - 1);
-            CreateFractal(new PointF[] {pointOfFirstSegment, pointOfSecondSegment}, recursionLevel - 1);
-            CreateFractal(new PointF[] {pointOfSecondSegment, pointOfThridSegment}, recursionLevel - 1);
-            CreateFractal(new PointF[] {pointOfThridSegment, points[1]}, recursionLevel - 1);
+            CreateFractal(new Point[] {points[0], pointOfFirstSegment}, recursionLevel - 1);
+            CreateFractal(new Point[] {pointOfFirstSegment, pointOfSecondSegment}, recursionLevel - 1);
+            CreateFractal(new Point[] {pointOfSecondSegment, pointOfThridSegment}, recursionLevel - 1);
+            CreateFractal(new Point[] {pointOfThridSegment, points[1]}, recursionLevel - 1);
         }
 
-        private static void WorkWithPoints(PointF[] points, float displacementSegmentX, float displacementSegmentY,
-            out PointF pointOfFirstSegment, out PointF pointOfThridSegment, out PointF pointOfSecondSegment)
+        private static void WorkWithPoints(Point[] points, float displacementSegmentX, float displacementSegmentY,
+            out Point pointOfFirstSegment, out Point pointOfThridSegment, out Point pointOfSecondSegment)
         {
-            pointOfFirstSegment = new PointF(points[0].X + displacementSegmentX, points[0].Y + displacementSegmentY);
-            pointOfThridSegment = new PointF(points[0].X + displacementSegmentX * 2,
+            pointOfFirstSegment = new Point(points[0].X + displacementSegmentX, points[0].Y + displacementSegmentY);
+            pointOfThridSegment = new Point(points[0].X + displacementSegmentX * 2,
                 points[0].Y + displacementSegmentY * 2);
-
-            float platformX = (float) ((pointOfThridSegment.X - pointOfFirstSegment.X) * Math.Cos(snowflakeRotateAngle)
+            float platformX = (float) ((pointOfThridSegment.X - pointOfFirstSegment.X) * Math.Cos(SnowflakeRotateAngle)
                                        + (pointOfThridSegment.Y - pointOfFirstSegment.Y) *
-                                       Math.Sin(snowflakeRotateAngle));
-            float platformY = (float) ((pointOfThridSegment.Y - pointOfFirstSegment.Y) * Math.Cos(snowflakeRotateAngle)
+                                       Math.Sin(SnowflakeRotateAngle));
+            float platformY = (float) ((pointOfThridSegment.Y - pointOfFirstSegment.Y) * Math.Cos(SnowflakeRotateAngle)
                                        - (pointOfThridSegment.X - pointOfFirstSegment.X) *
-                                       Math.Sin(snowflakeRotateAngle));
-
-            pointOfSecondSegment = new PointF(pointOfFirstSegment.X + platformX, pointOfFirstSegment.Y + platformY);
+                                       Math.Sin(SnowflakeRotateAngle));
+            pointOfSecondSegment = new Point(pointOfFirstSegment.X + platformX, pointOfFirstSegment.Y + platformY);
         }
     }
 
     class Carpet : Fractal
     {
 
-        private int nowColor;
+        private int s_nowColor;
 
         public Carpet(float segmentLength, ushort recursionDepth, Color startColor, Color endColor)
             : base(segmentLength, recursionDepth, startColor, endColor)
         {
         }
 
-        public override void CreateFractal(PointF[] points, int recursionLevel)
+        public override void CreateFractal(Point[] points, int recursionLevel)
         {
             float currentSegmentLength = (float) LengthOfSegment / (float) Math.Pow(3, RecursionDepth - recursionLevel);
             if (recursionLevel == RecursionDepth)
             {
-                nowColor = 1;
+                s_nowColor = 1;
                 CreateNewGradient((int) Math.Pow(8, RecursionDepth));
             }
             if (recursionLevel == 0)
             {
-                PointF endPoint = new PointF(points[0].X + currentSegmentLength, points[0].Y + currentSegmentLength);
-                base.CreateFractal(new PointF[] {points[0], endPoint}, RecursionDepth == 1 ? 1 : nowColor++);
+                Point endPoint = new Point(points[0].X + currentSegmentLength, points[0].Y + currentSegmentLength);
+                base.CreateFractal(new Point[] {points[0], endPoint}, RecursionDepth == 1 ? 1 : s_nowColor++);
                 return;
             }
             WorkWithPoints(points, currentSegmentLength, out var startPoint, out var midPoint, out var endingPoint);
             CreateSomeFractals(recursionLevel, startPoint, midPoint, endingPoint);
         }
 
-        private void CreateSomeFractals(int recursionLevel, PointF startPoint, PointF midPoint, PointF endingPoint)
+        private void CreateSomeFractals(int recursionLevel, Point startPoint, Point midPoint, Point endingPoint)
         {
-            CreateFractal(new PointF[] {new PointF(startPoint.X, startPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(midPoint.X, startPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(endingPoint.X, startPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(startPoint.X, midPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(endingPoint.X, midPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(startPoint.X, endingPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(midPoint.X, endingPoint.Y)}, recursionLevel - 1);
-            CreateFractal(new PointF[] {new PointF(endingPoint.X, endingPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(startPoint.X, startPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(midPoint.X, startPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(endingPoint.X, startPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(startPoint.X, midPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(endingPoint.X, midPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(startPoint.X, endingPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(midPoint.X, endingPoint.Y)}, recursionLevel - 1);
+            CreateFractal(new Point[] {new Point(endingPoint.X, endingPoint.Y)}, recursionLevel - 1);
         }
 
-        private static void WorkWithPoints(PointF[] points, float currentSegmentLength, out PointF startPoint,
-            out PointF midPoint, out PointF endingPoint)
+        private static void WorkWithPoints(Point[] points, float currentSegmentLength, out Point startPoint,
+            out Point midPoint, out Point endingPoint)
         {
-            startPoint = new PointF(points[0].X, points[0].Y);
-            midPoint = new PointF(startPoint.X + currentSegmentLength / 3,
+            startPoint = new Point(points[0].X, points[0].Y);
+            midPoint = new Point(startPoint.X + currentSegmentLength / 3,
                 startPoint.Y + currentSegmentLength / 3);
-            endingPoint = new PointF(startPoint.X + currentSegmentLength * 2 / 3,
+            endingPoint = new Point(startPoint.X + currentSegmentLength * 2 / 3,
                 startPoint.Y + currentSegmentLength * 2 / 3);
         }
     }
@@ -280,70 +310,52 @@ namespace Peergrade005
             : base(segmentLength, recursionDepth, startColor, endColor) { }
 
 
-        public override void CreateFractal(PointF[] points, int recursionLevel)
+        public override void CreateFractal(Point[] points, int recursionLevel)
         {
             if (recursionLevel == 0)
             {
                 return;
             }
-            WorkWithPoints(points, out var bottomApex, out var leftApex, out var rightApex);
-            CreateSomeFractals(points, recursionLevel, bottomApex, leftApex, rightApex);
+            WorkWithPoints(points, out var bottom, out var left, out var right);
+            CreateSomeFractals(points, recursionLevel, bottom, left, right);
         }
 
-        private void CreateSomeFractals(PointF[] points, int recursionLevel, PointF bottomApex, PointF leftApex,
-            PointF rightApex)
+        private void CreateSomeFractals(Point[] points, int recursionLevel, Point bottom, Point left,
+            Point right)
         {
-            CreateFractal(new PointF[] {points[0], bottomApex, leftApex}, recursionLevel - 1);
-            CreateFractal(new PointF[] {bottomApex, points[1], rightApex}, recursionLevel - 1);
-            CreateFractal(new PointF[] {leftApex, rightApex, points[2]}, recursionLevel - 1);
+            CreateFractal(new Point[] {points[0], bottom, left}, recursionLevel - 1);
+            CreateFractal(new Point[] {bottom, points[1], right}, recursionLevel - 1);
+            CreateFractal(new Point[] {left, right, points[2]}, recursionLevel - 1);
 
             for (int i = 0; i <= points.Length - 1; i++)
             {
-                base.CreateFractal(new PointF[] {points[i % points.Length], points[(i + 1) % points.Length]}, recursionLevel);
+                base.CreateFractal(new Point[] {points[i % points.Length],
+                    points[(i + 1) % points.Length]}, recursionLevel);
             }
         }
 
-        private static void WorkWithPoints(PointF[] points, out PointF bottomApex, out PointF leftApex, out PointF rightApex)
+        private static void WorkWithPoints(Point[] points, out Point bottom, out Point left, out Point right)
         {
-            bottomApex = new PointF((points[0].X + points[1].X) / 2, (points[0].Y + points[1].Y) / 2);
-            leftApex = new PointF((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
-            rightApex = new PointF((points[1].X + points[2].X) / 2, (points[1].Y + points[2].Y) / 2);
+            bottom = new Point((points[0].X + points[1].X) / 2, (points[0].Y + points[1].Y) / 2);
+            left = new Point((points[0].X + points[2].X) / 2, (points[0].Y + points[2].Y) / 2);
+            right = new Point((points[1].X + points[2].X) / 2, (points[1].Y + points[2].Y) / 2);
         }
     }
 
     class Set : Fractal
     {
-        private float sideLength;
+        private float s_sideLength;
 
-        private float betweenDistance;
-
-
-        public float Height
-        {
-            get => sideLength;
-            set
-            {
-                sideLength = value;
-            }
-        }
-
-        public float Distance
-        {
-            get => betweenDistance;
-            set
-            {
-                betweenDistance = value;
-            }
-        }
+        private float s_betweenDistance;
 
         public Set(float segmentLength, ushort recursionDepth, Color startColor, Color endColor, float height, float distance)
             : base(segmentLength, recursionDepth, startColor, endColor)
         {
-            Height = height;
-            Distance = distance;
+            s_sideLength = height;
+            s_betweenDistance = distance;
         }
 
-        public override void CreateFractal(PointF[] points, int recursionLevel)
+        public override void CreateFractal(Point[] points, int recursionLevel)
         {
             if (recursionLevel == 0)
             {
@@ -351,12 +363,14 @@ namespace Peergrade005
             }
             float currentSegmentLength = (float)LengthOfSegment / (float)Math.Pow(3, RecursionDepth - recursionLevel);
 
-            PointF endPoint = new PointF(points[0].X + currentSegmentLength, points[0].Y + Height);
+            var endPoint = new Point(points[0].X + currentSegmentLength, points[0].Y + s_sideLength);
 
-            base.CreateFractal(new PointF[] { points[0], endPoint }, recursionLevel);
+            base.CreateFractal(new Point[] { points[0], endPoint }, recursionLevel);
 
-            CreateFractal(new PointF[] { new PointF(points[0].X, points[0].Y + Distance + Height) }, recursionLevel - 1);
-            CreateFractal(new PointF[] { new PointF(points[0].X + currentSegmentLength * 2 / 3, points[0].Y + Distance + Height) }, recursionLevel - 1);
+            CreateFractal(new Point[] { new Point(points[0].X, 
+                points[0].Y + s_betweenDistance + s_sideLength) }, recursionLevel - 1);
+            CreateFractal(new Point[] { new Point(points[0].X + currentSegmentLength * 2 / 3,
+                points[0].Y + s_betweenDistance + s_sideLength) }, recursionLevel - 1);
         }
 
     }

@@ -39,6 +39,8 @@ namespace Peergrade005
         private (int, int, int) s_startRGB = (0, 0, 0);
         // Кортеж для хранения информации о конечном цвете градиента.
         private (int, int, int) s_endRGB = (0, 0, 0);
+        // Переменная для хранения текущей глубины рекурсии.
+        private int s_nowRecursion = 1;
 
         /// <summary>
         /// Метод, вызываемый при запуске главного окна.
@@ -231,6 +233,7 @@ namespace Peergrade005
         {
             // Устанавливаем тип фрактала.
             s_nowFractal = 0;
+            s_nowRecursion = 1;
             this.TypeFractalTextBlock.Text = "Тип фрактала: Фрактальное Дерево";
             // Устанавливаем текущую видимость меню настроек фракталов.
             SetVisibilityMenu(true, false);
@@ -248,6 +251,7 @@ namespace Peergrade005
         {
             // Устанавливаем тип фрактала.
             s_nowFractal = 1;
+            s_nowRecursion = 1;
             this.TypeFractalTextBlock.Text = "Тип фрактала: Кривая Коха";
             // Устанавливаем текущую видимость меню настроек фракталов.
             SetVisibilityMenu(false, false);
@@ -265,6 +269,7 @@ namespace Peergrade005
         {
             // Устанавливаем тип фрактала.
             s_nowFractal = 2;
+            s_nowRecursion = 1;
             this.TypeFractalTextBlock.Text = "Тип фрактала: Ковер Серпинского";
             // Устанавливаем текущую видимость меню настроек фракталов.
             SetVisibilityMenu(false, false);
@@ -282,6 +287,7 @@ namespace Peergrade005
         {
             // Устанавливаем тип фрактала.
             s_nowFractal = 3;
+            s_nowRecursion = 1;
             this.TypeFractalTextBlock.Text = "Тип фрактала: Треугольник Серпинского";
             // Устанавливаем текущую видимость меню настроек фракталов.
             SetVisibilityMenu(false, false);
@@ -299,6 +305,7 @@ namespace Peergrade005
         {
             // Устанавливаем тип фрактала.
             s_nowFractal = 4;
+            s_nowRecursion = 1;
             this.TypeFractalTextBlock.Text = "Тип фрактала: Множество Кантора";
             // Устанавливаем текущую видимость меню настроек фракталов.
             SetVisibilityMenu(false, true);
@@ -341,7 +348,8 @@ namespace Peergrade005
         {
             this.RecursionDeepText.Text = $"Глубина рекурсии: {(int)RecursionDeepSlider.Value}";
             // Вызываем перерисовку фракталов.
-            if(s_fractal != null) CreateFractalButton_Click(this, new RoutedEventArgs());
+            if(s_fractal != null && (int)RecursionDeepSlider.Value != s_nowRecursion) CreateFractalButton_Click(this, new RoutedEventArgs());
+            s_nowRecursion = (int) RecursionDeepSlider.Value;
         }
 
         /// <summary>
