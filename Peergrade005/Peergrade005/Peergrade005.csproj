@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="angle.png" />
-    <None Remove="CANTOR-SET.png" />
-    <None Remove="distance.png" />
-    <None Remove="FRACTAL-TREE.png" />
-    <None Remove="Fractal.png" />
-    <None Remove="KOCH-SNOWFLAKE.png" />
-    <None Remove="lenghtsegment.png" />
-    <None Remove="lengthside.png" />
-    <None Remove="recursion.png" />
-    <None Remove="relation.png" />
-    <None Remove="SIERPINSKI-CARPET.png" />
-    <None Remove="SIERPINSKI-TRIANGLE.png" />
+    <None Remove="Images/angle.png" />
+    <None Remove="Images/CANTOR-SET.png" />
+    <None Remove="Images/distance.png" />
+    <None Remove="Images/FRACTAL-TREE.png" />
+    <None Remove="Images/Fractal.png" />
+    <None Remove="Images/KOCH-SNOWFLAKE.png" />
+    <None Remove="Images/lenghtsegment.png" />
+    <None Remove="Images/lengthside.png" />
+    <None Remove="Images/recursion.png" />
+    <None Remove="Images/relation.png" />
+    <None Remove="Images/SIERPINSKI-CARPET.png" />
+    <None Remove="Images/SIERPINSKI-TRIANGLE.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,18 +26,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="angle.png" />
-    <Resource Include="CANTOR-SET.png" />
-    <Resource Include="distance.png" />
-    <Resource Include="FRACTAL-TREE.png" />
-    <Resource Include="Fractal.png" />
-    <Resource Include="KOCH-SNOWFLAKE.png" />
-    <Resource Include="lenghtsegment.png" />
-    <Resource Include="lengthside.png" />
-    <Resource Include="recursion.png" />
-    <Resource Include="relation.png" />
-    <Resource Include="SIERPINSKI-CARPET.png" />
-    <Resource Include="SIERPINSKI-TRIANGLE.png" />
+    <Resource Include="Images/angle.png" />
+    <Resource Include="Images/CANTOR-SET.png" />
+    <Resource Include="Images/distance.png" />
+    <Resource Include="Images/FRACTAL-TREE.png" />
+    <Resource Include="Images/Fractal.png" />
+    <Resource Include="Images/KOCH-SNOWFLAKE.png" />
+    <Resource Include="Images/lenghtsegment.png" />
+    <Resource Include="Images/lengthside.png" />
+    <Resource Include="Images/recursion.png" />
+    <Resource Include="Images/relation.png" />
+    <Resource Include="Images/SIERPINSKI-CARPET.png" />
+    <Resource Include="Images/SIERPINSKI-TRIANGLE.png" />
   </ItemGroup>
 
 </Project>

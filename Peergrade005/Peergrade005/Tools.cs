@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -152,7 +148,7 @@ namespace Peergrade005
         /// </summary>
         /// <param name="fractal">Фрактал.</param>
         /// <param name="MainWindowKernel">Обьект главного окна.</param>
-        public static Point[] GetStartPoints(Fractal fractal, MainWindow MainWindowKernel)
+        public static Point[] GetStartPointsForFractalCreation(Fractal fractal, MainWindow MainWindowKernel)
         {
             Point[] points = new Point[0];
             // Получаем центр экрана.
@@ -187,7 +183,7 @@ namespace Peergrade005
                     };
                     break;
                 case Set:
-                    points = new Point[] { new Point(centerX - (float)fractal.LengthOfSegment / 2, 10) };
+                    points = new Point[] { new Point(centerX - (float)fractal.LengthOfSegment / 2, centerY/2) };
                     break;
             }
             return points;

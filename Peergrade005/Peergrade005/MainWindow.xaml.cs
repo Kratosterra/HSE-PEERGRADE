@@ -1,25 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net.Cache;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Color = System.Drawing.Color;
-using Path = System.IO.Path;
-using Size = System.Windows.Size;
+
 
 namespace Peergrade005
 {
@@ -118,9 +104,9 @@ namespace Peergrade005
         {
             s_fractal = null;
             // Настраиваем слайдеры.
-            this.SectionLengthSlider.Value = 1;
+            this.SectionLengthSlider.Value = 100;
             this.SectionLengthSlider.Maximum = maxLengthSlider;
-            this.RecursionDeepSlider.Value = 1;
+            this.RecursionDeepSlider.Value = 3;
             this.RecursionDeepSlider.Maximum = maxRecursionSlider;
             // Выводим декоративное изображение.
             this.MainImage.Source = null;
@@ -157,7 +143,7 @@ namespace Peergrade005
                 // Создаём битовую карту для прорисовки фрактала.
                 s_fractal.FractalBitmap = new Bitmap((int)MainWindowKernel.MaxWidth, (int)MainWindowKernel.MaxHeight);
                 // Заполняем битовую карту, прорисовывая фрактал.
-                s_fractal.CreateFractal(Tools.GetStartPoints(s_fractal, MainWindowKernel), s_fractal.RecursionDepth);
+                s_fractal.CreateFractal(Tools.GetStartPointsForFractalCreation(s_fractal, MainWindowKernel), s_fractal.RecursionDepth);
                 // Устанавливаем битовую карту в качестве источника изображения.
                 MainImage.Source = Tools.ImageSourceFromBitmap(s_fractal.FractalBitmap);
             }
@@ -239,7 +225,7 @@ namespace Peergrade005
             SetVisibilityMenu(true, false);
             // Устанавливаем ограничения настроек и обновляем интерфейс.
             SetFractalInterface(350, 12, 
-                new Uri("/FRACTAL-TREE.png", UriKind.Relative));
+                new Uri("Images/FRACTAL-TREE.png", UriKind.Relative));
         }
 
         /// <summary>
@@ -257,7 +243,7 @@ namespace Peergrade005
             SetVisibilityMenu(false, false);
             // Устанавливаем ограничения настроек и обновляем интерфейс.
             SetFractalInterface(1500, 6, 
-                new Uri("/KOCH-SNOWFLAKE.png", UriKind.Relative));
+                new Uri("Images/KOCH-SNOWFLAKE.png", UriKind.Relative));
         }
 
         /// <summary>
@@ -275,7 +261,7 @@ namespace Peergrade005
             SetVisibilityMenu(false, false);
             // Устанавливаем ограничения настроек и обновляем интерфейс.
             SetFractalInterface(1000, 5, 
-                new Uri("/SIERPINSKI-CARPET.png", UriKind.Relative));
+                new Uri("Images/SIERPINSKI-CARPET.png", UriKind.Relative));
         }
 
         /// <summary>
@@ -293,7 +279,7 @@ namespace Peergrade005
             SetVisibilityMenu(false, false);
             // Устанавливаем ограничения настроек и обновляем интерфейс.
             SetFractalInterface(1000, 6, 
-                new Uri("/SIERPINSKI-TRIANGLE.png", UriKind.Relative));
+                new Uri("Images/SIERPINSKI-TRIANGLE.png", UriKind.Relative));
         }
 
         /// <summary>
@@ -311,7 +297,7 @@ namespace Peergrade005
             SetVisibilityMenu(false, true);
             // Устанавливаем ограничения настроек и обновляем интерфейс.
             SetFractalInterface(600, 10, 
-                new Uri("/CANTOR-SET.png", UriKind.Relative));
+                new Uri("Images/CANTOR-SET.png", UriKind.Relative));
         }
 
         /// <summary>
@@ -321,10 +307,10 @@ namespace Peergrade005
         /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
         private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            this.ZoomTextBlock.Text = $"Масштаб: x{(int)(ZoomSlider.Value)}";
+            this.ZoomTextBlock.Text = $"Масштаб: x{(double)(ZoomSlider.Value):F2}";
             // Приближаем изображение с помощью трансформации элемента Image.
             this.MainImage.LayoutTransform =
-                new ScaleTransform( (int) (ZoomSlider.Value),  (int) (ZoomSlider.Value));
+                new ScaleTransform( (double) (ZoomSlider.Value),  (double) (ZoomSlider.Value));
             // Устанавливаем положение ползунков.
             SetNewViewMod();
         }
