@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images/angle.png" />
+    <None Remove="Images/CANTOR-SET.png" />
+    <None Remove="Images/distance.png" />
+    <None Remove="Images/FRACTAL-TREE.png" />
+    <None Remove="Images/Fractal.png" />
+    <None Remove="Images/KOCH-SNOWFLAKE.png" />
+    <None Remove="Images/lenghtsegment.png" />
+    <None Remove="Images/lengthside.png" />
+    <None Remove="Images/recursion.png" />
+    <None Remove="Images/relation.png" />
+    <None Remove="Images/SIERPINSKI-CARPET.png" />
+    <None Remove="Images/SIERPINSKI-TRIANGLE.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images/angle.png" />
+    <Resource Include="Images/CANTOR-SET.png" />
+    <Resource Include="Images/distance.png" />
+    <Resource Include="Images/FRACTAL-TREE.png" />
+    <Resource Include="Images/Fractal.png" />
+    <Resource Include="Images/KOCH-SNOWFLAKE.png" />
+    <Resource Include="Images/lenghtsegment.png" />
+    <Resource Include="Images/lengthside.png" />
+    <Resource Include="Images/recursion.png" />
+    <Resource Include="Images/relation.png" />
+    <Resource Include="Images/SIERPINSKI-CARPET.png" />
+    <Resource Include="Images/SIERPINSKI-TRIANGLE.png" />
+  </ItemGroup>
+
+</Project>
