@@ -13,7 +13,6 @@ C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\bin\Debu
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\MainWindow.g.cs
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\App.g.cs
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005_MarkupCompile.cache
-C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005_MarkupCompile.lref
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\MainWindow.baml
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005.g.resources
 C:\Users\Егор Шарапов\source\repos\Peergrade005\Peergrade005\obj\Debug\net5.0-windows\Peergrade005.GeneratedMSBuildEditorConfig.editorconfig

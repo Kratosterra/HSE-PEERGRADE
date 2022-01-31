@@ -67,6 +67,7 @@ namespace Peergrade005
             }
             catch (Exception)
             {
+
             }
         }
 
@@ -126,8 +127,8 @@ namespace Peergrade005
             }
             catch (Exception)
             {
-                MessageBox.Show($"Произошла критическая ошибка при установке интерфейса для фрактала!", "Ошибка",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Произошла критическая ошибка при установке интерфейса для фрактала!",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -168,7 +169,8 @@ namespace Peergrade005
             // Создаём битовую карту для прорисовки фрактала.
             s_fractal.FractalBitmap = new Bitmap((int)MainWindowKernel.MaxWidth, (int)MainWindowKernel.MaxHeight);
             // Заполняем битовую карту, прорисовывая фрактал.
-            s_fractal.CreateFractal(Tools.GetStartPointsForFractalCreation(s_fractal, MainWindowKernel), s_fractal.RecursionDepth);
+            s_fractal.CreateFractal(
+                Tools.GetStartPointsForFractalCreation(s_fractal, MainWindowKernel), s_fractal.RecursionDepth);
             // Устанавливаем битовую карту в качестве источника изображения.
             MainImage.Source = Tools.ImageSourceFromBitmap(s_fractal.FractalBitmap);
         }
@@ -243,7 +245,7 @@ namespace Peergrade005
                 // Устанавливаем текущую видимость меню настроек фракталов.
                 SetVisibilityMenu(true, false);
                 // Устанавливаем ограничения настроек и обновляем интерфейс.
-                SetFractalInterface(350, 12,
+                SetFractalInterface(350, 12, 
                     new Uri("Images/FRACTAL-TREE.png", UriKind.Relative));
             }
             catch
@@ -275,7 +277,7 @@ namespace Peergrade005
                 // Устанавливаем текущую видимость меню настроек фракталов.
                 SetVisibilityMenu(false, false);
                 // Устанавливаем ограничения настроек и обновляем интерфейс.
-                SetFractalInterface(1500, 6,
+                SetFractalInterface(1500, 6, 
                     new Uri("Images/KOCH-SNOWFLAKE.png", UriKind.Relative));
             }
             catch
@@ -393,10 +395,10 @@ namespace Peergrade005
         /// <param name="e">Переменная, содержащая информацию для использования при реализации события.</param>
         private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            this.ZoomTextBlock.Text = $"Масштаб: x{(double)(ZoomSlider.Value):F2}";
+            this.ZoomTextBlock.Text = $"Масштаб: x{(ZoomSlider.Value):F2}";
             // Приближаем изображение с помощью трансформации элемента Image.
             this.MainImage.LayoutTransform =
-                new ScaleTransform((double)(ZoomSlider.Value), (double)(ZoomSlider.Value));
+                new ScaleTransform((ZoomSlider.Value), (ZoomSlider.Value));
             // Устанавливаем положение ползунков.
             SetNewViewMod();
         }
@@ -591,7 +593,6 @@ namespace Peergrade005
                 MessageBox.Show($"Произошла ошибка при прорисовке фрактала, проверьте входные данные!",
                     "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Drawing;
 using Color = System.Drawing.Color;
-using Pen = System.Drawing.Pen;
 using Point = System.Drawing.PointF;
 
 namespace Peergrade005

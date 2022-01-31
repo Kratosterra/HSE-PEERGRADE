@@ -21,9 +21,9 @@ namespace Peergrade005
         protected Graphics GraphicsFractal;
 
         // Начальный цвет градиента.
-        private Color s_startColor;
+        private readonly Color s_startColor;
         // Конечный цвет градиента.
-        private Color s_endColor;
+        private readonly Color s_endColor;
         // Массив цветов градиента.
         private Color[] s_colorsGradient;
 

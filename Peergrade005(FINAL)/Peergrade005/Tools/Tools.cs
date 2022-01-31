@@ -8,6 +8,8 @@ using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
 using Point = System.Drawing.PointF;
+using Rectangle = System.Drawing.RectangleF;
+using Size = System.Drawing.SizeF; 
 
 namespace Peergrade005
 {
@@ -37,7 +39,7 @@ namespace Peergrade005
                                 $"{Environment.NewLine}Файл находится внутри родительской папки!",
                     "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show($"Не удалось сохранить файл",
                     "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -54,13 +56,13 @@ namespace Peergrade005
         public static void CreateLine(Point[] points, int recursion, ref Graphics graphics, Color[] colorsGradient)
         {
             // Задаём ручку с цветом, получаемым из итерации рекурсии.
-            Pen nowPen = new Pen(colorsGradient[recursion - 1], 2f);
+            var nowPen = new Pen(colorsGradient[recursion - 1], 2f);
             // Рисуем линию.
             graphics.DrawLine(nowPen, points[0], points[1]);
         }
 
         /// <summary>
-        /// Метод, создающий треугольник для создания фрактала.
+        /// Метод, создающий прямоугольник для создания фрактала.
         /// </summary>
         /// <param name="points">Точки.</param>
         /// <param name="recursion">Глубина рекурсии.</param>
@@ -69,14 +71,12 @@ namespace Peergrade005
         public static void CreateRectangle(Point[] points, int recursion, ref Graphics graphics,
             Color[] colorsGradient)
         {
-            // Cоздаём треугольник.
-            RectangleF rectangle = new RectangleF(
+            // Cоздаём прямоугольник.
+            var rectangle = new Rectangle(
                 points[0],
-                new SizeF(points[1].X - points[0].X, points[1].Y - points[0].Y));
-            // Получаем кисточку с цветом.
-            SolidBrush solidBrush = new SolidBrush(colorsGradient[recursion - 1]);
-            // Закрашиваем треугольник.
-            graphics.FillRectangle(solidBrush, rectangle);
+                new Size(points[1].X - points[0].X, points[1].Y - points[0].Y));
+            // Закрашиваем прямоугольник.
+            graphics.FillRectangle(new SolidBrush(colorsGradient[recursion - 1]), rectangle);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Peergrade005
                     $"Файл находится по пути: {Path.GetFullPath("Saves")}",
                     "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show($"Не удалось сохранить файл",
                     "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -148,13 +148,13 @@ namespace Peergrade005
         /// Метод, получающий начальные точки для построения фракталов.
         /// </summary>
         /// <param name="fractal">Фрактал.</param>
-        /// <param name="MainWindowKernel">Обьект главного окна.</param>
-        public static Point[] GetStartPointsForFractalCreation(Fractal fractal, MainWindow MainWindowKernel)
+        /// <param name="mainWindowKernel">Обьект главного окна.</param>
+        public static Point[] GetStartPointsForFractalCreation(Fractal fractal, MainWindow mainWindowKernel)
         {
-            Point[] points = new Point[0];
+            Point[] points = Array.Empty<Point>();
             // Получаем центр экрана.
-            float centerX = (float)MainWindowKernel.MaxWidth / 2f;
-            float centerY = (float)MainWindowKernel.MaxHeight / 2f;
+            float centerX = (float)mainWindowKernel.MaxWidth / 2f;
+            float centerY = (float)mainWindowKernel.MaxHeight / 2f;
             // Вычисляем точки для построения фрактала в зависимости от его типа.
             switch (fractal)
             {
@@ -184,7 +184,7 @@ namespace Peergrade005
                     };
                     break;
                 case Set:
-                    points = new Point[] { new Point(centerX - (float)fractal.LengthOfSegment / 2, centerY/2) };
+                    points = new Point[] { new Point(centerX - (float)fractal.LengthOfSegment / 2, centerY/1.3f) };
                     break;
             }
             return points;

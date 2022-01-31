@@ -3,10 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Peergrade005"
         mc:Ignorable="d"
-        Title="Fractals" Height="540" Width="960" Background="White" Icon="/Images/Fractal.png" Foreground="Black" WindowStyle="ThreeDBorderWindow">
+        Title="Fractals"
+        Height="540"
+        Width="960"
+        Background="White"
+        Icon="/Images/Fractal.png"
+        Foreground="Black" 
+        WindowStyle="ThreeDBorderWindow">
+
     <Window.Resources>
+
         <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -15,7 +22,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border  BorderThickness="1" BorderBrush="Black" Background="Black" Height="3"/>
+                        <Border  
+                            BorderThickness="1" 
+                            BorderBrush="Black"
+                            Background="Black"
+                            Height="3"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -27,7 +38,12 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border SnapsToDevicePixels="True" Background="#FF621778"  BorderThickness="1" BorderBrush="#FF621778" Height="3"/>
+                        <Border 
+                            SnapsToDevicePixels="True"
+                            Background="#FF621778" 
+                            BorderThickness="1" 
+                            BorderBrush="#FF621778" 
+                            Height="3"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -39,7 +55,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Ellipse Height="10" Width="10" Fill="#FF621778"></Ellipse>
+                        <Ellipse 
+                            Height="10"
+                            Width="10" 
+                            Fill="#FF621778"></Ellipse>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -49,44 +68,65 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto"
+                                   MinHeight="{TemplateBinding MinHeight}" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Track Grid.Row="1" x:Name="PART_Track"   >
                     <Track.DecreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource SliderRepeatButton1}"  Command="Slider.DecreaseLarge" />
+                        <RepeatButton 
+                            Style="{StaticResource SliderRepeatButton1}"
+                            Command="Slider.DecreaseLarge" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
-                        <Thumb Style="{StaticResource SliderThumb}"  />
+                        <Thumb 
+                            Style="{StaticResource SliderThumb}"  />
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource SliderRepeatButton}" Command="Slider.IncreaseLarge" />
+                        <RepeatButton 
+                            Style="{StaticResource SliderRepeatButton}"
+                            Command="Slider.IncreaseLarge" />
                     </Track.IncreaseRepeatButton>
                 </Track>
             </Grid>
         </ControlTemplate>
 
         <Style x:Key="HorizontalSlider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter 
+                Property="Focusable"
+                Value="False"/>
+            <Setter 
+                Property="SnapsToDevicePixels"
+                Value="true" />
+            <Setter 
+                Property="OverridesDefaultStyle"
+                Value="true" />
             <Style.Triggers>
-                <Trigger Property="Orientation" Value="Horizontal">
+                <Trigger 
+                    Property="Orientation" 
+                    Value="Horizontal">
                     <Setter Property="MinHeight" Value="21" />
                     <Setter Property="MinWidth" Value="104" />
                     <Setter Property="Template" Value="{StaticResource Slider}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
+
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Rectangle Margin="2" StrokeDashArray="1 2" SnapsToDevicePixels="true" StrokeThickness="1" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                        <Rectangle 
+                            Margin="2"
+                            StrokeDashArray="1 2"
+                            SnapsToDevicePixels="true"
+                            StrokeThickness="1" 
+                            Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
         <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
         <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
@@ -96,551 +136,95 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style x:Key="ButtonStyleMain" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
+
+        <Style x:Key="ButtonStyleMain" 
+               TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" 
+                    Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" 
+                    Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" 
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+            <Setter Property="HorizontalContentAlignment" 
+                    Value="Center"/>
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+            <Setter Property="Padding" 
+                    Value="1"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="10"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Trigger Property="IsDefaulted" 
+                                     Value="true">
+                                <Setter 
+                                    Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            <Trigger Property="IsMouseOver"
+                                     Value="true">
+                                <Setter 
+                                    Property="Background"
+                                    TargetName="border"
+                                    Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter 
+                                    Property="BorderBrush" 
+                                    TargetName="border"
+                                    Value="{StaticResource Button.MouseOver.Border}"/>
                             </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            <Trigger Property="IsPressed"
+                                     Value="true">
+                                <Setter 
+                                    Property="Background"
+                                    TargetName="border" 
+                                    Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter 
+                                    Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="{StaticResource Button.Pressed.Border}"/>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter 
+                                    Property="Background" 
+                                    TargetName="border"
+                                    Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter 
+                                    Property="BorderBrush"
+                                    TargetName="border"
+                                    Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter 
+                                    Property="TextElement.Foreground" 
+                                    TargetName="contentPresenter" 
+                                    Value="{StaticResource Button.Disabled.Foreground}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Focusable" Value="false"/>
-            <Setter Property="IsTabStop" Value="false"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Rectangle Fill="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="#FFF0F0F0"/>
-        <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="#FFACACAC"/>
-        <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
-        <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
-        <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="#FF7Eb4EA"/>
-        <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="#FFDAECFC"/>
-        <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="#FF569DE5"/>
-        <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="#FFF0F0F0"/>
-        <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="#FFD9D9D9"/>
-        <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="#FFE7EAEA"/>
-        <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="#FFD6D6D6"/>
-        <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbHorizontalTop" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,6 C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbHorizontalBottom" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,12 C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12 z" Fill="{StaticResource SliderThumb.Static.Background}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderHorizontal" TargetType="{x:Type Slider}">
-            <Border x:Name="border"
-                    CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="True">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
-                    <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
-                    <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center">
-                        <Canvas Margin="-6,-1">
-                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
-                        </Canvas>
-                    </Border>
-                    <Track x:Name="PART_Track" Grid.Row="1">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb x:Name="Thumb" Focusable="False" Height="18" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbHorizontalDefault}" VerticalAlignment="Center" Width="11"/>
-                        </Track.Thumb>
-                    </Track>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalTop}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalBottom}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsSelectionRangeEnabled" Value="true">
-                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocused" Value="true">
-                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalDefault" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M0.5,0.5 L18.5,0.5 18.5,11.5 0.5,11.5z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalLeft" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 6,11 C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalRight" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 12,11 C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderVertical" TargetType="{x:Type Slider}">
-            <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="True">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" Placement="Left" Visibility="Collapsed" Width="4"/>
-                    <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
-                    <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border}" Grid.Column="1" HorizontalAlignment="center" Margin="0,5" Width="4.0">
-                        <Canvas Margin="-1,-6">
-                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Visibility="Hidden" Width="4.0"/>
-                        </Canvas>
-                    </Border>
-                    <Track x:Name="PART_Track" Grid.Column="1">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb x:Name="Thumb" Focusable="False" Height="11" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbVerticalDefault}" VerticalAlignment="Top" Width="18"/>
-                        </Track.Thumb>
-                    </Track>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalLeft}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalRight}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsSelectionRangeEnabled" Value="true">
-                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocused" Value="true">
-                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style x:Key="SliderStyleMain" TargetType="{x:Type Slider}">
-            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource SliderThumb.Static.Foreground}"/>
-            <Setter Property="Template" Value="{StaticResource SliderHorizontal}"/>
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Template" Value="{StaticResource SliderVertical}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="RepeatButtonTransparent1" TargetType="{x:Type RepeatButton}">
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Focusable" Value="false"/>
-            <Setter Property="IsTabStop" Value="false"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Rectangle Fill="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="SliderThumb.Static.Background1" Color="#FFF0F0F0"/>
-        <SolidColorBrush x:Key="SliderThumb.Static.Border1" Color="#FFACACAC"/>
-        <SolidColorBrush x:Key="SliderThumb.Static.Foreground1" Color="#FFE5E5E5"/>
-        <SolidColorBrush x:Key="SliderThumb.MouseOver.Background1" Color="#FFDCECFC"/>
-        <SolidColorBrush x:Key="SliderThumb.MouseOver.Border1" Color="#FF7Eb4EA"/>
-        <SolidColorBrush x:Key="SliderThumb.Pressed.Background1" Color="#FFDAECFC"/>
-        <SolidColorBrush x:Key="SliderThumb.Pressed.Border1" Color="#FF569DE5"/>
-        <SolidColorBrush x:Key="SliderThumb.Disabled.Background1" Color="#FFF0F0F0"/>
-        <SolidColorBrush x:Key="SliderThumb.Disabled.Border1" Color="#FFD9D9D9"/>
-        <SolidColorBrush x:Key="SliderThumb.Track.Background1" Color="#FFE7EAEA"/>
-        <SolidColorBrush x:Key="SliderThumb.Track.Border1" Color="#FFD6D6D6"/>
-        <ControlTemplate x:Key="SliderThumbHorizontalDefault1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background1}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbHorizontalTop1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,6 C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6 z" Fill="{StaticResource SliderThumb.Static.Background1}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbHorizontalBottom1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 0,12 C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12 z" Fill="{StaticResource SliderThumb.Static.Background1}" SnapsToDevicePixels="True" StrokeThickness="1" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}" UseLayoutRounding="True" VerticalAlignment="Center"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderHorizontal1" TargetType="{x:Type Slider}">
-            <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="10" SnapsToDevicePixels="True">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
-                    <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
-                    <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background1}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border1}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center">
-                        <Canvas Margin="-6,-1">
-                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
-                        </Canvas>
-                    </Border>
-                    <Track x:Name="PART_Track" Grid.Row="1">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent1}"/>
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent1}"/>
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb x:Name="Thumb" Focusable="False" Height="18" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbHorizontalDefault1}" VerticalAlignment="Center" Width="11"/>
-                        </Track.Thumb>
-                    </Track>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalTop1}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalBottom1}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsSelectionRangeEnabled" Value="true">
-                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocused" Value="true">
-                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalDefault1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M0.5,0.5 L18.5,0.5 18.5,11.5 0.5,11.5z" Fill="{StaticResource SliderThumb.Static.Background1}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalLeft1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 6,11 C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11 z" Fill="{StaticResource SliderThumb.Static.Background1}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderThumbVerticalRight1" TargetType="{x:Type Thumb}">
-            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Path x:Name="grip" Data="M 12,11 C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11 z" Fill="{StaticResource SliderThumb.Static.Background1}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border1}"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsDragging" Value="true">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border1}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background1}"/>
-                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border1}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <ControlTemplate x:Key="SliderVertical1" TargetType="{x:Type Slider}">
-            <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="True">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" Placement="Left" Visibility="Collapsed" Width="4"/>
-                    <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
-                    <Border x:Name="TrackBackground" Background="{StaticResource SliderThumb.Track.Background1}" BorderThickness="1" BorderBrush="{StaticResource SliderThumb.Track.Border1}" Grid.Column="1" HorizontalAlignment="center" Margin="0,5" Width="4.0">
-                        <Canvas Margin="-1,-6">
-                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Visibility="Hidden" Width="4.0"/>
-                        </Canvas>
-                    </Border>
-                    <Track x:Name="PART_Track" Grid.Column="1">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent1}"/>
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent1}"/>
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb x:Name="Thumb" Focusable="False" Height="11" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbVerticalDefault1}" VerticalAlignment="Top" Width="18"/>
-                        </Track.Thumb>
-                    </Track>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalLeft1}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalRight1}"/>
-                    <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsSelectionRangeEnabled" Value="true">
-                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocused" Value="true">
-                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style x:Key="SliderStyleMainRE" TargetType="{x:Type Slider}">
-            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource SliderThumb.Static.Foreground1}"/>
-            <Setter Property="Template" Value="{StaticResource SliderHorizontal1}"/>
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Template" Value="{StaticResource SliderVertical1}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
     </Window.Resources>
     <Grid ShowGridLines="False">
+
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -672,30 +256,76 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="TypeFractalTextBlock" Grid.Column="0" Grid.Row="0" Background="White"
-                   Text="Тип фрактала: Фрактальное Дерево" Grid.ColumnSpan="5" FontWeight="Bold"
-                   TextDecorations="{x:Null}" FontStyle="Normal" FontStretch="Normal" TextWrapping="NoWrap"
-                   HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="Black" />
-        <TextBlock x:Name="ZoomTextBlock" Grid.Column="5" Grid.Row="0" Background="White" Text="Масштаб: x1"
-                   Grid.ColumnSpan="3" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal"
-                   FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" 
-                   TextAlignment="Center" Foreground="Black" />
-        <TextBlock x:Name="ImageTextBlock" Grid.Column="8" Grid.Row="0" Background="White" Text="Изображение"
-                   Grid.ColumnSpan="2" FontWeight="Bold" TextDecorations="{x:Null}" FontStyle="Normal"
-                   FontStretch="Normal" TextWrapping="NoWrap" HorizontalAlignment="Stretch" TextAlignment="Center"
+        <TextBlock x:Name="TypeFractalTextBlock"
+                   Grid.Column="0"
+                   Grid.Row="0" 
+                   Background="White"
+                   Text="Тип фрактала: Фрактальное Дерево"
+                   Grid.ColumnSpan="5" 
+                   FontWeight="Bold"
+                   TextDecorations="{x:Null}"
+                   FontStyle="Normal"
+                   FontStretch="Normal"
+                   TextWrapping="NoWrap"
+                   HorizontalAlignment="Stretch"
+                   TextAlignment="Center" 
+                   Foreground="Black" />
+        <TextBlock x:Name="ZoomTextBlock"
+                   Grid.Column="5"
+                   Grid.Row="0" 
+                   Background="White"
+                   Text="Масштаб: x1"
+                   Grid.ColumnSpan="3"
+                   FontWeight="Bold"
+                   TextDecorations="{x:Null}"
+                   FontStyle="Normal"
+                   FontStretch="Normal" 
+                   TextWrapping="NoWrap"
+                   HorizontalAlignment="Stretch" 
+                   TextAlignment="Center" 
+                   Foreground="Black" />
+        <TextBlock x:Name="ImageTextBlock"
+                   Grid.Column="8"
+                   Grid.Row="0"
+                   Background="White"
+                   Text="Изображение"
+                   Grid.ColumnSpan="2"
+                   FontWeight="Bold"
+                   TextDecorations="{x:Null}"
+                   FontStyle="Normal"
+                   FontStretch="Normal"
+                   TextWrapping="NoWrap"
+                   HorizontalAlignment="Stretch"
+                   TextAlignment="Center"
                    Foreground="Black" />
 
-        <Image  x:Name ="ImageInfo"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14"
+        <Image  x:Name ="ImageInfo"
+                Grid.Column="0" 
+                Grid.Row="2"
+                Grid.ColumnSpan="5"
+                Grid.RowSpan ="14"
                 Source="/Images/FRACTAL-TREE.png" />
-        <ScrollViewer x:Name="ScrollViewer" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5"
-                      Grid.RowSpan ="14" HorizontalScrollBarVisibility="Visible" Padding="0,0,0,0"
-                      Margin="3,3,3,3" BorderThickness="1,1,1,1" Visibility="Hidden">
-            <Image x:Name ="MainImage"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan ="14"
-                   Stretch="None" Cursor="Arrow" RenderTransformOrigin="0.5,0.5" OpacityMask="Black"
-                   ScrollViewer.HorizontalScrollBarVisibility="Visible" Margin="3,3,0,0" >
+        <ScrollViewer x:Name="ScrollViewer"
+                      Grid.Column="0"
+                      Grid.Row="2"
+                      Grid.ColumnSpan="5"
+                      Grid.RowSpan ="14" 
+                      HorizontalScrollBarVisibility="Visible"
+                      Padding="0,0,0,0"
+                      Margin="3,3,3,3"
+                      BorderThickness="1,1,1,1"
+                      Visibility="Hidden">
+            <Image x:Name ="MainImage" 
+                   Stretch="None"
+                   Cursor="Arrow"
+                   RenderTransformOrigin="0.5,0.5"
+                   OpacityMask="Black"
+                   ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                   Margin="3,3,0,0" >
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                        <ScaleTransform ScaleX="1" 
+                                        ScaleY="1"/>
                         <SkewTransform/>
                         <RotateTransform Angle="0"/>
                         <TranslateTransform/>
@@ -704,34 +334,100 @@
             </Image>
         </ScrollViewer>
 
-        <Button x:Name="TreeButton" Style="{DynamicResource ButtonStyleMain}"
-                Content="Дерево" Grid.Row="1" Grid.ColumnSpan="1" BorderThickness="1,1,1,1"
-                BorderBrush="Black" Foreground="White" FontWeight="Bold" FontStyle="Normal" Background="Black"
-                Padding="1,1,1,1" Margin="3,3,3,3" Click="TreeButton_Click"/>
-        <Button x:Name="CurvedKochButton" Style="{DynamicResource ButtonStyleMain}" Content="Кривая Коха"
-                Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="1" Background="Black" BorderThickness="1,1,1,1"
-                BorderBrush="Black" Foreground="White" FontWeight="Bold" FontStyle="Normal" Margin="3,3,3,3"
+        <Button x:Name="TreeButton"
+                Style="{DynamicResource ButtonStyleMain}"
+                Content="Дерево"
+                Grid.Row="1"
+                Grid.Column ="0"
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black"
+                Foreground="White"
+                FontWeight="Bold" 
+                FontStyle="Normal"
+                Background="Black"
+                Padding="1,1,1,1"
+                Margin="3,3,3,3"
+                Click="TreeButton_Click"/>
+        <Button x:Name="CurvedKochButton"
+                Style="{DynamicResource ButtonStyleMain}"
+                Content="Кривая Коха"
+                Grid.Column="1"
+                Grid.Row="1"
+                Background="Black"
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black" 
+                Foreground="White" 
+                FontWeight="Bold"
+                FontStyle="Normal" 
+                Margin="3,3,3,3"
                 Click="CurvedKochButton_Click"/>
-        <Button x:Name="CarpetButton" Style="{DynamicResource ButtonStyleMain}"
-                Content="Ковёр" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="1" Background="#FF151515"
-                BorderThickness="1,1,1,1" BorderBrush="Black" Foreground="White" FontWeight="Bold"
-                FontStyle="Normal" Margin="3,3,3,3" Click="CarpetButton_Click"/>
-        <Button x:Name="TriangleButton" Style="{DynamicResource ButtonStyleMain}" 
-                Content="Треугольник" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="1" Background="Black" 
-                BorderThickness="1,1,1,1" BorderBrush="Black" Foreground="White" FontWeight="Bold" 
-                FontStyle="Normal" Margin="3,3,3,3" Click="TriangleButton_Click"/>
-        <Button x:Name="SetButton" Style="{DynamicResource ButtonStyleMain}" Content="Множество"
-                Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="1" Background="Black" BorderThickness="1,1,1,1"
-                BorderBrush="Black" Foreground="White" FontWeight="Bold" FontStyle="Normal" Margin="3,3,3,3" 
+        <Button x:Name="CarpetButton"
+                Style="{DynamicResource ButtonStyleMain}"
+                Content="Ковёр" 
+                Grid.Column="2"
+                Grid.Row="1" 
+                Background="#FF151515"
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black"
+                Foreground="White" 
+                FontWeight="Bold"
+                FontStyle="Normal" 
+                Margin="3,3,3,3"
+                Click="CarpetButton_Click"/>
+        <Button x:Name="TriangleButton"
+                Style="{DynamicResource ButtonStyleMain}" 
+                Content="Треугольник"
+                Grid.Column="3"
+                Grid.Row="1"
+                Background="Black" 
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black"
+                Foreground="White"
+                FontWeight="Bold" 
+                FontStyle="Normal" 
+                Margin="3,3,3,3"
+                Click="TriangleButton_Click"/>
+        <Button x:Name="SetButton"
+                Style="{DynamicResource ButtonStyleMain}" 
+                Content="Множество"
+                Grid.Column="4" 
+                Grid.Row="1" 
+                Background="Black"
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black"
+                Foreground="White"
+                FontWeight="Bold"
+                FontStyle="Normal"
+                Margin="3,3,3,3" 
                 Click="SetButton_Click"/>
-        <Slider x:Name="ZoomSlider" Style="{DynamicResource HorizontalSlider}" Grid.Column="5" Grid.Row="1"
-                Grid.ColumnSpan="3" Maximum="5" Value="1" FontWeight="Normal" BorderBrush="Black" BorderThickness="3,3,3,3"
-                Margin="3,3,3,3" Padding="0,0,0,0" ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                UseLayoutRounding="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+        <Slider x:Name="ZoomSlider"
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="5" 
+                Grid.Row="1"
+                Grid.ColumnSpan="3"
+                Maximum="5" 
+                Value="1"
+                FontWeight="Normal"
+                BorderBrush="Black"
+                BorderThickness="3,3,3,3"
+                Margin="3,3,3,3"
+                Padding="0,0,0,0"
+                ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                UseLayoutRounding="True" 
+                VerticalContentAlignment="Stretch"
+                HorizontalContentAlignment="Stretch" 
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch" Minimum="1" SmallChange="1" ValueChanged="ZoomSlider_ValueChanged" 
-                TickPlacement="Both" Interval="37"
-                TickFrequency="0" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" Foreground="Black" Background="White" 
+                VerticalAlignment="Stretch" 
+                Minimum="1" 
+                SmallChange="1"
+                ValueChanged="ZoomSlider_ValueChanged" 
+                TickPlacement="Both" 
+                Interval="37"
+                TickFrequency="0"
+                Orientation="Horizontal"
+                RenderTransformOrigin="0.5,0.5"
+                Foreground="Black" 
+                Background="White" 
                 AutoToolTipPlacement="None" >
             <Slider.RenderTransform>
                 <TransformGroup>
@@ -742,143 +438,437 @@
                 </TransformGroup>
             </Slider.RenderTransform>
         </Slider>
-        <Button x:Name="SaveButton" Style="{DynamicResource ButtonStyleMain}"
-                Content="Сохранить" Grid.Column="8" Grid.Row="1" Grid.ColumnSpan="2" Background="#FF621778"
-                BorderThickness="1,1,1,1" FontWeight="Bold" Margin="3,3,3,3" 
+        <Button x:Name="SaveButton"
+                Style="{DynamicResource ButtonStyleMain}"
+                Content="Сохранить"
+                Grid.Column="8"
+                Grid.Row="1" 
+                Grid.ColumnSpan="2" 
+                Background="#FF621778"
+                BorderThickness="1,1,1,1"
+                FontWeight="Bold"
+                Margin="3,3,3,3" 
                 Click="SaveButton_Click"
-                BorderBrush="Black" Foreground="White" FontSize="14"/>
+                BorderBrush="Black" 
+                Foreground="White"
+                FontSize="14"/>
 
-        <GroupBox x:Name="MainSettingsBox" Grid.Column="5" Header="Основные настройки" Grid.Row="3" Grid.ColumnSpan ="5"
-                  Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" Margin="3,3,3,0"
+        <GroupBox x:Name="MainSettingsBox"
+                  Grid.Column="5" 
+                  Header="Основные настройки"
+                  Grid.Row="3" 
+                  Grid.ColumnSpan ="5"
+                  Grid.RowSpan ="3"
+                  BorderBrush="Black" 
+                  FontWeight="Bold" 
+                  Margin="3,3,3,0"
                   Padding="3,3,3,3"/>
-        <TextBlock x:Name="SectionLengthText" Grid.Column="6" Grid.Row="4" Grid.ColumnSpan="2" FontWeight="Normal"
-                   FontStyle="Italic" Text="Длина отрезка: 100" TextAlignment="Center" HorizontalAlignment="Center"
+        <TextBlock x:Name="SectionLengthText" 
+                   Grid.Column="6" 
+                   Grid.Row="4" 
+                   Grid.ColumnSpan="2" 
+                   FontWeight="Normal"
+                   FontStyle="Italic"
+                   Text="Длина отрезка: 100"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
-        <Image Grid.Column="5" Grid.Row="4" Source="/Images/lenghtsegment.png" Stretch="Uniform" 
-               StretchDirection="Both" Margin="0,0,3,4" HorizontalAlignment="Right"
-               VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" UseLayoutRounding="True"/>
-        <Slider x:Name="SectionLengthSlider" Style="{DynamicResource HorizontalSlider}" 
-                Grid.Column="8" Grid.Row="4" Grid.ColumnSpan="2" Minimum="1" Maximum="350"
-                Margin="0,0,6,0" SmallChange="1" ValueChanged="SectionLengthSlider_ValueChanged" 
-                VerticalAlignment="Center" Value="100"/>
-        <TextBlock x:Name="RecursionDeepText"  Grid.Column="6" Grid.Row="5" Grid.ColumnSpan="2" 
-                   FontWeight="Normal" FontStyle="Italic" Text="Глубина рекурсии: 3" TextAlignment="Center" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <Image Grid.Column="5" Grid.Row="5" Source="/Images/recursion.png" Stretch="Uniform" 
-               StretchDirection="Both" VerticalAlignment="Top" HorizontalAlignment="Right" 
-               Margin="0,0,2,1" Grid.IsSharedSizeScope="True" UseLayoutRounding="True"/>
-        <Slider x:Name="RecursionDeepSlider" Style="{DynamicResource HorizontalSlider}"
-                Grid.Column="8" Grid.Row="5" Grid.ColumnSpan="2" Minimum="1" Maximum="12"
-                Margin="0,0,6,0" SmallChange="1" ValueChanged="RecursionDeepSlider_ValueChanged" 
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0,0,0,0"
-                VerticalAlignment="Center" Value="3"/>
+        <Image 
+            Grid.Column="5"
+            Grid.Row="4"
+            Source="/Images/lenghtsegment.png"
+            Stretch="Uniform" 
+            StretchDirection="Both" 
+            Margin="0,0,3,4" 
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+            UseLayoutRounding="True"/>
+        <Slider x:Name="SectionLengthSlider"
+                Style="{DynamicResource HorizontalSlider}" 
+                Grid.Column="8"
+                Grid.Row="4"
+                Grid.ColumnSpan="2"
+                Minimum="1"
+                Maximum="350"
+                Margin="0,0,6,0"
+                SmallChange="1" 
+                ValueChanged="SectionLengthSlider_ValueChanged" 
+                VerticalAlignment="Center"
+                Value="100"/>
+        <TextBlock x:Name="RecursionDeepText" 
+                   Grid.Column="6"
+                   Grid.Row="5"
+                   Grid.ColumnSpan="2" 
+                   FontWeight="Normal"
+                   FontStyle="Italic"
+                   Text="Глубина рекурсии: 3"
+                   TextAlignment="Center" 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,5" />
+        <Image 
+            Grid.Column="5" 
+            Grid.Row="5"
+            Source="/Images/recursion.png"
+            Stretch="Uniform" 
+            StretchDirection="Both"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"
+            Margin="0,0,2,1" 
+            Grid.IsSharedSizeScope="True"
+            UseLayoutRounding="True"/>
+        <Slider x:Name="RecursionDeepSlider" 
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="8"
+                Grid.Row="5" 
+                Grid.ColumnSpan="2" 
+                Minimum="1"
+                Maximum="12"
+                Margin="0,0,6,0"
+                SmallChange="1" 
+                ValueChanged="RecursionDeepSlider_ValueChanged" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center"
+                Padding="0,0,0,0"
+                VerticalAlignment="Center"
+                Value="3"/>
 
-        <GroupBox x:Name="FractalTreeSettingsBox" Grid.Column="5" 
-                  Header="Настройки фрактального дерева" Grid.Row="6"
-                  Grid.ColumnSpan ="5" Grid.RowSpan ="4" BorderBrush="Black" 
-                  FontWeight="Bold" Margin="3,3,3,0" Padding="3,3,3,3"/>
-        <TextBlock x:Name="RelationText" Grid.Column="6" Grid.Row="7" Grid.ColumnSpan="2"
-                   FontWeight="Normal" FontStyle="Italic" Text="Отношение длин: 0,650"
-                   TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Image x:Name="RelationImage" Grid.Column="5" Grid.Row="7" Source="/Images/relation.png"
-               Stretch="Uniform" StretchDirection="Both" Margin="0,0,4,10"
-               HorizontalAlignment="Right" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        <GroupBox x:Name="FractalTreeSettingsBox"
+                  Grid.Column="5" 
+                  Header="Настройки фрактального дерева"
+                  Grid.Row="6"
+                  Grid.ColumnSpan ="5"
+                  Grid.RowSpan ="4" 
+                  BorderBrush="Black" 
+                  FontWeight="Bold" 
+                  Margin="3,3,3,0" 
+                  Padding="3,3,3,3"/>
+        <TextBlock x:Name="RelationText"
+                   Grid.Column="6"
+                   Grid.Row="7"
+                   Grid.ColumnSpan="2"
+                   FontWeight="Normal"
+                   FontStyle="Italic" 
+                   Text="Отношение длин: 0,650"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" />
+        <Image x:Name="RelationImage"
+               Grid.Column="5"
+               Grid.Row="7" 
+               Source="/Images/relation.png"
+               Stretch="Uniform"
+               StretchDirection="Both"
+               Margin="0,0,4,10"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                UseLayoutRounding="True"/>
-        <Slider x:Name="RelationSlider" Style="{DynamicResource HorizontalSlider}" Grid.Column="8" Grid.Row="7"
-                Grid.ColumnSpan="2" Minimum="1" Maximum="999" Margin="0,0,6,0" SmallChange="1"
-                ValueChanged="RelationSlider_ValueChanged" VerticalAlignment="Center" Value="650"/>
-        <TextBlock x:Name="FirstAngleText" Grid.Column="6" Grid.Row="8" Grid.ColumnSpan="2" FontWeight="Normal"
-                   FontStyle="Italic" Text="Первый угол наклона: 45" TextAlignment="Center" HorizontalAlignment="Center"
+        <Slider x:Name="RelationSlider"
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="8"
+                Grid.Row="7"
+                Grid.ColumnSpan="2"
+                Minimum="1"
+                Maximum="999"
+                Margin="0,0,6,0"
+                SmallChange="1"
+                ValueChanged="RelationSlider_ValueChanged"
+                VerticalAlignment="Center"
+                Value="650"/>
+        <TextBlock x:Name="FirstAngleText" 
+                   Grid.Column="6" 
+                   Grid.Row="8"
+                   Grid.ColumnSpan="2"
+                   FontWeight="Normal"
+                   FontStyle="Italic"
+                   Text="Первый угол наклона: 45"
+                   TextAlignment="Center" 
+                   HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
-        <Image x:Name="FirstAngleImage" Grid.Column="5" Grid.Row="8" Source="/Images/angle.png" Stretch="Uniform"
-               StretchDirection="Both" Margin="0,0,4,11" HorizontalAlignment="Right" VerticalAlignment="Top"
-               ScrollViewer.VerticalScrollBarVisibility="Disabled" UseLayoutRounding="True"/>
-        <Slider x:Name="FirstAngleSlider" Style="{DynamicResource HorizontalSlider}" Grid.Column="8" Grid.Row="8"
-                Grid.ColumnSpan="2" Minimum="-179" Maximum="179" Margin="0,0,6,0" 
-                SmallChange="1" ValueChanged="FirstAngleSlider_ValueChanged" VerticalAlignment="Center"
-                HorizontalAlignment="Stretch" Value="45"/>
-        <TextBlock x:Name="SecondAngleText" Grid.Column="6" Grid.Row="9" Grid.ColumnSpan="2" FontWeight="Normal"
-                   FontStyle="Italic" Text="Второй угол наклона: 45" TextAlignment="Center" HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-        <Image x:Name="SecondAngleImage" Grid.Column="5" Grid.Row="9" Source="/Images/angle.png"
-               Stretch="Uniform" StretchDirection="Both" Margin="0,0,4,10" 
-               HorizontalAlignment="Right" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        <Image x:Name="FirstAngleImage" 
+               Grid.Column="5" 
+               Grid.Row="8"
+               Source="/Images/angle.png"
+               Stretch="Uniform"
+               StretchDirection="Both"
+               Margin="0,0,4,11"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                UseLayoutRounding="True"/>
-        <Slider x:Name="SecondAngleSlider" Style="{DynamicResource HorizontalSlider}" Grid.Column="8"
-                Grid.Row="9" Grid.ColumnSpan="2" Minimum="-179" Maximum="179" Margin="0,0,6,0" SmallChange="1"
-                ValueChanged="SecondAngleSlider_ValueChanged" VerticalAlignment="Center" Value="45"/>
+        <Slider x:Name="FirstAngleSlider" 
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="8" 
+                Grid.Row="8"
+                Grid.ColumnSpan="2" 
+                Minimum="-179" 
+                Maximum="179"
+                Margin="0,0,6,0" 
+                SmallChange="1"
+                ValueChanged="FirstAngleSlider_ValueChanged"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch" 
+                Value="45"/>
+        <TextBlock x:Name="SecondAngleText"
+                   Grid.Column="6" 
+                   Grid.Row="9" 
+                   Grid.ColumnSpan="2"
+                   FontWeight="Normal"
+                   FontStyle="Italic" 
+                   Text="Второй угол наклона: 45"
+                   TextAlignment="Center" 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+        <Image x:Name="SecondAngleImage"
+               Grid.Column="5"
+               Grid.Row="9" 
+               Source="/Images/angle.png"
+               Stretch="Uniform" 
+               StretchDirection="Both"
+               Margin="0,0,4,10" 
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Top"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               UseLayoutRounding="True"/>
+        <Slider x:Name="SecondAngleSlider"
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="8"
+                Grid.Row="9"
+                Grid.ColumnSpan="2"
+                Minimum="-179" 
+                Maximum="179" 
+                Margin="0,0,6,0" 
+                SmallChange="1"
+                ValueChanged="SecondAngleSlider_ValueChanged"
+                VerticalAlignment="Center" 
+                Value="45"/>
 
-        <GroupBox x:Name="SetKantorBox" Grid.Column="5" Header="Настройки множества Кантора" Grid.Row="6"
-                  Grid.ColumnSpan ="5" Grid.RowSpan ="3" BorderBrush="Black" FontWeight="Bold" 
-                  Margin="3,3,3,3" Padding="3,3,3,3" Visibility="Hidden"/>
-        <TextBlock x:Name="SideText" Grid.Column="6" Grid.Row="7" Grid.ColumnSpan="2" FontWeight="Normal"
-                   FontStyle="Italic" Text="Сторона прямоугольника: 20" TextAlignment="Center" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
-        <Image x:Name="SideImage" Grid.Column="5" Grid.Row="7" Source="/Images/lengthside.png" 
-               Stretch="Uniform" StretchDirection="Both" Margin="0,0,0,5" 
-               HorizontalAlignment="Right" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-               UseLayoutRounding="True" Visibility="Hidden"/>
-        <Slider x:Name="SideSlider" Style="{DynamicResource HorizontalSlider}" SmallChange="1"
-                Grid.Column="8" Grid.Row="7" Grid.ColumnSpan="2" Minimum="1" Maximum="40" Visibility="Hidden"
-                ValueChanged="SideSlider_ValueChanged" Margin="0,0,6,0" HorizontalAlignment="Stretch"
-                VerticalAlignment="Center" Value="20"/>
-        <TextBlock x:Name="DistanceText" Grid.Column="6" Grid.Row="8" Grid.ColumnSpan="2" FontWeight="Normal"
-                   FontStyle="Italic" Text="Расстояние: 40" TextAlignment="Center" HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" Visibility="Hidden" />
-        <Image x:Name="DistanceImage" Grid.Column="5" Grid.Row="8" Source="/Images/distance.png" Stretch="Uniform"
-               StretchDirection="Both" Margin="0,0,0,5" HorizontalAlignment="Right" VerticalAlignment="Top"
-               ScrollViewer.VerticalScrollBarVisibility="Disabled" UseLayoutRounding="True" Visibility="Hidden"/>
-        <Slider x:Name="DistanceSlider" Style="{DynamicResource HorizontalSlider}" SmallChange="1"
-                Grid.Column="8" Grid.Row="8" Grid.ColumnSpan="2" Minimum="1" Maximum="80" Visibility="Hidden"
-                ValueChanged="DistanceSlider_ValueChanged" Margin="0,0,6,0" HorizontalAlignment="Stretch"
-                VerticalAlignment="Center" Value="40"/>
+        <GroupBox x:Name="SetKantorBox" 
+                  Grid.Column="5" 
+                  Header="Настройки множества Кантора" 
+                  Grid.Row="6"
+                  Grid.ColumnSpan ="5" 
+                  Grid.RowSpan ="3" 
+                  BorderBrush="Black"
+                  FontWeight="Bold" 
+                  Margin="3,3,3,3"
+                  Padding="3,3,3,3"
+                  Visibility="Hidden"/>
+        <TextBlock x:Name="SideText"
+                   Grid.Column="6" 
+                   Grid.Row="7" 
+                   Grid.ColumnSpan="2"
+                   FontWeight="Normal"
+                   FontStyle="Italic"
+                   Text="Сторона прямоугольника: 20" 
+                   TextAlignment="Center" 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="Hidden"/>
+        <Image x:Name="SideImage"
+               Grid.Column="5"
+               Grid.Row="7" 
+               Source="/Images/lengthside.png" 
+               Stretch="Uniform"
+               StretchDirection="Both"
+               Margin="0,0,0,5" 
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top" 
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               UseLayoutRounding="True" 
+               Visibility="Hidden"/>
+        <Slider x:Name="SideSlider"
+                Style="{DynamicResource HorizontalSlider}" 
+                SmallChange="1"
+                Grid.Column="8"
+                Grid.Row="7" 
+                Grid.ColumnSpan="2"
+                Minimum="1" 
+                Maximum="40"
+                Visibility="Hidden"
+                ValueChanged="SideSlider_ValueChanged"
+                Margin="0,0,6,0" 
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Value="20"/>
+        <TextBlock x:Name="DistanceText" 
+                   Grid.Column="6" 
+                   Grid.Row="8" 
+                   Grid.ColumnSpan="2"
+                   FontWeight="Normal"
+                   FontStyle="Italic" 
+                   Text="Расстояние: 40"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   Visibility="Hidden" />
+        <Image x:Name="DistanceImage" 
+               Grid.Column="5" 
+               Grid.Row="8" 
+               Source="/Images/distance.png"
+               Stretch="Uniform"
+               StretchDirection="Both"
+               Margin="0,0,0,5" 
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Top"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               UseLayoutRounding="True"
+               Visibility="Hidden"/>
+        <Slider x:Name="DistanceSlider"
+                Style="{DynamicResource HorizontalSlider}" 
+                SmallChange="1"
+                Grid.Column="8"
+                Grid.Row="8" 
+                Grid.ColumnSpan="2"
+                Minimum="1" 
+                Maximum="80" 
+                Visibility="Hidden"
+                ValueChanged="DistanceSlider_ValueChanged"
+                Margin="0,0,6,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" 
+                Value="40"/>
 
-        <GroupBox x:Name="GradientSettingsBox" Grid.Column="5" Header="Настройкa цветов градиента"
-                  Grid.Row="10" Grid.ColumnSpan ="5" Grid.RowSpan ="3" BorderBrush="Black" 
-                  FontWeight="Bold" Margin="3,3,3,1" Padding="3,3,3,3"/>
-        <TextBlock x:Name="StartColourText" Grid.Column="6" Grid.Row="11" Grid.ColumnSpan="1" 
-                   FontWeight="Normal" FontStyle="Italic" Text="(0,0,0)" TextAlignment="Center"
-                   VerticalAlignment="Center" HorizontalAlignment="Center" />
-        <Slider x:Name="StartColourRSlider" Style="{DynamicResource HorizontalSlider}" 
-                Grid.Column="7" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" 
-                SmallChange="1" ValueChanged="StartColourRSlider_ValueChanged" 
-                Margin="0,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                MinWidth="0" MinHeight="0"/>
-        <Slider x:Name="StartColourGSlider" Style="{DynamicResource HorizontalSlider}"
-                Grid.Column="8" Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" SmallChange="1"
-                ValueChanged="StartColourGSlider_ValueChanged" Margin="0,0,10,0" VerticalAlignment="Center"
-                MinWidth="0" MinHeight="0"/>
-        <Slider x:Name="StartColourBSlider" Style="{DynamicResource HorizontalSlider}" Grid.Column="9"
-                Grid.Row="11" Grid.ColumnSpan="1" Minimum="0" Maximum="255" Margin="0,0,10,0" 
-                SmallChange="1" ValueChanged="StartColourBSlider_ValueChanged" HorizontalAlignment="Stretch"
-                VerticalAlignment="Center" MinWidth="0" MinHeight="0"/>
-        <TextBlock x:Name="EndColourText" Grid.Column="6" Grid.Row="12" Grid.ColumnSpan="1" FontWeight="Normal"
-                   FontStyle="Italic" Text="(0,0,0)" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Ellipse x:Name="ShowStartColor" Grid.Column="5" Grid.Row="11" 
-                 Fill="Black" Margin="68,5,4,5" HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch" StrokeThickness="4" Stretch="Uniform" StrokeDashCap="Round"
+        <GroupBox x:Name="GradientSettingsBox" 
+                  Grid.Column="5" 
+                  Header="Настройкa цветов градиента"
+                  Grid.Row="10"
+                  Grid.ColumnSpan ="5"
+                  Grid.RowSpan ="3" 
+                  BorderBrush="Black" 
+                  FontWeight="Bold"
+                  Margin="3,3,3,1" 
+                  Padding="3,3,3,3"/>
+        <TextBlock x:Name="StartColourText" 
+                   Grid.Column="6"
+                   Grid.Row="11"
+                   FontWeight="Normal"
+                   FontStyle="Italic"
+                   Text="(0,0,0)" 
+                   TextAlignment="Center"
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center" />
+        <Slider x:Name="StartColourRSlider" 
+                Style="{DynamicResource HorizontalSlider}" 
+                Grid.Column="7"
+                Grid.Row="11" 
+                Minimum="0" 
+                Maximum="255" 
+                SmallChange="1" 
+                ValueChanged="StartColourRSlider_ValueChanged" 
+                Margin="0,0,10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                MinWidth="0" 
+                MinHeight="0"/>
+        <Slider x:Name="StartColourGSlider" 
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="8" 
+                Grid.Row="11" 
+                Minimum="0" 
+                Maximum="255" 
+                SmallChange="1"
+                ValueChanged="StartColourGSlider_ValueChanged"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                MinWidth="0" 
+                MinHeight="0"/>
+        <Slider x:Name="StartColourBSlider" 
+                Style="{DynamicResource HorizontalSlider}"
+                Grid.Column="9"
+                Grid.Row="11"
+                Minimum="0" 
+                Maximum="255" 
+                Margin="0,0,10,0" 
+                SmallChange="1"
+                ValueChanged="StartColourBSlider_ValueChanged"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                MinWidth="0"
+                MinHeight="0"/>
+        <TextBlock x:Name="EndColourText"
+                   Grid.Column="6" 
+                   Grid.Row="12" 
+                   FontWeight="Normal"
+                   FontStyle="Italic" 
+                   Text="(0,0,0)" 
+                   TextAlignment="Center" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" />
+        <Ellipse x:Name="ShowStartColor" 
+                 Grid.Column="5"
+                 Grid.Row="11" 
+                 Fill="Black" 
+                 Margin="68,5,4,5"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch" 
+                 StrokeThickness="4" 
+                 Stretch="Uniform" 
+                 StrokeDashCap="Round"
                  StrokeStartLineCap="Round"/>
-        <Ellipse x:Name="ShowEndColor" Grid.Column="5" Grid.Row="12" Fill="Black"
-                 Margin="68,3,4,7" Stretch="Uniform" StrokeDashCap="Round"
+        <Ellipse x:Name="ShowEndColor"
+                 Grid.Column="5" 
+                 Grid.Row="12" 
+                 Fill="Black"
+                 Margin="68,3,4,7"
+                 Stretch="Uniform" 
+                 StrokeDashCap="Round"
                  StrokeStartLineCap="Round"/>
-        <Slider x:Name="EndColourRSlider" Style="{DynamicResource HorizontalSlider}" 
-                Grid.Column="7" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" 
-                SmallChange="1" ValueChanged="EndColourRSlider_ValueChanged" Margin="0,0,10,0"
-                VerticalAlignment="Center" MinWidth="0" MinHeight="0"/>
-        <Slider  x:Name="EndColourGSlider" Style="{DynamicResource HorizontalSlider}" 
-                 Grid.Column="8" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" 
-                 SmallChange="1" ValueChanged="EndColourGSlider_ValueChanged" 
-                 Margin="0,0,10,0" VerticalAlignment="Center" MinWidth="0" MinHeight="0"/>
-        <Slider x:Name="EndColourBSlider" Style="{DynamicResource HorizontalSlider}" 
-                Grid.Column="9" Grid.Row="12" Grid.ColumnSpan="1" Minimum="0" Maximum="255" 
-                Margin="0,0,10,0" SmallChange="1" ValueChanged="EndColourBSlider_ValueChanged"
-                VerticalAlignment="Center" MinWidth="0" MinHeight="0"/>
+        <Slider x:Name="EndColourRSlider"
+                Style="{DynamicResource HorizontalSlider}" 
+                Grid.Column="7" 
+                Grid.Row="12" 
+                Minimum="0"
+                Maximum="255" 
+                SmallChange="1"
+                ValueChanged="EndColourRSlider_ValueChanged" 
+                Margin="0,0,10,0"
+                VerticalAlignment="Center" 
+                MinWidth="0" MinHeight="0"/>
+        <Slider  x:Name="EndColourGSlider"
+                 Style="{DynamicResource HorizontalSlider}" 
+                 Grid.Column="8" 
+                 Grid.Row="12" 
+                 Minimum="0" 
+                 Maximum="255" 
+                 SmallChange="1"
+                 ValueChanged="EndColourGSlider_ValueChanged" 
+                 Margin="0,0,10,0"
+                 VerticalAlignment="Center"
+                 MinWidth="0" 
+                 MinHeight="0"/>
+        <Slider x:Name="EndColourBSlider"
+                Style="{DynamicResource HorizontalSlider}" 
+                Grid.Column="9" 
+                Grid.Row="12"  
+                Minimum="0" 
+                Maximum="255" 
+                Margin="0,0,10,0"
+                SmallChange="1" 
+                ValueChanged="EndColourBSlider_ValueChanged"
+                VerticalAlignment="Center"
+                MinWidth="0" 
+                MinHeight="0"/>
 
-        <Button x:Name="CreateFractalButton" Style="{DynamicResource ButtonStyleMain}"
-                Content="Построить фрактал" Grid.Row="14" Grid.Column="5" Grid.ColumnSpan="5"
-                BorderThickness="1,1,1,1" BorderBrush="Black" Foreground="White"
-                FontWeight="Bold" FontStyle="Normal" Background="#FF621778" Padding="3,3,3,3"
-                Margin="3,3,3,3" Grid.RowSpan="2" Click="CreateFractalButton_Click" FontSize="25" 
+        <Button x:Name="CreateFractalButton"
+                Style="{DynamicResource ButtonStyleMain}"
+                Content="Построить фрактал"
+                Grid.Row="14" 
+                Grid.Column="5"
+                Grid.ColumnSpan="5"
+                BorderThickness="1,1,1,1"
+                BorderBrush="Black"
+                Foreground="White"
+                FontWeight="Bold"
+                FontStyle="Normal" 
+                Background="#FF621778"
+                Padding="3,3,3,3"
+                Margin="3,3,3,3"
+                Grid.RowSpan="2" 
+                Click="CreateFractalButton_Click"
+                FontSize="25" 
                 FontFamily="Segoe UI" />
     </Grid>
 </Window>

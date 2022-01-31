@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using Color = System.Drawing.Color;
-using Pen = System.Drawing.Pen;
 using Point = System.Drawing.PointF;
 
 namespace Peergrade005
@@ -13,9 +12,9 @@ namespace Peergrade005
     partial class Set : Fractal
     {
         // Поле для хранения длины одной стороны.
-        private float s_sideLength;
+        private readonly float s_sideLength;
         // поле для хранения расстояния между ячейками множества.
-        private float s_betweenDistance;
+        private readonly float s_betweenDistance;
 
         /// <summary>
         /// Конструктор класса Множества Кантора, наследуемого от класса Фрактал.

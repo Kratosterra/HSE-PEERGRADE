@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Drawing;
 using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
 using Point = System.Drawing.PointF;
@@ -86,7 +85,7 @@ namespace Peergrade005
                 (segmentLength * Math.Sin(s_nowAngle * treeDirection)));
             float endPointY = (float)(startPoint.Y - (segmentLength * Math.Cos(s_nowAngle * treeDirection)));
             // Cоздаём конечную точку.
-            Point endPoint = new Point(endPointX, endPointY);
+            var endPoint = new Point(endPointX, endPointY);
             // Снова вызываем построения фрактала исходя из текущей позиции построения.
             CreateFractal(new Point[] { startPoint, endPoint }, recursion - 1);
             s_nowAngle -= angleOfVector * treeDirection;
@@ -136,7 +135,11 @@ namespace Peergrade005
         /// Метод, устанавливающий координаты необходимых для построения фрактала точек.
         /// </summary>
         /// <param name="points">Начальные точки фрактала.</param>
-        /// <param name="recursion">Глубина рекурсии.</param>
+        /// <param name="displacementSegmentX">Смещение отрезка по оси X.</param>
+        /// <param name="displacementSegmentY">Смещение отрезка по оси Y.</param>
+        /// <param name="pointOfFirstSegment">Точка первого отрезка построения.</param>
+        /// <param name="pointOfSecondSegment">Точка второго отрезка построения.</param>
+        /// <param name="pointOfThridSegment">Точка третьего отрезка построения.</param>
         private static void WorkWithPoints(Point[] points, float displacementSegmentX, float displacementSegmentY,
             out Point pointOfFirstSegment, out Point pointOfThridSegment, out Point pointOfSecondSegment)
         {
@@ -178,7 +181,7 @@ namespace Peergrade005
         private void CreateZeroRecursionFractal(Point[] points, float currentSegmentLength)
         {
             // Вычисляем опорную точку.
-            Point endPoint = new Point(
+            var endPoint = new Point(
                 points[0].X + currentSegmentLength,
                 points[0].Y + currentSegmentLength);
             // Строим многоугольник.
