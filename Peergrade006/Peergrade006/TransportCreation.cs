@@ -9,7 +9,7 @@ namespace Peergrade006
     static class TransportCreation
     {
         // Задаём переменную для генерации случайного числа.
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
         
         /// <summary>
         /// Метод, создающий случайную машину.

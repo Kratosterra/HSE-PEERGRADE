@@ -10,7 +10,7 @@ namespace Peergrade006
     static class Tools
     {
         // Задаём переменную для генерации случайного числа.
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
         
         /// <summary>
         /// Метод, подготавливающий файлы для записи информации.
@@ -32,14 +32,14 @@ namespace Peergrade006
                 $"..{Path.DirectorySeparatorChar}MotorBoats.txt");
 
             // Производим создание пустого файла или его перезапись.
-            using (FileStream fs = File.Create(carFileName))
+            using (var fs = File.Create(carFileName))
             {
-                byte[] info = new UnicodeEncoding().GetBytes(String.Empty);
+                var info = new UnicodeEncoding().GetBytes(String.Empty);
                 fs.Write(info, 0, info.Length);
             }
-            using (FileStream fs = File.Create(boatFileName))
+            using (var fs = File.Create(boatFileName))
             {
-                byte[] info = new UnicodeEncoding().GetBytes(String.Empty);
+                var info = new UnicodeEncoding().GetBytes(String.Empty);
                 fs.Write(info, 0, info.Length);
             }
         }
@@ -51,26 +51,27 @@ namespace Peergrade006
         internal static string GenerateModelName()
         {
             var stringBuilder = new StringBuilder();
-            int choice = _random.Next(0, 101);
+            var choice = _random.Next(0, 101);
             // В зависимости от шанса, мы выбираем длину названия модели.
-            for (int i = 0; i < ((choice > 80) ? 4: 5); i++)
+            for (var i = 0; i < ((choice > 80) ? 4: 5); i++)
             {
-                // Далее путем неравенств, создаём вероятность создания невалидного имени модели.
-                if (choice <= 40)
+                choice = _random.Next(0, 101);
+                switch (choice)
                 {
-                    stringBuilder.Append((char)_random.Next('A', 'Z'));
-                }
-                else if (choice > 75)
-                {
-                    stringBuilder.Append((char)_random.Next(33, 110));
-                }
-                else
-                {
-                    stringBuilder.Append(_random.Next(0, 10).ToString());
+                    // Далее путем неравенств, создаём вероятность создания невалидного имени модели.
+                    case <= 40:
+                        stringBuilder.Append((char)_random.Next('A', 'Z'));
+                        break;
+                    case > 75:
+                        stringBuilder.Append((char)_random.Next(33, 110));
+                        break;
+                    default:
+                        stringBuilder.Append(_random.Next(0, 10));
+                        break;
                 }
             }
             // Возвращаем строку.
-            return  stringBuilder.ToString();
+            return stringBuilder.ToString();
         }
     }
 }

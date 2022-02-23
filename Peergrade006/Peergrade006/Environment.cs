@@ -14,7 +14,7 @@ namespace Peergrade006
         public static void GreatError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Произошла ошибка при выполнении операции" +
+            Console.WriteLine("Произошла ошибка при выполнении тестирования" +
                               ", вероятно проблема возникла в вашей файловой системе!");
             Console.ResetColor();
         }
@@ -128,9 +128,8 @@ namespace Peergrade006
                 sr.Close();
                 Console.ResetColor();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
                 // Игнорируется
             }
             Console.ReadKey();

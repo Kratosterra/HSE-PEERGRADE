@@ -7,7 +7,7 @@ namespace EKRLib
     /// <summary>
     /// Сереализуемый класс, отвечающий за выбрасывание исключений типа <see cref="TransportException"/>.
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class TransportException : Exception
     {
         /// <summary>

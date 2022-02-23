@@ -11,7 +11,7 @@ namespace Peergrade006
     static class Testing
     { 
         // Задаём переменную для генерации случайного числа.
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
         
         /// <summary>
         /// Метод генерирующий масив транспорта для тестирования библиотеки.
@@ -111,10 +111,10 @@ namespace Peergrade006
                         Console.ResetColor();
                         break;
                     case MotorBoat:
+                        File.AppendAllLines(boatFileName, new[] {transport.ToString()}, Encoding.Unicode);
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine($"Файл {Path.GetFileName(boatFileName)}:\n {transport} - Успешно записано!");
                         Console.ResetColor();
-                        File.AppendAllLines(boatFileName, new[] {transport.ToString()}, Encoding.Unicode);
                         break;
                 }
             }

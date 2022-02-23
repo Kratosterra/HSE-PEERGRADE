@@ -10,24 +10,23 @@ namespace EKRLib
         /// <summary>
         /// Приватное поле для хранения модели обьекта типа <see cref="Transport"/>.
         /// </summary>
-        private readonly string _model;
+        private string _model;
         
         /// <summary>
         /// Приватное поле для хранения мощности двигателя обьекта типа <see cref="Transport"/>.
         /// </summary>
-        private readonly uint _power;
+        private uint _power;
         
         /// <summary>
         /// Свойство, для представдения модели обьекта типа <see cref="Transport"/>.
         /// </summary>
         /// <exception cref="TransportException">Возвращается в случае неподходящего формата модели <see cref="Transport"/>.</exception>
-        protected string Model
+        public string Model
         {
             get => _model;
-            private init
+            private set
             {
-                if ((string.IsNullOrEmpty(value)) || (value.Length != 5) ||
-                    (Regex.Matches(value, @"[^A-Z0-9]").Count != 0))
+                if (IsInvalidModel(value))
                 {
                     throw new TransportException($"Недопустимая модель {value}");
                 }
@@ -40,10 +39,10 @@ namespace EKRLib
         /// Свойсво, репрезентующее мощность двигателя обьекта типа <see cref="Transport"/>.
         /// </summary>
         /// <exception cref="TransportException">Возвращается в случае неподходящего формата мощности двигателя.</exception>
-        private uint Power
+        public uint Power
         {
             get => _power;
-            init
+            private set
             {
                 if (value < 20)
                 {
@@ -70,6 +69,15 @@ namespace EKRLib
             Model = model;
             Power = power;
         }
+        
+        /// <summary>
+        /// Метод, проверяющий невалидность модели для создания обьекта типа <see cref="Transport"/>.
+        /// </summary>
+        /// <param name="value">Название модели</param>
+        /// <returns>Boolean значение, не сответствует ли модель стандарту для обьекта типа <see cref="Transport"/></returns>
+        private static bool IsInvalidModel(string value) =>
+            (string.IsNullOrEmpty(value)) || (value.Length != 5) ||
+            (Regex.Matches(value, @"[^A-Z0-9]").Count != 0);
 
         /// <summary>
         /// Метод, представляющий информацию об обьекте типа <see cref="Transport"/>.
