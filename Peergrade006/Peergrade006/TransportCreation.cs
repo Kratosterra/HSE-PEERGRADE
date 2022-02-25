@@ -15,7 +15,7 @@ namespace Peergrade006
         /// Метод, создающий случайную машину.
         /// </summary>
         /// <returns>Обьект типа Car со случайными параметрами.</returns>
-        internal static Car CreateRandomCar()
+        internal static Car CreateRandomCar(bool generateBySpecification)
         {
             // Cоздаём флагЮ для фиксации события создания обьекта.
             bool isTransportCreated = false;
@@ -25,7 +25,7 @@ namespace Peergrade006
             {
                 try
                 {
-                    newCar = new Car(Tools.GenerateModelName(), (uint)_random.Next(10, 100));
+                    newCar = new Car(Tools.GenerateModelName(generateBySpecification), (uint)_random.Next(10, 100));
                     isTransportCreated = true;
                 }
                 catch (TransportException e)
@@ -50,7 +50,7 @@ namespace Peergrade006
         /// Метод, создающий случайную лодку.
         /// </summary>
         /// <returns>Обьект типа MotorBoat со случайными параметрами.</returns>
-        internal static MotorBoat CreateRandomMotorBoat()
+        internal static MotorBoat CreateRandomMotorBoat(bool generateBySpecification)
         {
             // Cоздаём флаг для фиксации события создания обьекта.
             bool isTransportCreated = false;
@@ -60,7 +60,7 @@ namespace Peergrade006
             {
                 try
                 {
-                    newMotorBoat = new MotorBoat(Tools.GenerateModelName(), (uint)_random.Next(10, 100));
+                    newMotorBoat = new MotorBoat(Tools.GenerateModelName(generateBySpecification), (uint)_random.Next(10, 100));
                     isTransportCreated = true;
                 }
                 catch (TransportException e)

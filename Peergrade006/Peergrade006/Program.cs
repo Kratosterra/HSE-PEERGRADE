@@ -31,8 +31,10 @@ namespace Peergrade006
             {
                 try
                 {
+                    // Получаем тип генерации моделей.
+                    bool generateBySpecification = Tools.SetGeneratorMode();
                     // Генерируем требуемый массив.
-                    Testing.CreateTransportList(out Transport[] listOfTransports);
+                    Testing.CreateTransportList(out Transport[] listOfTransports, generateBySpecification);
                     // Оповещаем об окончании генерации.
                     Environment.GenerationFinished();
                     // Создаём файлы.
@@ -52,7 +54,7 @@ namespace Peergrade006
                     exitKey = Console.ReadKey();
                 }
             } while (exitKey.Key != ConsoleKey.Escape);
-            
+            // Показываем прощальное сообщение.
             Environment.ShowLastMessageFirst();
         }
         

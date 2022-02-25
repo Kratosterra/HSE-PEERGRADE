@@ -12,12 +12,13 @@ namespace Peergrade006
     { 
         // Задаём переменную для генерации случайного числа.
         private static readonly Random _random = new Random();
-        
+
         /// <summary>
         /// Метод генерирующий масив транспорта для тестирования библиотеки.
         /// </summary>
         /// <param name="listOfTransports">Массив сгенерированного транспорта.</param>
-        internal static void CreateTransportList(out Transport[] listOfTransports)
+        /// <param name="generateBySpecification">Следует ли генерировать модель согласно спецификации.</param>
+        internal static void CreateTransportList(out Transport[] listOfTransports, bool generateBySpecification)
         {
             // Задаём колличество генерируемого транспорта.
             int numOfTransports = _random.Next(6, 10);
@@ -35,13 +36,13 @@ namespace Peergrade006
                 int randomChoice = _random.Next(0, 2);
                 if (randomChoice == 1)
                 {
-                    Car newCar = TransportCreation.CreateRandomCar();
+                    Transport newCar = TransportCreation.CreateRandomCar(generateBySpecification);
                     listOfTransports[i] = newCar;
                     Console.WriteLine(newCar.StartEngine());
                 }
                 else
                 {
-                    MotorBoat newMotorBoat = TransportCreation.CreateRandomMotorBoat();
+                    Transport newMotorBoat = TransportCreation.CreateRandomMotorBoat(generateBySpecification);
                     listOfTransports[i] = newMotorBoat;
                     Console.WriteLine(newMotorBoat.StartEngine());
                 }
