@@ -125,3 +125,23 @@ std::pair<std::vector<int>, std::vector<int>> ParseInMFI(const std::vector<std::
 std::vector<int> ParseInBFO(const std::vector<std::vector<int>>& matrix, bool oriented);
 std::pair<std::vector<int>, std::vector<int>> ParseInBMFO(const std::vector<std::vector<int>>& matrix,
                                                           bool oriented);
+
+std::vector<int> GetMatrixLine(int32_t size_of_matrix);
+std::vector<std::string> Split(const std::string& s, char delim);
+bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans);
+bool IsValidString(const std::string& s);
+std::string GetStringAdjacencyMatrix(const Graph &graph);
+std::string GetStringIncidenceMatrix(const Graph &graph);
+std::string GetStringAdjacencyList(const Graph &graph);
+std::string GetStringRibsList(const Graph &graph);
+std::string GetStringFO(const Graph &graph);
+std::string GetStringFI(const Graph &graph);
+std::string GetStringMFO(const Graph &graph);
+std::string GetStringMFI(const Graph &graph);
+std::string GetStringBFO(const Graph &graph);
+void PrintVertexDegrees(const Graph &graph);
+std::string GetStringBMFO(const Graph &graph);
+void PrintMatrixRepresentation(const Graph &graph);
+void PrintGraphMainInfo(const Graph &graph);
+void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjacency_matrix);
+int32_t ParseNum(const std::string& s);

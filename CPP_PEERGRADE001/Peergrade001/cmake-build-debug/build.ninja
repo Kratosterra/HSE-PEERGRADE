@@ -65,6 +65,7 @@ build CMakeFiles/Peergrade001.dir/main.cpp.obj: CXX_COMPILER__Peergrade001_Debug
 
 build Peergrade001.exe: CXX_EXECUTABLE_LINKER__Peergrade001_Debug CMakeFiles/Peergrade001.dir/main.cpp.obj
   FLAGS = -g
+  LINK_FLAGS = -static
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Peergrade001.dir
   POST_BUILD = cd .
