@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <sstream>
 #include <fstream>
+#include <cmath>
+#include <stack> // стек
 
 using namespace std;  // Укажем использование пространства имен std.
 
@@ -37,7 +39,7 @@ struct Graph {
     vector<int> bfo_fo;
 };
 
-vector<string> SplitSegment(const string& sentence);
+
 
 /**
  *  @brief  Основная функция работы программы.
@@ -49,21 +51,21 @@ int main() {
     const int32_t EXIT_NUM = 9;  // Переменная для проверки опции выхода из программы.
     int32_t now_choice;  // Текущий выбор меню пользователем.
     Graph graph = {false}; // Задаем граф.
-    system("color 01");
+    system("color 0B");
     ShowStartOfProgram();  // Показваем заставку.
-    cout << "─────────────────────────────────────────────\n";
-    cout << "Нажмите Enter, чтобы продолжить!";
+    cout << "── Запрос ────────────────────────────────────────\n";
+    cout << "Нажмите Enter, чтобы продолжить...";
     cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
     do {
-        system("color 01");
+        system("color 0B");
         ShowNowGraphInfo(graph);  // Показываем текущий граф.
         ShowMainMenu(); // Показываем стратовое меню.
         now_choice = GetChoice(); // Получаем выбор пользователя.
         // Если выбор является приемлемым - рабоатем.
         DoGraphWork(now_choice, graph);
         Sleep(200);
-        cout << "─────────────────────────────────────────────\n";
-        cout << "Нажмите Enter, чтобы продолжить!";
+        cout << "── Запрос ────────────────────────────────────────\n";
+        cout << "Нажмите Enter, чтобы продолжить...";
         cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
     } while (now_choice != EXIT_NUM); // Пока человек не пожелал выйти продолжаем работу.
     ShowExitOfProgram(); // Показываем конечную заставку.
@@ -77,13 +79,11 @@ void ShowStartOfProgram() {
 
 void ShowExitOfProgram() {
     std::cout << "Спасибо за использование!\n";
-    system("color 01");
+    system("color 0B");
 }
 
 void ShowMainMenu() {
-    std::cout << "Это главное меню!\n"
-                 "─────────────────────────────────────────────\n"
-                 "[1] Ввод графа\n"
+    std::cout << "[1] Ввод графа\n"
                  "[2] Вывод графа\n"
                  "[3] Смена типа представления/хранения\n"
                  "[4] Подсчет степеней/полустепеней вершин\n"
@@ -98,7 +98,7 @@ void ShowMainMenu() {
 void ShowNowGraphInfo(const Graph& graph) {
     std::cout << "\n───────────────────────────────────────────────"
                  "───────────────────────────────────────────\n"
-                 "────────────────────────────────────────────────"
+                 "Главное меню\n────────────────────────────────────────────────"
                  "──────────────────────────────────────────\n\n"
                  "─────────────────────────────────────────────\n"
                  "Информация о графе\n"
@@ -394,7 +394,6 @@ int32_t GetChoice() {
             ans = stoi(line);
         } catch (std::exception& exception){
             std::cin.clear();
-            std::cin.ignore(numeric_limits<int>::max(), '\n');
         }
         if (ans >= 1 && ans <= 9) {
             valid_choice = true;
@@ -403,7 +402,7 @@ int32_t GetChoice() {
             std::cout << "Ошибка, введите число от 1 до 9!\n";
         }
     } while (!valid_choice);
-    system("color 01");
+    system("color 0B");
     return ans;
 }
 
@@ -417,7 +416,7 @@ int32_t GetChoiceVarious(int32_t upper_bound) {
             std::getline(std::cin, line);
             ans = stoi(line);
         } catch (std::exception& exception){
-            // Игнорирование.
+            std::cin.clear();
         }
         if (ans >= 1 && ans <= upper_bound) {
             valid_choice = true;
@@ -426,7 +425,7 @@ int32_t GetChoiceVarious(int32_t upper_bound) {
             std::cout << "Ошибка, введите число от 1 до "<< upper_bound << "!\n";
         }
     } while (!valid_choice);
-    system("color 01");
+    system("color 0B");
     return ans;
 }
 
@@ -440,7 +439,7 @@ int32_t GetChoiceVarious(int32_t upper_bound, const string& info) {
             std::getline(std::cin, line);
             ans = stoi(line);
         } catch (std::exception& exception){
-            // Игнорирование.
+            std::cin.clear();
         }
         if (ans >= 1 && ans <= upper_bound) {
             valid_choice = true;
@@ -449,7 +448,7 @@ int32_t GetChoiceVarious(int32_t upper_bound, const string& info) {
             std::cout << "Ошибка, введите число от 1 до "<< upper_bound << "!\n";
         }
     } while (!valid_choice);
-    system("color 01");
+    system("color 0B");
     return ans;
 }
 
@@ -488,13 +487,32 @@ void DoGraphWork(int32_t now_choice, Graph& graph) {
     }
 }
 
+std::ifstream::pos_type filesize(const string& filename)
+{
+    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
+}
+
 string ReadFileIntoString(const string& path) {
     ifstream input_file(path);
-    if (!input_file.is_open()) {
-        cerr << "Невозможно открыть файл!\n";
-        return "";
+    try {
+        int size = 0;
+        size = filesize(path);
+        if (size > 30000) {
+            cerr << "Отмена чтения. Файл весит больше 30 КБ!\n";
+            return "";
+        }
+        if (!input_file.is_open()) {
+            cerr << "Невозможно открыть файл!\n";
+            return "";
+        }
+        return string((std::istreambuf_iterator<char>(input_file)),
+                      std::istreambuf_iterator<char>());
+    } catch (exception) {
+        cerr << "Произошла ошибка при чтении из файла!\n";
+        input_file.close();
     }
-    return string((std::istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
+    return "";
 }
 
 void GetNewGraph(Graph& graph) {
@@ -508,7 +526,7 @@ void GetNewGraph(Graph& graph) {
     if (choice == 1) {
         vector<vector<int>> adjacency_matrix;
         cout << "Введите размер квадртаной матрицы смежности:\n";
-        int32_t size_of_matrix = GetChoiceVarious(10, "размер матрицы");
+        int32_t size_of_matrix = GetChoiceVarious(5, "размер матрицы");
         std::cout << "─────────────────────────────────────────────\n";
         for (int i = 0; i < size_of_matrix; ++i) {
             vector<int> matrix_line = GetMatrixLine(size_of_matrix);
@@ -518,7 +536,7 @@ void GetNewGraph(Graph& graph) {
         std::cout << "Матрица установлена!\n";
     } else {
         cout << "Введите размер квадртаной матрицы смежности в файле (должна точно совпадать):\n";
-        int32_t size_of_matrix = GetChoiceVarious(10, "размер матрицы");
+        int32_t size_of_matrix = GetChoiceVarious(5, "размер матрицы");
         std::cout << "─────────────────────────────────────────────\n";
         vector<vector<int>> adjacency_matrix;
         try {
@@ -537,7 +555,7 @@ void GetNewGraph(Graph& graph) {
                 vector<int> final;
                 vector<string> str = Split(i, ' ');
                 if (str.size() != size_of_matrix) {
-                    cerr << "Размер одной из строк не соответсвует измерениям квадратной матрицы"
+                    cerr << "Размер одной из строк не соответствует измерениям квадратной матрицы"
                             ".\nНовый граф не установлен!\n";
                     return;
                 }
@@ -579,32 +597,18 @@ void SetAdjacencyMatrix(Graph &graph, const vector<vector<int>>& adjacency_matri
     graph.arcs = CountArcs(adjacency_matrix);
     graph.loops = CountLoops(adjacency_matrix);
     cout << GetStringAdjacencyMatrix(graph);
-    cout << 1;
     graph.vertex_degrees = GetVertexDegrees(adjacency_matrix, graph.WithLoops, graph.Oriented);
-    cout << 2;
-    graph.incidence_matrix = ParseInIncidenceMatrix(adjacency_matrix,
-                                                    graph.Pseudo ? graph.arcs : graph.q);
-    cout << 3;
-    graph.adjacency_list = ParseInAdjacencyList(adjacency_matrix);
-    cout << 4;
     graph.ribs_list = ParseInRibsList(adjacency_matrix, graph.arcs);
-    cout << 5;
+    graph.adjacency_list = ParseInAdjacencyList(adjacency_matrix);
+    graph.incidence_matrix = ParseInIncidenceMatrix(graph.adjacency_list);
     graph.fo = ParseInFO(adjacency_matrix, graph.Oriented);
-    cout << 6;
     graph.fi = ParseInFI(adjacency_matrix, graph.Oriented);
-    cout << 7;
     graph.mfo_me = ParseInMFO(adjacency_matrix, graph.Oriented).first;
-    cout << 8;
     graph.mfo_mv = ParseInMFO(adjacency_matrix, graph.Oriented).second;
-    cout << 9;
     graph.mfi_me = ParseInMFI(adjacency_matrix, graph.Oriented).first;
-    cout << -10;
     graph.mfi_mv = ParseInMFI(adjacency_matrix, graph.Oriented).second;
-    cout << -11;
     graph.bmfo_me = ParseInBMFO(adjacency_matrix, graph.Oriented).first;
-    cout << -12;
     graph.bmfo_mv = ParseInBMFO(adjacency_matrix, graph.Oriented).second;
-    cout << -13;
     graph.bfo_fo = ParseInBFO(adjacency_matrix, graph.Oriented);
 }
 
@@ -723,13 +727,12 @@ void ChangeTypeOfGraph(Graph& graph) {
     } else if (graph.Multi && !graph.Oriented) {
         cout << "Для неориентированного мультиграфа доступны следующие представления.\n";
         cout << "[1] Матрица смежности\n"
-                "[2] Матрица инцидентности\n"
-                "[3] Список смежности\n"
-                "[4] Список ребёр\n"
-                "[5] FO\n"
-                "[6] MFO\n"
-                "[7] BFO\n"
-                "[8] BMFO\n";
+                "[2] Список смежности\n"
+                "[3] Список ребёр\n"
+                "[4] FO\n"
+                "[5] MFO\n"
+                "[6] BFO\n"
+                "[7] BMFO\n";
         cout << "─────────────────────────────────────────────\n";
         int32_t choice = GetChoiceVarious(8);
         cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
@@ -738,24 +741,21 @@ void ChangeTypeOfGraph(Graph& graph) {
                 graph.type = "Матрица смежности";
                 break;
             case 2 :
-                graph.type = "Матрица инцидентности";
-                break;
-            case 3 :
                 graph.type = "Список смежности";
                 break;
-            case 4 :
+            case 3 :
                 graph.type = "Список ребер";
                 break;
-            case 5 :
+            case 4 :
                 graph.type = "FO";
                 break;
-            case 6 :
+            case 5 :
                 graph.type = "MFO";
                 break;
-            case 7 :
+            case 6 :
                 graph.type = "BFO";
                 break;
-            case 8 :
+            case 7 :
                 graph.type = "BMFO";
                 break;
             default:
@@ -886,11 +886,74 @@ void CountEdgesOfGraph(const Graph& graph) {
 }
 
 void DFSClassic(const Graph& graph) {
-    cout << "В глубину обычно!\n";
+    if (!graph.Exist) {
+        cerr << "Граф не существует. Воспользуйтесь вводом!\n";
+        return;
+    }
+    std::cout << "─────────────────────────────────────────────\n";
+    cout << "Приступаем к обходу графа в глубину стандартно!\n";
+    std::cout << "─────────────────────────────────────────────\n";
+    std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    stack<int> stack;
+    vector<vector<int>> adjacency_matrix = graph.adjacency_matrix;
+    vector<int> used(adjacency_matrix.size()); // вершины графа
+    vector<int> path;
+    for (int & i : used) i = 0;
+    stack.push(0);
+    while (!stack.empty())
+    {
+        int now_point = stack.top(); // извлекаем вершину
+        stack.pop();
+        if (used[now_point] == 2) continue;
+        if (path.empty()) cout << "Cтартовая точка: " << now_point + 1 << "\n";
+        else cout << "Путь: " << path[path.size()-1] << " --> " << now_point + 1 << "\n";
+        cout << "Посетили вершину " << now_point + 1 << "\n";
+        used[now_point] = 2;
+        for (int j = adjacency_matrix.size()-1; j >= 0; j--)
+        {
+            if (adjacency_matrix[now_point][j] == 1 && used[j] != 2)
+            {
+                cout << "Обнаружили смежную вершину " << j+1<< "\n";
+                stack.push(j);
+                used[j] = 1;
+                path.push_back(now_point + 1);
+            }
+        }
+        cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"; // выводим номер вершины
+    }
+    cout << "Обход в глубину стандартным методом завершён!\n";
+    std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+void DFSSearchRecursion(int start, int end, const vector<vector<int>> matrix,
+                        vector<int>& used, vector<int>& path)
+{
+    if (path.empty()) {
+        cout << "Cтартовая точка: " << start + 1 << "\n";
+    }
+    cout << "Посетили вершину " << start + 1 << "\n";
+    path.push_back(start + 1);
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+    used[start] = 1;
+    for (int i = 0; i < end; i++)
+        if (matrix[start][i] != 0 && used[i] == 0) DFSSearchRecursion(i, end, matrix, used, path);
 }
 
 void DFSRecursion(const Graph& graph) {
-    cout << "В глубину рекурсивно!\n";
+    if (!graph.Exist) {
+        cerr << "Граф не существует. Воспользуйтесь вводом!\n";
+        return;
+    }
+    std::cout << "─────────────────────────────────────────────\n";
+    cout << "Приступаем к обходу графа в глубину рекурсивно!\n";
+    std::cout << "─────────────────────────────────────────────\n";
+    std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    vector<int> used(graph.adjacency_matrix.size());
+    vector<int> path;
+    for (int & i : used) i = 0;
+    DFSSearchRecursion(0, graph.adjacency_matrix.size(), graph.adjacency_matrix, used, path);
+    cout << "Обход в глубину рекурсивным методом завершён!\n";
+    std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
 
 void BFS(const Graph& graph) {
@@ -937,7 +1000,7 @@ int CountLoops(vector<vector<int>> matrix) {
         for (int j = 0; j < matrix[i].size(); ++j) {
             if (i == j) {
                 if (matrix[i][j] > 0) {
-                    count += 1;
+                    count += matrix[i][j];
                 }
             }
         }
@@ -962,7 +1025,9 @@ int CountRibs(vector<vector<int>> matrix) {
     int anti_count = 0;
     for (int i = 0; i < matrix.size(); ++i) {
         for (int j = 0; j < matrix[i].size(); ++j) {
-            if (matrix[i][j] > 0 && matrix[j][i] == matrix[i][j]) {
+            if (i == j) {
+                count += matrix[i][j];
+            } else if (matrix[i][j] > 0 && matrix[j][i] == matrix[i][j]) {
                 count += matrix[i][j];
                 anti_count += matrix[i][j];
             } else if (matrix[i][j] > 0) {
@@ -970,7 +1035,7 @@ int CountRibs(vector<vector<int>> matrix) {
             }
         }
     }
-    return count - (anti_count/2);
+    return count - static_cast<int>(floor(static_cast<double>(anti_count)/2.0));
 }
 
 vector<vector<int>> GetVertexDegrees(vector<vector<int>> matrix, bool with_loops, bool oriented) {
@@ -1021,27 +1086,62 @@ vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& matrix, in
     for (int i = 0; i < matrix.size(); ++i) {
        for (int j = 0; j < matrix.size(); ++j) {
             if (matrix[i][j] >= 1) {
-                int num_of_path = matrix[i][j];
+                int num_of_path = 1;
+                if (i != j) {
+                     num_of_path = matrix[i][j];
+                } else {
+                    num_of_path = matrix[i][j] - 1;
+                }
                 if (!rejected.contains({i, j})) {
                     while (num_of_path != 0) {
                         if (matrix[i][j] == matrix[j][i]) {
-                            incidence[i].push_back(1);
-                            incidence[j].push_back(1);
+                            incidence[i][id_of_rib] = 1;
+                            incidence[j][id_of_rib] = 1;
                         } else {
-                            incidence[i].push_back(1);
-                            incidence[j].push_back(-1);
+                            incidence[i][id_of_rib] = 1;
+                            incidence[j][id_of_rib] = -1;
                         }
                         ++id_of_rib;
                         --num_of_path;
                     }
                     rejected.insert({j, i});
                 }
-                incidence[i].push_back(0);
-                incidence[j].push_back(0);
            }
        }
     }
     return incidence;
+}
+
+vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& adjacency_list) {
+    vector<vector<int>> incidence;
+    set<pair<int, int>> rejected;
+    for (int i = 0; i < adjacency_list.size(); ++i) {
+        for (int j = 0; j < adjacency_list[i].size(); ++j) {
+            if (!rejected.contains({i, adjacency_list[i][j]-1})) {
+                vector<int> work_flow(adjacency_list.size());
+                auto pointer = find(adjacency_list[adjacency_list[i][j]-1].begin(),
+                                    adjacency_list[adjacency_list[i][j]-1].end(), i+1);
+                if (pointer == adjacency_list[adjacency_list[i][j]-1].end()) {
+                    int path = std::count(adjacency_list[adjacency_list[i][j]-1].begin(),
+                                       adjacency_list[adjacency_list[i][j]-1].end(), i+1);
+                    work_flow[i] = 1;
+                    work_flow[adjacency_list[i][j]-1] = -1;
+                } else {
+                    work_flow[i] = 1;
+                    work_flow[adjacency_list[i][j]-1] = 1;
+                }
+                rejected.insert({adjacency_list[i][j]-1, i});
+                incidence.push_back(work_flow);
+            }
+        }
+    }
+    vector<vector<int>> new_matrix(adjacency_list.size());
+    for (size_t i = 0; i < adjacency_list.size(); i++){
+        for (int j = 0; j < incidence.size(); ++j) {
+            new_matrix[i].push_back(incidence[j][i]);
+        }
+    }
+    return new_matrix;
 }
 
 vector<vector<int>> ParseInAdjacencyList(const vector<vector<int>>& matrix) {
@@ -1222,14 +1322,22 @@ vector<int> GetMatrixLine(int32_t size_of_matrix) {
     vector<string> string_data;
     do {
         cout << "Введите строку матрицы размером " << size_of_matrix << endl;
-        getline(cin, line);
-        string_data = Split(line, ' ');
-        if (string_data.size() != size_of_matrix) {
-            cout << "Размер не подходит!\n";
-        } else {
-            if (IsValidForMatrix(string_data, final)) {
-                return final;
+        try {
+            getline(cin, line);
+            int check = stoi(line);
+            string_data = Split(line, ' ');
+            if (string_data.size() != size_of_matrix) {
+                cout << "Размер не подходит!\n";
+            } else {
+                if (IsValidForMatrix(string_data, final)) {
+                    cout << "Успешно получена строка матрицы!\n";
+                    return final;
+                }
             }
+        } catch (exception e) {
+            cout << "Введите подходящую строку!\n";
+            std::cin.clear();
+            continue;
         }
     } while (!flag);
     return final;
@@ -1237,10 +1345,16 @@ vector<int> GetMatrixLine(int32_t size_of_matrix) {
 
 vector<string> Split(const string& s, char delim) {
     vector<string> res;
-    std::stringstream ss(s);
-    string item;
-    while (std::getline(ss, item, delim)) {
-        res.push_back(item);
+    try {
+        std::stringstream ss(s);
+        string item;
+        while (std::getline(ss, item, delim)) {
+            res.push_back(item);
+        }
+        return res;
+    } catch (exception) {
+        cout << "Не вводите пустую строку!\n";
+        cin.clear();
     }
     return res;
 }
@@ -1259,10 +1373,10 @@ bool IsValidString(const string& s) {
     int32_t ans = 0;
     try {
         ans = stoi(s);
-        if (ans >= 0 && ans <= 10) {
+        if (ans >= 0 && ans <= 4) {
             return true;
         } else {
-            cerr << "Одно из чисел не в пределах от 0 до 10!\n";
+            cerr << "Одно из чисел не в пределах от 0 до 4!\n";
             return false;
         }
     } catch (std::exception& exception){

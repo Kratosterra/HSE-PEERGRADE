@@ -145,3 +145,6 @@ void PrintMatrixRepresentation(const Graph &graph);
 void PrintGraphMainInfo(const Graph &graph);
 void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjacency_matrix);
 int32_t ParseNum(const std::string& s);
+std::vector<std::string> SplitSegment(const std::string& sentence);
+std::vector<std::vector<int>> ParseInIncidenceMatrix(
+        const std::vector<std::vector<int>>& adjacency_list);
