@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <set>
 #include <limits>
@@ -252,7 +253,7 @@ void DoGraphWork(int32_t now_choice, Graph& graph) {
     }
 }
 
-// TODO: ДОРАБОТАТЬ И РАЗБИТЬ НА ФУНКЦИИ
+// TODO: ДОРАБОТАТЬ И РАЗБИТЬ НА ФУНКЦИИ + ДОПИСАТЬ ПЕРЕВОДЫ.
 void GetNewGraph(Graph& graph) {
     std::cout << "─────────────────────────────────────────────\n";
     cout << "Приступаем к вводу графа!";
@@ -452,6 +453,8 @@ void GetNewGraph(Graph& graph) {
                 }
                 //adjacency_matrix = ParseFromBF0(bfo_fo);
                 break;
+            default:
+                return;
         }
         if (adjacency_matrix.empty()) {
             cerr << "Было введено недопустимое сочетание данных для представления!";
@@ -606,7 +609,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromRibsList(ribs_list, number_of_strings);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 5:
                 type = "FO";
@@ -641,7 +644,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromFO(fo);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 6:
                 type = "FI";
@@ -677,7 +680,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromFI(fi);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 7:
                 type = "MFO";
@@ -730,7 +733,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 8:
                 type = "MFI";
@@ -783,7 +786,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 9:
                 type = "BMFO";
@@ -836,7 +839,7 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
             case 10:
                 type = "BFO";
@@ -871,8 +874,10 @@ void GetNewGraph(Graph& graph) {
                     return;
                 }
                 //adjacency_matrix = ParseFromBF0(bfo_fo);
-                size_of_matrix = adjacency_matrix.size();
+                size_of_matrix = static_cast<int>(adjacency_matrix.size());
                 break;
+            default:
+                return;
         }
         if (adjacency_matrix.empty()) {
             cerr << "Было введено недопустимое сочетание данных для представления!";
@@ -925,7 +930,7 @@ void CheckAndSetFileData(Graph &graph, int32_t size_of_matrix,
                          const vector<vector<int>> &adjacency_matrix, string type) {
     // Производим проверку матрицы смежности, чтобы она точно была подходящей для построения графа.
     if (!adjacency_matrix.empty() && adjacency_matrix.size() == size_of_matrix) {
-        SetAdjacencyMatrix(graph, adjacency_matrix, type);
+        SetAdjacencyMatrix(graph, adjacency_matrix, std::move(type));
         cout << "Успех! Матрица установленна!\n";
     } else if (adjacency_matrix.empty()) {
         cerr << "Не удалось считать матрицу, она пуста или невалидна!\nНовый граф не "
@@ -998,7 +1003,7 @@ void OutputGraph(const Graph& graph) {
     } else {
         // Печатаем текущее представление графа в файл.
         try {
-            char * fileName = "..\\Output.txt";
+            char * fileName = const_cast<char *>("..\\Output.txt");
             FILE * file = fopen(fileName, "w");
             if (file)
             {
@@ -1018,7 +1023,6 @@ void OutputGraph(const Graph& graph) {
     std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
 
-// TODO: Прокоменировать и разделить на функции.
 void ChangeTypeOfGraph(Graph& graph) {
     if (!graph.Exist) {
         cerr << "Граф не существует. Воспользуйтесь вводом!\n";
@@ -1027,203 +1031,200 @@ void ChangeTypeOfGraph(Graph& graph) {
     std::cout << "─────────────────────────────────────────────\n";
     cout << "Приступаем к смене типа представления/хранения графа";
     std::cout << "\n─────────────────────────────────────────────\n";
+    // В зависимости от типа графа можно предложить только определённые типы представления, для
+    // этого пользователю предоставляется ограниченая возможность преобразования.
     if (graph.Pseudo && graph.Oriented) {
-        cout << "Для ориентированного псеводографа доступны следующие представления.\n";
-        cout << "[1] Матрица смежности\n"
-                "[2] Список смежности\n"
-                "[3] Список ребёр\n"
-                "[4] FO\n"
-                "[5] FI\n"
-                "[6] MFO\n";
-        cout << "─────────────────────────────────────────────\n";
-        int32_t choice = GetChoiceVarious(6);
-        cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-        switch (choice) {
-            case 1 :
-                graph.type = "Матрица смежности";
-                break;
-            case 2 :
-                graph.type = "Список смежности";
-                break;
-            case 3 :
-                graph.type = "Список ребер";
-                break;
-            case 4 :
-                graph.type = "FO";
-                break;
-            case 5 :
-                graph.type = "FI";
-                break;
-            case 6 :
-                graph.type = "MFO";
-                break;
-            default:
-                graph.type = "Матрица смежности";
-                break;
-        }
-        cout << "Успех!\n";
-        cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+        ChangeTypeOfGraphForPseudoOriented(graph);
     } else if (graph.Pseudo && !graph.Oriented) {
-        cout << "Для неориентированного псеводографа доступны следующие представления.\n";
-        cout << "[1] Матрица смежности\n"
-                "[2] Список смежности\n"
-                "[3] Список ребёр\n"
-                "[4] FO\n"
-                "[5] MFO\n";
-        cout << "─────────────────────────────────────────────\n";
-        int32_t choice = GetChoiceVarious(5);
-        cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-        switch (choice) {
-            case 1 :
-                graph.type = "Матрица смежности";
-                break;
-            case 2 :
-                graph.type = "Список смежности";
-                break;
-            case 3 :
-                graph.type = "Список ребер";
-                break;
-            case 4 :
-                graph.type = "FO";
-                break;
-            case 5 :
-                graph.type = "MFO";
-                break;
-            default:
-                graph.type = "Матрица смежности";
-                break;
-        }
-        cout << "Успех!\n";
-        cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+        ChangeTypeOfGraphForPseudoNotOriented(graph);
     } else if (graph.Multi && !graph.Oriented) {
-        cout << "Для неориентированного мультиграфа доступны следующие представления.\n";
-        cout << "[1] Матрица смежности\n"
-                "[2] Список смежности\n"
-                "[3] Список ребёр\n"
-                "[4] FO\n"
-                "[5] MFO\n"
-                "[6] BFO\n"
-                "[7] BMFO\n";
-        cout << "─────────────────────────────────────────────\n";
-        int32_t choice = GetChoiceVarious(8);
-        cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-        switch (choice) {
-            case 1 :
-                graph.type = "Матрица смежности";
-                break;
-            case 2 :
-                graph.type = "Список смежности";
-                break;
-            case 3 :
-                graph.type = "Список ребер";
-                break;
-            case 4 :
-                graph.type = "FO";
-                break;
-            case 5 :
-                graph.type = "MFO";
-                break;
-            case 6 :
-                graph.type = "BFO";
-                break;
-            case 7 :
-                graph.type = "BMFO";
-                break;
-            default:
-                graph.type = "Матрица смежности";
-                break;
-        }
-        cout << "Успех!\n";
-        cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+        ChangeTypeOfGraphForMulti(graph);
     } else if (!graph.Oriented) {
-        cout << "Для неориентированного графа доступны следующие представления.\n";
-        cout << "[1] Матрица смежности\n"
-                "[2] Матрица инцидентности\n"
-                "[3] Список смежности\n"
-                "[4] Список ребёр\n"
-                "[5] FO\n"
-                "[6] MFO\n"
-                "[7] BFO\n"
-                "[8] BMFO\n";
-        cout << "─────────────────────────────────────────────\n";
-        int32_t choice = GetChoiceVarious(8);
-        cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-        switch (choice) {
-            case 1 :
-                graph.type = "Матрица смежности";
-                break;
-            case 2 :
-                graph.type = "Матрица инцидентности";
-                break;
-            case 3 :
-                graph.type = "Список смежности";
-                break;
-            case 4 :
-                graph.type = "Список ребер";
-                break;
-            case 5 :
-                graph.type = "FO";
-                break;
-            case 6 :
-                graph.type = "MFO";
-                break;
-            case 7 :
-                graph.type = "BFO";
-                break;
-            case 8 :
-                graph.type = "BMFO";
-                break;
-            default:
-                graph.type = "Матрица смежности";
-                break;
-        }
-        cout << "Успех!\n";
-        cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+        ChangeTypeOfGraphForNotOriented(graph);
     } else {
-        cout << "Для ориентированного графа доступны следующие представления.\n";
-        cout << "[1] Матрица смежности\n"
-                "[2] Матрица инцидентности\n"
-                "[3] Список смежности\n"
-                "[4] Список ребёр\n"
-                "[5] FO\n"
-                "[6] FI\n"
-                "[7] MFO\n"
-                "[8] MFI\n";
-        cout << "─────────────────────────────────────────────\n";
-        int32_t choice = GetChoiceVarious(8);
-        cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-        switch (choice) {
-            case 1 :
-                graph.type = "Матрица смежности";
-                break;
-            case 2 :
-                graph.type = "Матрица инцидентности";
-                break;
-            case 3 :
-                graph.type = "Список смежности";
-                break;
-            case 4 :
-                graph.type = "Список ребер";
-                break;
-            case 5 :
-                graph.type = "FO";
-                break;
-            case 6 :
-                graph.type = "FI";
-                break;
-            case 7 :
-                graph.type = "MFO";
-                break;
-            case 8 :
-                graph.type = "MFI";
-                break;
-            default:
-                graph.type = "Матрица смежности";
-                break;
-        }
-        cout << "Успех!\n";
-        cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+        ChangeTypeOfGraphForOriented(graph);
     }
+}
+
+void ChangeTypeOfGraphForOriented(Graph &graph) {
+    cout << "Для ориентированного графа доступны следующие представления.\n";
+    cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n"
+            "[4] Список ребёр\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice = GetChoiceVarious(8);
+    cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    switch (choice) {
+        case 1 :
+            graph.type = "Матрица смежности";
+            break;
+        case 2 :
+            graph.type = "Матрица инцидентности";
+            break;
+        case 3 :
+            graph.type = "Список смежности";
+            break;
+        case 4 :
+            graph.type = "Список ребер";
+            break;
+        case 5 :
+            graph.type = "FO";
+            break;
+        case 6 :
+            graph.type = "FI";
+            break;
+        case 7 :
+            graph.type = "MFO";
+            break;
+        case 8 :
+            graph.type = "MFI";
+            break;
+        default:
+            graph.type = "Матрица смежности";
+            break;
+    }
+    cout << "Успех!\n";
+    cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+void ChangeTypeOfGraphForNotOriented(Graph &graph) {
+    cout << "Для неориентированного графа доступны следующие представления.\n";
+    cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n"
+            "[4] Список ребёр\n[5] FO\n[6] MFO\n[7] BFO\n[8] BMFO\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice = GetChoiceVarious(8);
+    cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    switch (choice) {
+        case 1 :
+            graph.type = "Матрица смежности";
+            break;
+        case 2 :
+            graph.type = "Матрица инцидентности";
+            break;
+        case 3 :
+            graph.type = "Список смежности";
+            break;
+        case 4 :
+            graph.type = "Список ребер";
+            break;
+        case 5 :
+            graph.type = "FO";
+            break;
+        case 6 :
+            graph.type = "MFO";
+            break;
+        case 7 :
+            graph.type = "BFO";
+            break;
+        case 8 :
+            graph.type = "BMFO";
+            break;
+        default:
+            graph.type = "Матрица смежности";
+            break;
+    }
+    cout << "Успех!\n";
+    cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+void ChangeTypeOfGraphForMulti(Graph &graph) {
+    cout << "Для неориентированного мультиграфа доступны следующие представления.\n";
+    cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n"
+            "[4] FO\n[5] MFO\n[6] BFO\n[7] BMFO\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice = GetChoiceVarious(8);
+    cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    switch (choice) {
+        case 1 :
+            graph.type = "Матрица смежности";
+            break;
+        case 2 :
+            graph.type = "Список смежности";
+            break;
+        case 3 :
+            graph.type = "Список ребер";
+            break;
+        case 4 :
+            graph.type = "FO";
+            break;
+        case 5 :
+            graph.type = "MFO";
+            break;
+        case 6 :
+            graph.type = "BFO";
+            break;
+        case 7 :
+            graph.type = "BMFO";
+            break;
+        default:
+            graph.type = "Матрица смежности";
+            break;
+    }
+    cout << "Успех!\n";
+    cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph) {
+    cout << "Для неориентированного псеводографа доступны следующие представления.\n";
+    cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n[4] FO\n[5] MFO\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice = GetChoiceVarious(5);
+    cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    switch (choice) {
+        case 1 :
+            graph.type = "Матрица смежности";
+            break;
+        case 2 :
+            graph.type = "Список смежности";
+            break;
+        case 3 :
+            graph.type = "Список ребер";
+            break;
+        case 4 :
+            graph.type = "FO";
+            break;
+        case 5 :
+            graph.type = "MFO";
+            break;
+        default:
+            graph.type = "Матрица смежности";
+            break;
+    }
+    cout << "Успех!\n";
+    cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+void ChangeTypeOfGraphForPseudoOriented(Graph &graph) {
+    cout << "Для ориентированного псеводографа доступны следующие представления.\n";
+    cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n"
+            "[4] FO\n[5] FI\n[6] MFO\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice = GetChoiceVarious(6);
+    cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    switch (choice) {
+        case 1 :
+            graph.type = "Матрица смежности";
+            break;
+        case 2 :
+            graph.type = "Список смежности";
+            break;
+        case 3 :
+            graph.type = "Список ребер";
+            break;
+        case 4 :
+            graph.type = "FO";
+            break;
+        case 5 :
+            graph.type = "FI";
+            break;
+        case 6 :
+            graph.type = "MFO";
+            break;
+        default:
+            graph.type = "Матрица смежности";
+            break;
+    }
+    cout << "Успех!\n";
+    cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
 
 void CountDegreesOfVertices(const Graph& graph) {
@@ -1249,7 +1250,7 @@ void CountEdgesOfGraph(const Graph& graph) {
     cout << "Приступаем к подсчёту рёбер/дуг графа\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
-    // В зависимости от типа графа возфращаем пользователю информацию о ребрах или о дугах.
+    // В зависимости от типа графа возвращаем пользователю информацию о ребрах или о дугах.
     if (!graph.Oriented) {
         cout << "" << "Рёбра: " << graph.q << ".\n";
     } else {
@@ -1328,7 +1329,8 @@ void DFSRecursion(const Graph& graph) {
     vector<int> path;
     for (int & i : used) i = 0;
     // Запускаем рекурсивный проход по врешинам.
-    DFSSearchRecursion(0, graph.adjacency_matrix.size(), graph.adjacency_matrix, used, path);
+    DFSSearchRecursion(0, static_cast<int>(graph.adjacency_matrix.size()), graph.adjacency_matrix,
+                       used, path);
     cout << "Обход в глубину рекурсивным методом завершён!\n";
     std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
@@ -1444,14 +1446,12 @@ int CountArcs(const vector<vector<int>>& matrix) {
 }
 
 int CountRibs(vector<vector<int>> matrix) {
-    // 
+    // Считаем все ребра с учетом петлей и ребер;
     int count = 0;
     int anti_count = 0;
     for (size_t i = 0; i < matrix.size(); ++i) {
         for (size_t j = 0; j < matrix[i].size(); ++j) {
-            if (i == j) {
-                count += matrix[i][j];
-            } else if (matrix[i][j] > 0 && matrix[j][i] == matrix[i][j]) {
+            if (matrix[i][j] > 0 && matrix[j][i] == matrix[i][j] & i != j) {
                 count += matrix[i][j];
                 anti_count += matrix[i][j];
             } else if (matrix[i][j] > 0) {
@@ -1463,6 +1463,7 @@ int CountRibs(vector<vector<int>> matrix) {
 }
 
 vector<vector<int>> GetVertexDegrees(vector<vector<int>> matrix, bool with_loops, bool oriented) {
+    // Получаем представление о степенях вершин с учетом характеристик графа.
     vector<vector<int>> vertex_degrees(matrix.size());
     if (!with_loops && !oriented) {
         for (size_t i = 0; i < matrix.size(); ++i) {
@@ -1505,18 +1506,22 @@ vector<vector<int>> GetVertexDegrees(vector<vector<int>> matrix, bool with_loops
 vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& adjacency_list) {
     std::vector<std::vector<int>> incidence;
     std::set<std::pair<int, int>> rejected;
+    // Без повторений фиксируем смежность вершин в матрице инцинденций.
     for (size_t  i = 0; i < adjacency_list.size(); ++i) {
         for (size_t  j = 0; j < adjacency_list[i].size(); ++j) {
             if (!rejected.contains({i, adjacency_list[i][j]-1})) {
                 std::vector<int> work_flow(adjacency_list.size());
                 auto pointer = find(adjacency_list[adjacency_list[i][j]-1].begin(),
                                     adjacency_list[adjacency_list[i][j]-1].end(), i+1);
+                // Если есть путь туда, то фиксируем направление.
                 if (pointer == adjacency_list[adjacency_list[i][j]-1].end()) {
-                    int path = std::count(adjacency_list[adjacency_list[i][j]-1].begin(),
-                                          adjacency_list[adjacency_list[i][j]-1].end(), i+1);
+                    int path = static_cast<int>(std::count(
+                            adjacency_list[adjacency_list[i][j]-1].begin(),
+                            adjacency_list[adjacency_list[i][j]-1].end(), i+1));
                     work_flow[i] = 1;
                     work_flow[adjacency_list[i][j]-1] = -1;
                 } else {
+                    // Если есть путь туда и обратно, помечаем вершины как смежные по ребру.
                     work_flow[i] = 1;
                     work_flow[adjacency_list[i][j]-1] = 1;
                 }
@@ -1525,23 +1530,25 @@ vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& adjacency_
             }
         }
     }
+    // Транспонируем конечную матрицу.
     std::vector<std::vector<int>> new_matrix(adjacency_list.size());
     for (size_t i = 0; i < adjacency_list.size(); ++i){
-        for (size_t j = 0; j < incidence.size(); ++j) {
-            new_matrix[i].push_back(incidence[j][i]);
+        for (auto & j : incidence) {
+            new_matrix[i].push_back(j[i]);
         }
     }
     return new_matrix;
 }
 
 vector<vector<int>> ParseInAdjacencyList(const vector<vector<int>>& matrix) {
+    // Фиксируем в виде векторов смежные вершины, проходясь по матрице по строкам.
     std::vector<std::vector<int>> adjacency_list(matrix.size());
     for (size_t i = 0; i < matrix.size(); ++i) {
         for (size_t j = 0; j < matrix.size(); ++j) {
             if (matrix[i][j] > 0) {
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
-                    adjacency_list[i].push_back(j+1);
+                    adjacency_list[i].push_back(static_cast<int>(j)+1);
                     --num_of_path;
                 }
             }
@@ -1551,6 +1558,8 @@ vector<vector<int>> ParseInAdjacencyList(const vector<vector<int>>& matrix) {
 }
 
 vector<vector<int>> ParseInRibsList(const vector<vector<int>>& matrix, int32_t arcs) {
+    // Получаем из матрицы рёбра, каждый раз выделяя каждый путь в отдельный вектор из двух
+    // элементов: конец и начало.
     std::vector<std::vector<int>> ribs_list(arcs);
     int32_t ribs_count = 0;
     for (size_t i = 0; i < matrix.size(); ++i) {
@@ -1558,8 +1567,8 @@ vector<vector<int>> ParseInRibsList(const vector<vector<int>>& matrix, int32_t a
             if (matrix[i][j] > 0) {
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
-                    ribs_list[ribs_count].push_back(i+1);
-                    ribs_list[ribs_count].push_back(j+1);
+                    ribs_list[ribs_count].push_back(static_cast<int>(i)+1);
+                    ribs_list[ribs_count].push_back(static_cast<int>(j)+1);
                     ++ribs_count;
                     --num_of_path;
                 }
@@ -1570,6 +1579,7 @@ vector<vector<int>> ParseInRibsList(const vector<vector<int>>& matrix, int32_t a
 }
 
 vector<int> ParseInFO(const vector<vector<int>>& matrix, bool oriented) {
+    // Фиксируем в виде одномерного вектора вершины, смежные с текущей вершиной, деля их 0.
     std::vector<int> fo;
     fo.push_back(static_cast<int>(matrix.size()));
     for (size_t i = 0; i < matrix.size(); ++i) {
@@ -1577,7 +1587,7 @@ vector<int> ParseInFO(const vector<vector<int>>& matrix, bool oriented) {
             if (matrix[i][j] > 0) {
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
-                    fo.push_back(j + 1);
+                    fo.push_back(static_cast<int>(j) + 1);
                     --num_of_path;
                 }
             }
@@ -1588,6 +1598,8 @@ vector<int> ParseInFO(const vector<vector<int>>& matrix, bool oriented) {
 }
 
 vector<int> ParseInFI(const vector<vector<int>>& matrix, bool oriented) {
+    // Фиксируем в виде одномерного вектора вершины, входящие в текущую вершину, деля их
+    // 0-разделителем.
     std::vector<int> fi;
     if (!oriented) {
         return {};
@@ -1601,7 +1613,7 @@ vector<int> ParseInFI(const vector<vector<int>>& matrix, bool oriented) {
             if (new_matrix[i][j] > 0) {
                 int num_of_path = new_matrix[i][j];
                 while (num_of_path != 0) {
-                    fi.push_back(j + 1);
+                    fi.push_back(static_cast<int>(j) + 1);
                     --num_of_path;
                 }
             }
@@ -1612,6 +1624,9 @@ vector<int> ParseInFI(const vector<vector<int>>& matrix, bool oriented) {
 }
 
 pair<vector<int>, vector<int>> ParseInMFO(const vector<vector<int>>& matrix, bool oriented) {
+    // Производим разбиение на два вектора, в первом мы записываем смежные вершины (как в FO) без
+    // разделителя, а в массив mv описывает секции выделяя номер (начиная с 1) последней смежной
+    // с этой вершиной вершины.
     std::vector<int> me;
     std::vector<int> mv;
     int last = 0;
@@ -1620,7 +1635,7 @@ pair<vector<int>, vector<int>> ParseInMFO(const vector<vector<int>>& matrix, boo
             if (matrix[i][j] > 0) {
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
-                    me.push_back(j + 1);
+                    me.push_back(static_cast<int>(j) + 1);
                     --num_of_path;
                 }
                 last = static_cast<int>(me.size());
@@ -1633,6 +1648,9 @@ pair<vector<int>, vector<int>> ParseInMFO(const vector<vector<int>>& matrix, boo
 }
 
 pair<vector<int>, vector<int>> ParseInMFI(const vector<vector<int>>& matrix, bool oriented){
+    // Производим разбиение на два вектора, в первом мы записываем смежные вершины (как в FI) без
+    // разделителя, а в массив mv описывает секции выделяя номер (начиная с 1) первой смежной
+    // с этой вершиной вершины.
     if (!oriented) {
         return {{}, {}};
     }
@@ -1647,7 +1665,7 @@ pair<vector<int>, vector<int>> ParseInMFI(const vector<vector<int>>& matrix, boo
             if (new_matrix[i][j] > 0) {
                 int num_of_path = new_matrix[i][j];
                 while (num_of_path > 0) {
-                    me.push_back(j + 1);
+                    me.push_back(static_cast<int>(j) + 1);
                     --num_of_path;
                 }
                 last = static_cast<int>(me.size());
@@ -1660,6 +1678,8 @@ pair<vector<int>, vector<int>> ParseInMFI(const vector<vector<int>>& matrix, boo
 }
 
 vector<int> ParseInBFO(const vector<vector<int>>& matrix, bool oriented) {
+    // Фиксируем в виде одномерного вектора вершины, смежные с текущей вершиной, но с номером не
+    // ниже текущей вершины, деля их 0.
     if (oriented) {
         return {};
     }
@@ -1671,7 +1691,7 @@ vector<int> ParseInBFO(const vector<vector<int>>& matrix, bool oriented) {
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
                     if (j >= i) {
-                        fo.push_back(j + 1);
+                        fo.push_back(static_cast<int>(j) + 1);
                     }
                     --num_of_path;
                 }
@@ -1683,6 +1703,10 @@ vector<int> ParseInBFO(const vector<vector<int>>& matrix, bool oriented) {
 }
 
 pair<vector<int>, vector<int>> ParseInBMFO(const vector<vector<int>>& matrix, bool oriented) {
+    // Производим разбиение на два вектора, в первом мы записываем смежные вершины (как в FO,
+    // однако используем принцип из BFO) без
+    // разделителя, а в массив mv описывает секции выделяя номер (начиная с 1) последней смежной
+    // с этой вершиной вершины.
     std::vector<int> me;
     std::vector<int> mv;
     int last = 0;
@@ -1692,7 +1716,7 @@ pair<vector<int>, vector<int>> ParseInBMFO(const vector<vector<int>>& matrix, bo
                 int num_of_path = matrix[i][j];
                 while (num_of_path != 0) {
                     if (j >= i) {
-                        me.push_back(j + 1);
+                        me.push_back(static_cast<int>(j) + 1);
                     }
                     --num_of_path;
                 }
@@ -1706,6 +1730,7 @@ pair<vector<int>, vector<int>> ParseInBMFO(const vector<vector<int>>& matrix, bo
 }
 
 string GetStringMatrixRepresentation(const Graph &graph) {
+    // В зависимости от типа хранения возфращаем представление информации о графе в качестве строки.
     string output;
     if (graph.type == "Матрица смежности") {
         output = GetStringAdjacencyMatrix(graph);
@@ -1732,6 +1757,8 @@ string GetStringMatrixRepresentation(const Graph &graph) {
 }
 
 string GetStringBMFO(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "ME: [";
     int check = 0;
@@ -1753,6 +1780,8 @@ string GetStringBMFO(const Graph &graph) {
 }
 
 string GetStringBFO(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "BFO: [";
     int check = 0;
@@ -1766,6 +1795,8 @@ string GetStringBFO(const Graph &graph) {
 }
 
 string GetStringMFI(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "ME: [";
     int check = 0;
@@ -1787,6 +1818,8 @@ string GetStringMFI(const Graph &graph) {
 }
 
 string GetStringMFO(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "ME: [";
     int check = 0;
@@ -1808,6 +1841,8 @@ string GetStringMFO(const Graph &graph) {
 }
 
 string GetStringFI(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "FI: [";
     int check = 0;
@@ -1821,6 +1856,8 @@ string GetStringFI(const Graph &graph) {
 }
 
 string GetStringFO(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     output += "FO: [";
     int check = 0;
@@ -1834,6 +1871,8 @@ string GetStringFO(const Graph &graph) {
 }
 
 string GetStringRibsList(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     if (graph.q == 0 || graph.arcs == 0) {
         return "Не обнаружено связей между вершинами! Переключитесь на матрицу смежности!\n";
     }
@@ -1850,6 +1889,8 @@ string GetStringRibsList(const Graph &graph) {
 }
 
 string GetStringAdjacencyList(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     if (graph.q == 0 || graph.arcs == 0) {
         return "Не обнаружено связей между вершинами! Переключитесь на матрицу смежности!\n";
     }
@@ -1868,6 +1909,8 @@ string GetStringAdjacencyList(const Graph &graph) {
 }
 
 string GetStringIncidenceMatrix(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     if (graph.q == 0 || graph.arcs == 0) {
         return "Не обнаружено связей между вершинами! Переключитесь на матрицу смежности!\n";
     }
@@ -1887,6 +1930,8 @@ string GetStringIncidenceMatrix(const Graph &graph) {
 }
 
 string GetStringAdjacencyMatrix(const Graph &graph) {
+    // Создаём для пользователя наиболее понятное строковое представления информации о графе в
+    // текущем представлении.
     string output;
     for (int i = 0; i < graph.p; ++i) {
         output += "\t" + to_string(i+1);
@@ -1907,13 +1952,17 @@ int32_t GetChoice() {
     int32_t ans = 0;
     std::string line;
     std::cout << "Выбретите опцию, отправив число от 1 до 9.\n";
+    // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
             std::getline(std::cin, line);
+            // Пытаемся преобразовать строку в число.
             ans = stoi(line);
         } catch (std::exception& exception){
+            // Возвращаем консоль в хорошее состояние после ошибки.
             std::cin.clear();
         }
+        // Проверяем диапазон, в котором должно лежать число.
         if (ans >= 1 && ans <= 9) {
             valid_choice = true;
         } else {
@@ -1930,13 +1979,16 @@ int32_t GetChoiceVarious(int32_t upper_bound) {
     int32_t ans = 0;
     string line;
     cout << "Выбретите опцию, отправив число от 1 до "<< upper_bound << ".\n";
+    // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
             std::getline(std::cin, line);
             ans = stoi(line);
         } catch (std::exception& exception){
+            // Возвращаем консоль в хорошее состояние после ошибки.
             std::cin.clear();
         }
+        // Проверяем диапазон, в котором должно лежать число.
         if (ans >= 1 && ans <= upper_bound) {
             valid_choice = true;
         } else {
@@ -1953,13 +2005,16 @@ int32_t GetChoiceVarious(int32_t upper_bound, const string& info) {
     int32_t ans = 0;
     std::string line;
     std::cout << "Выбретите " << info << ", отправив число от 1 до "<< upper_bound << ".\n";
+    // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
             std::getline(std::cin, line);
             ans = stoi(line);
         } catch (std::exception& exception){
+            // Возвращаем консоль в хорошее состояние после ошибки.
             std::cin.clear();
         }
+        // Проверяем диапазон, в котором должно лежать число.
         if (ans >= 1 && ans <= upper_bound) {
             valid_choice = true;
         } else {
@@ -1974,7 +2029,9 @@ int32_t GetChoiceVarious(int32_t upper_bound, const string& info) {
 int32_t ParseNum(const string& s) {
     int32_t ans = 0;
     try {
+        // Производим попытку преобразовать строку к числу.
         ans = stoi(s);
+        // Проверяем диапазон.
         if (ans >= 1 && ans <= 10) {
             return ans;
         } else {
@@ -1986,8 +2043,9 @@ int32_t ParseNum(const string& s) {
     return ans;
 }
 
-std::ifstream::pos_type GetFileSize(const string& filename)
+ifstream::pos_type GetFileSize(const string& filename)
 {
+    // Получаем длину файла в байтах, в симолах стандартной кодировки.
     std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
     return in.tellg();
 }
@@ -1996,18 +2054,22 @@ string ReadFileIntoString(const string& path) {
     ifstream input_file(path);
     try {
         int size = 0;
-        size = GetFileSize(path);
+        // Получаем размер файла
+        size = static_cast<int>(GetFileSize(path));
+        // Провреяем размер файла.
         if (size > 30000) {
             cerr << "Отмена чтения. Файл весит больше 30 КБ!\n";
             return "";
         }
+        // Получилось ли открыть файл.
         if (!input_file.is_open()) {
             cerr << "Невозможно открыть файл!\n";
             return "";
         }
-        return string((std::istreambuf_iterator<char>(input_file)),
-                      std::istreambuf_iterator<char>());
-    } catch (exception) {
+        // Возвращаем всю строку из файла обратно.
+        return {string((std::istreambuf_iterator<char>(input_file)),
+                      std::istreambuf_iterator<char>())};
+    } catch (exception&) {
         cerr << "Произошла ошибка при чтении из файла!\n";
         input_file.close();
     }
@@ -2023,18 +2085,23 @@ vector<int> GetMatrixLine(int32_t size_of_matrix) {
         cout << "Введите строку матрицы размером " << size_of_matrix << endl;
         try {
             getline(cin, line);
+            // Проверяем символ.
             int check = stoi(line);
+            // Разделяем строку по пробелам.
             string_data = Split(line, ' ');
+            // Проверяем размер строки.
             if (string_data.size() != size_of_matrix) {
                 cout << "Размер не подходит!\n";
             } else {
+                // Проверяем введеную строку на валидность.
                 if (IsValidForMatrix(string_data, final)) {
                     cout << "Успешно получена строка матрицы!\n";
                     return final;
                 }
             }
-        } catch (exception e) {
+        } catch (exception&) {
             cout << "Введите подходящую строку!\n";
+            // Возвращаем валидное значение строки.
             std::cin.clear();
             continue;
         }
@@ -2047,12 +2114,15 @@ vector<string> Split(const string& str, char delim) {
     try {
         std::stringstream str_stream(str);
         string item;
+        // Получаем элементы через текущий разделитель и если это не пустые строки, заносим в
+        // вектор.
         while (std::getline(str_stream, item, delim)) {
-            if (item[0] != delim && item != "") ans.push_back(item);
+            if (item[0] != delim && !item.empty()) ans.push_back(item);
         }
         return ans;
     } catch (exception&) {
         cerr << "Не вводите пустую строку!\n";
+        // При ошибке также очищаем консоль, возвращая ее в стандартное состояние.
         cin.clear();
     }
     return ans;
@@ -2063,8 +2133,10 @@ vector<string> SplitSegment(const string& sentence) {
     try {
         std::stringstream str_stream(sentence);
         std::string item;
+        // Получаем элементы через перенос строки и если это не пустые строки, заносим в
+        // вектор.
         while (std::getline(str_stream, item, '\n')) {
-            if (item != " " && item != "") ans.push_back(item);
+            if (item != " " && !item.empty()) ans.push_back(item);
         }
     } catch (exception&) {
         cerr << "Возникла ошибка при разделении файла на строки!\n";
@@ -2075,14 +2147,16 @@ vector<string> SplitSegment(const string& sentence) {
 bool IsValidString(const string& s) {
     int32_t ans = 0;
     try {
+        // Пробуем произвести приведение строки к числу.
         ans = stoi(s);
+        // Проверяем диапазон.
         if (ans >= 0 && ans <= 4) {
             return true;
         } else {
             cerr << "Одно из чисел не в пределах от 0 до 4!\n";
             return false;
         }
-    } catch (std::exception& exception){
+    } catch (exception&){
         cerr << "Данные не содержат число!\n";
         return false;
     }
@@ -2091,10 +2165,12 @@ bool IsValidString(const string& s) {
 
 bool IsValidForMatrix(const vector<string>& line, vector<int>& ans){
     for (auto & i : line) {
+        // Проверяем, является ли строка подходящей для представления.
         if (!IsValidString(i)) {
             ans = {};
             return false;
         } else {
+            // Если да, то добавляем уже преобразованную в число строку в конечный вектор.
             ans.push_back(ParseNum(i));
         }
     }
@@ -2104,7 +2180,9 @@ bool IsValidForMatrix(const vector<string>& line, vector<int>& ans){
 bool IsValidString(const string& s, int32_t lower_bound, int32_t upper_bound) {
     int32_t ans = 0;
     try {
+        // Пытаемся преобразовать строку к числу.
         ans = stoi(s);
+        // Проверяем диапазон.
         if (ans >= lower_bound && ans <= upper_bound) {
             return true;
         } else {
@@ -2121,7 +2199,9 @@ bool IsValidString(const string& s, int32_t lower_bound, int32_t upper_bound) {
 int32_t ParseNum(const string& s, int32_t lower_bound, int32_t upper_bound) {
     int32_t ans = 0;
     try {
+        // Производим попытку преобразовать строку к числу.
         ans = stoi(s);
+        // Проверяем диапазон.
         if (ans >= lower_bound && ans <= upper_bound) {
             return ans;
         } else {
@@ -2136,10 +2216,12 @@ int32_t ParseNum(const string& s, int32_t lower_bound, int32_t upper_bound) {
 bool IsValidForMatrix(const vector<string>& line, vector<int>& ans, int32_t lower_bound,
                       int32_t upper_bound) {
     for (auto & i : line) {
+        // Проверяем, является ли строка подходящей для представления.
         if (!IsValidString(i, lower_bound, upper_bound)) {
             ans = {};
             return false;
         } else {
+            // Если да, то добавляем уже преобразованную в число строку в конечный вектор.
             ans.push_back(ParseNum(i, lower_bound, upper_bound));
         }
     }
@@ -2147,7 +2229,7 @@ bool IsValidForMatrix(const vector<string>& line, vector<int>& ans, int32_t lowe
 }
 
 vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, int32_t upper_bound,
-                          string comment) {
+                          const string& comment) {
     string line;
     bool flag = false;
     vector<int> final;
@@ -2155,12 +2237,17 @@ vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, in
     do {
         cout << "Введите строку " << comment << " размером " << size_of_matrix << endl;
         try {
+            // Получаем строку текущего представления.
             getline(cin, line);
+            // Производим попытку преобразования первого символа в число.
             int check = stoi(line);
+            // Делим строку по пробелам.
             string_data = Split(line, ' ');
+            // Проверяем размер.
             if (string_data.size() != size_of_matrix) {
                 cout << "Размер не подходит!\n";
             } else {
+                // Если получаем подходящую строку - возвращаем.
                 if (IsValidForMatrix(string_data, final, lower_bound, upper_bound)) {
                     cout << "Успешно получена строка " << comment << "!\n";
                     return final;
@@ -2168,6 +2255,7 @@ vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, in
             }
         } catch (exception& e) {
             cout << "Введите подходящую строку!\n";
+            // При ошибке отчищаем консоль до последнего приемлемого состояния.
             std::cin.clear();
             continue;
         }

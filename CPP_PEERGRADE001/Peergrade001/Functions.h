@@ -521,7 +521,7 @@ bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& an
 */
 
 std::vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, int32_t upper_bound,
-                                      std::string comment);
+                                      const std::string& comment);
 
 /**
  *  @brief  Функция, считывающая информацию из файла, делящая его на строки.
@@ -539,3 +539,38 @@ std::vector<std::string> ReadAllLinesInFile();
 
 void CheckAndSetFileData(Graph &graph, int32_t size_of_matrix,
                          const std::vector<std::vector<int>> &adjacency_matrix, std::string type);
+
+/**
+ *  @brief  Функция, производящая смену представления для ориентированных псевдографов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForPseudoOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для неориентированных псевдографов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для мультиграфов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForMulti(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для неориентированных графов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForNotOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для ориентированных графов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForOriented(Graph &graph);
