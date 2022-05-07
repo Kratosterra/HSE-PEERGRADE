@@ -1,4 +1,14 @@
+#include <iostream>  // Библиотека ввода-вывода.
 #include <vector>
+#include <set>
+#include <limits>
+#include <Windows.h>
+#include <cstdio>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+#include <stack> // стек
+#include <queue>
 
 /**
  *  @brief  Структура представления графа.
@@ -96,6 +106,9 @@ void DFSClassic(const Graph& graph);
 
 void DFSRecursion(const Graph& graph);
 
+void DFSSearchRecursion(int start, int end, const std::vector<std::vector<int>>& matrix,
+                        std::vector<int>& used, std::vector<int>& path);
+
 /**
  *  @brief  Функция, которая обходит граф в ширину.
  *  @param  graph  Текущий граф.
@@ -103,33 +116,48 @@ void DFSRecursion(const Graph& graph);
 
 void BFS(const Graph& graph);
 
+
 bool IsOriented(std::vector<std::vector<int>> matrix);
 bool IsMulti(const std::vector<std::vector<int>> &matrix);
 bool IsPseudo(const std::vector<std::vector<int>>& matrix, bool oriented);
 int CountLoops(std::vector<std::vector<int>> matrix);
 int CountArcs(const std::vector<std::vector<int>>& matrix);
 int CountRibs(std::vector<std::vector<int>> matrix);
-std::vector<std::vector<int>> GetVertexDegrees(std::vector<std::vector<int>> matrix,
-                                               bool with_loops, bool oriented);
-std::vector<std::vector<int>> ParseInIncidenceMatrix(const std::vector<std::vector<int>>& matrix,
-                                                     int32_t arcs);
+
+std::vector<std::vector<int>> ParseInIncidenceMatrix(
+        const std::vector<std::vector<int>>& adjacency_list);
+
 std::vector<std::vector<int>> ParseInAdjacencyList(const std::vector<std::vector<int>>& matrix);
+
 std::vector<std::vector<int>> ParseInRibsList(const std::vector<std::vector<int>>& matrix,
-                                              int32_t arcs);
+                                              int arcs);
+
 std::vector<int> ParseInFO(const std::vector<std::vector<int>>& matrix, bool oriented);
+
 std::vector<int> ParseInFI(const std::vector<std::vector<int>>& matrix, bool oriented);
+
 std::pair<std::vector<int>, std::vector<int>> ParseInMFO(const std::vector<std::vector<int>>& matrix,
                                                          bool oriented);
+
 std::pair<std::vector<int>, std::vector<int>> ParseInMFI(const std::vector<std::vector<int>>& matrix,
                                                          bool oriented);
+
 std::vector<int> ParseInBFO(const std::vector<std::vector<int>>& matrix, bool oriented);
+
 std::pair<std::vector<int>, std::vector<int>> ParseInBMFO(const std::vector<std::vector<int>>& matrix,
                                                           bool oriented);
+std::vector<std::vector<int>> GetVertexDegrees(std::vector<std::vector<int>> matrix,
+                                               bool with_loops, bool oriented);
 
 std::vector<int> GetMatrixLine(int32_t size_of_matrix);
-std::vector<std::string> Split(const std::string& s, char delim);
+std::vector<std::string> Split(const std::string& str, char delim);
+int32_t GetChoiceVarious(int32_t upper_bound);
+int32_t GetChoiceVarious(int32_t upper_bound, const std::string& info);
+std::ifstream::pos_type GetFileSize(const std::string& filename);
+std::string ReadFileIntoString(const std::string& path);
 bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans);
 bool IsValidString(const std::string& s);
+std::string GetStringMatrixRepresentation(const Graph &graph);
 std::string GetStringAdjacencyMatrix(const Graph &graph);
 std::string GetStringIncidenceMatrix(const Graph &graph);
 std::string GetStringAdjacencyList(const Graph &graph);
@@ -146,5 +174,3 @@ void PrintGraphMainInfo(const Graph &graph);
 void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjacency_matrix);
 int32_t ParseNum(const std::string& s);
 std::vector<std::string> SplitSegment(const std::string& sentence);
-std::vector<std::vector<int>> ParseInIncidenceMatrix(
-        const std::vector<std::vector<int>>& adjacency_list);
