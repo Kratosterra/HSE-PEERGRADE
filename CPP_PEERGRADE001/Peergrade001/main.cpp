@@ -53,48 +53,6 @@ struct Graph {
 };
 
 
-void GetConsoleGraphInput(Graph &graph);
-
-void GetAdjacencyMatrixFromConsole(Graph &graph);
-
-void GetIncidenceMatrixFromConsole(Graph &graph);
-
-void GetAdjacencyListFromConsole(Graph &graph);
-
-void GetRibsListFromConsole(Graph &graph);
-
-void GetFOFromConsole(Graph &graph);
-
-void GetFIFromConsole(Graph &graph);
-
-void GetMFOFromConsole(Graph &graph);
-
-void GetMFIFromConsole(Graph &graph);
-
-void GetBMFOFromConsole(Graph &graph);
-
-void GetBFOFromConsole(Graph &graph);
-
-void GetIncidenceMatrixFromFile(Graph &graph);
-
-void GetAdjacencyListFromFile(Graph &graph);
-
-void GetRibsListFromFile(Graph &graph);
-
-void GetFOFromFile(Graph &graph);
-
-void GetFIFromFile(Graph &graph);
-
-void GetMFOFromFile(Graph &graph);
-
-void GetMFIFromFile(Graph &graph);
-
-void GetBMFOFromFile(Graph &graph);
-
-void GetBFOFromFile(Graph &graph);
-
-void GetFileGraphInput(Graph &graph);
-
 /**
  *  @brief  Основная функция работы программы.
  *  @return  0 при успешном выполнении, -1 при возникновении ошибки.
@@ -395,7 +353,6 @@ void GetBFOFromFile(Graph &graph) {
     CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
 }
 
-//TODO: Больше 40 строк!
 void GetBMFOFromFile(Graph &graph) {
     vector<int> bmfo_me{};
     vector<int> bmfo_mv{};
@@ -404,39 +361,7 @@ void GetBMFOFromFile(Graph &graph) {
     cout << "─────────────────────────────────────────────\nВведите количество элементов массива MV:\n";
     int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     cout << "─────────────────────────────────────────────\n";
-    try {
-        vector<string> string_data = ReadAllLinesInFile();
-        if (string_data.size() != 2) {
-            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-            return;
-        }
-        vector<int> final;
-        vector<string> str = Split(string_data[0], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_mv = final;
-        else {
-            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-            return;
-        }
-        final = {};
-        cout << "Введите количество элементов массива ME:\n";
-        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-        cout << "─────────────────────────────────────────────\n";
-        str = Split(string_data[1], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_me = final;
-        else {
-            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-            return;
-        }
-    } catch (exception &) {
-        cerr << "Произошла ошибка при считывании файла!";
+    if (!TryGetInfoBMFOFromFile(number_of_colums, bmfo_me, bmfo_mv)) {
         return;
     }
     vector<vector<int>> adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
@@ -447,7 +372,45 @@ void GetBMFOFromFile(Graph &graph) {
     CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, "BMFO");
 }
 
-//TODO: Больше 40 строк!
+bool TryGetInfoBMFOFromFile(int32_t number_of_colums, vector<int> &bmfo_me, vector<int> &bmfo_mv) {
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return false;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_mv = final;
+        else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+        final = {};
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_me = final;
+        else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return false;
+    }
+    return true;
+}
+
 void GetMFIFromFile(Graph &graph) {
     vector<int> mfi_me{};
     vector<int> mfi_mv{};
@@ -458,42 +421,7 @@ void GetMFIFromFile(Graph &graph) {
     cout << "Введите количество элементов массива MV:\n";
     int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     cout << "─────────────────────────────────────────────\n";
-    try {
-        vector<string> string_data = ReadAllLinesInFile();
-        if (string_data.size() != 2) {
-            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-            return;
-        }
-        vector<int> final;
-        vector<string> str = Split(string_data[0], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {
-            mfi_mv = final;
-            final = {};
-        } else {
-            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-            return;
-        }
-        cout << "Введите количество элементов массива ME:\n";
-        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-        cout << "─────────────────────────────────────────────\n";
-        str = Split(string_data[1], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {
-            mfi_me = final;
-            final = {};
-        } else {
-            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-            return;
-        }
-    } catch (exception &) {
-        cerr << "Произошла ошибка при считывании файла!";
+    if (!TryGetMFIFromFile(number_of_colums, mfi_me, mfi_mv)) {
         return;
     }
     vector<vector<int>> adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
@@ -504,7 +432,48 @@ void GetMFIFromFile(Graph &graph) {
     CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
 }
 
-//TODO: Больше 40 строк!
+bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int> &mfi_mv) {
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return false;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfi_mv = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfi_me = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return false;
+    }
+    return true;
+}
+
 void GetMFOFromFile(Graph &graph) {
     vector<int> mfo_me{};
     vector<int> mfo_mv{};
@@ -515,46 +484,7 @@ void GetMFOFromFile(Graph &graph) {
     cout << "Введите количество элементов массива MV:\n";
     int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     cout << "─────────────────────────────────────────────\n";
-    try {
-        vector<string> string_data = ReadAllLinesInFile();
-        if (string_data.size() != 2) {
-            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-            return;
-        }
-        vector<int> final;
-        vector<string> str = Split(string_data[0], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!"
-                    "\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {
-            mfo_mv = final;
-            final = {};
-        } else {
-            cerr << "Возникли проблемы с валидностью строки!\n"
-                    "Новый граф не установлен!\n";
-            return;
-        }
-        cout << "Введите количество элементов массива ME:\n";
-        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-        cout << "─────────────────────────────────────────────\n";
-        str = Split(string_data[1], ' ');
-        if (str.size() != number_of_colums) {
-            cerr << "Размер строки не соответствует измерениям!"
-                    "\nНовый граф не установлен!\n";
-            return;
-        }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {
-            mfo_me = final;
-            final = {};
-        } else {
-            cerr << "Возникли проблемы с валидностью строки!\n"
-                    "Новый граф не установлен!\n";
-            return;
-        }
-    } catch (exception &) {
-        cerr << "Произошла ошибка при считывании файла!";
+    if (!TryGetMFOFromFile(number_of_colums, mfo_me, mfo_mv)) {
         return;
     }
     vector<vector<int>> adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
@@ -563,6 +493,48 @@ void GetMFOFromFile(Graph &graph) {
         return;
     }
     CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+bool TryGetMFOFromFile(int32_t number_of_colums, vector<int> &mfo_me, vector<int> &mfo_mv) {
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return false;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfo_mv = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return false;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfo_me = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return false;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return false;
+    }
+    return true;
 }
 
 void GetFIFromFile(Graph &graph) {

@@ -670,3 +670,185 @@ vertices);
 */
 
 std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo);
+
+/**
+ *  @brief  Функция, получающая граф из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetConsoleGraphInput(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы смежности из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyMatrixFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы инцендентности из консольного ввода
+ *  пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetIncidenceMatrixFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка смежности из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyListFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка ребер из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetRibsListFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FI из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFIFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFI из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFIFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BMFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBMFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы инциндентности из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetIncidenceMatrixFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка смежности из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyListFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка ребер из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetRibsListFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FI из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFIFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFI из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFIFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BMFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBMFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф из файла ввода.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFileGraphInput(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая попытку получения BMFO представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
+ *  @param  bmfo_me  ME-вектор.
+ *  @param  bmfo_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetInfoBMFOFromFile(int32_t number_of_colums, std::vector<int> &bmfo_me, std::vector<int>
+        &bmfo_mv);
+
+/**
+ *  @brief  Функция, производящая попытку получения MFI представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
+ *  @param  mfi_me  ME-вектор.
+ *  @param  mfi_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetMFIFromFile(int32_t number_of_colums, std::vector<int> &mfi_me, std::vector<int> &mfi_mv);
+
+/**
+ *  @brief  Функция, производящая попытку получения MFO представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
+ *  @param  mfo_me  ME-вектор.
+ *  @param  mfo_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetMFOFromFile(int32_t number_of_colums, std::vector<int> &mfo_me, std::vector<int> &mfo_mv);
