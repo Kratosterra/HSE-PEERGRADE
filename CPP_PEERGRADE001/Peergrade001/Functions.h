@@ -328,11 +328,11 @@ bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& an
 
 /**
  *  @brief  Функция, проверяющая валидена ли строка как представление числа.
- *  @param  s  Строка.
+ *  @param  str  Строка.
  *  @return Boolean значение является ли данная строка подходящей для построения представления.
 */
 
-bool IsValidString(const std::string& s);
+bool IsValidString(const std::string& str);
 
 /**
  *  @brief  Функция, возвращающая строковое предствление графа в текущем типе хранения.
@@ -456,11 +456,11 @@ void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjac
 
 /**
  *  @brief  Функция, получающая число из строки.
- *  @param  s  Строка с числом.
+ *  @param  string  Строка с числом.
  *  @return Число из строки.
 */
 
-int32_t ParseNum(const std::string& s);
+int32_t ParseNum(const std::string& string);
 
 /**
  *  @brief  Функция, делящая строку по разделителям новой строки.
@@ -479,23 +479,23 @@ void GetAdjacencyMatrixFromFile(Graph &graph);
 
 /**
  *  @brief  Функция, проверяющая валидена ли строка как представление числа.
- *  @param  s  Строка.
+ *  @param  str  Строка.
  *  @param  lower_bound  Нижняя граница для числа от пользователя.
  *  @param  upper_bound  Верхняя граница для числа от пользователя.
  *  @return Boolean значение является ли данная строка подходящей для построения представления.
 */
 
-bool IsValidString(const std::string& s, int32_t lower_bound, int32_t upper_bound);
+bool IsValidString(const std::string& str, int32_t lower_bound, int32_t upper_bound);
 
 /**
  *  @brief  Функция, превращающая строку в число.
- *  @param  s  Строка.
+ *  @param  str  Строка.
  *  @param  lower_bound  Нижняя граница для числа от пользователя.
  *  @param  upper_bound  Верхняя граница для числа от пользователя.
  *  @return Число.
 */
 
-int32_t ParseNum(const std::string& s, int32_t lower_bound, int32_t upper_bound);
+int32_t ParseNum(const std::string& str, int32_t lower_bound, int32_t upper_bound);
 
 /**
  *  @brief  Функция, проверяющая валиден ли набор строк как информация для построения представления
@@ -577,12 +577,12 @@ void ChangeTypeOfGraphForOriented(Graph &graph);
 
 /**
  *  @brief  Функция, возвращающая индекс элемента в векторе.
- *  @param  v Вектор чисел.
- *  @param  a  Число, которое нужно найти.
- *  @return Индекс элемента a или -1.
+ *  @param  vector Вектор чисел.
+ *  @param  item  Число, которое нужно найти.
+ *  @return Индекс элемента item или -1.
 */
 
-int Find(std::vector<int> &v, int a);
+int Find(std::vector<int> &vector, int item);
 
 /**
  *  @brief  Функция, превращающая список смежности в матрицу смежности.
