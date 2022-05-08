@@ -574,3 +574,99 @@ void ChangeTypeOfGraphForNotOriented(Graph &graph);
 */
 
 void ChangeTypeOfGraphForOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая индекс элемента в векторе.
+ *  @param  v Вектор чисел.
+ *  @param  a  Число, которое нужно найти.
+ *  @return Индекс элемента a или -1.
+*/
+
+int Find(std::vector<int> &v, int a);
+
+/**
+ *  @brief  Функция, превращающая список смежности в матрицу смежности.
+ *  @param  adjacency_list Список смежности.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromAdjacencyList(std::vector<std::vector<int>> adjacency_list,
+                                                     int32_t vertices);
+
+/**
+ *  @brief  Функция, превращающая матрицу инцидентности в матрицу смежности.
+ *  @param  incidence_matrix Матрица инцидентности.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromIncidenceMatrix(std::vector<std::vector<int>>
+incidence_matrix, int32_t vertices);
+
+/**
+ *  @brief  Функция, превращающая список ребер в матрицу смежности.
+ *  @param  ribs_list Список ребер.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromRibsList(std::vector<std::vector<int>> ribs_list, int32_t
+vertices);
+
+/**
+ *  @brief  Функция, превращающая представление FO в матрицу смежности.
+ *  @param  fo FO-представление.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromFO(std::vector<int> fo);
+
+/**
+ *  @brief  Функция, превращающая представление FI в матрицу смежности.
+ *  @param  fi FI-представление.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromFI(std::vector<int> fi);
+
+/**
+ *  @brief  Функция, превращающая представление MFO в матрицу смежности.
+ *  @param  mv MV-вектор.
+ *  @param  me  ME-вектор.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromMFO(const std::vector<int>& mv, std::vector<int> me, int32_t
+vertices);
+
+/**
+ *  @brief  Функция, превращающая представление MFI в матрицу смежности.
+ *  @param  mv MV-вектор.
+ *  @param  me  ME-вектор.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromMFI(const std::vector<int>& mv, std::vector<int> me, int32_t
+vertices);
+
+/**
+ *  @brief  Функция, превращающая представление BMFO в матрицу смежности.
+ *  @param  mv MV-вектор.
+ *  @param  me  ME-вектор.
+ *  @param  vertices  Количество вершин.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromBMFO(const std::vector<int>& mv, std::vector<int> me, int32_t
+vertices);
+
+/**
+ *  @brief  Функция, превращающая представление BFO в матрицу смежности.
+ *  @param  fo BFO-представление.
+ *  @return Матрицу смежности для данного представления.
+*/
+
+std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo);

@@ -53,6 +53,48 @@ struct Graph {
 };
 
 
+void GetConsoleGraphInput(Graph &graph);
+
+void GetAdjacencyMatrixFromConsole(Graph &graph);
+
+void GetIncidenceMatrixFromConsole(Graph &graph);
+
+void GetAdjacencyListFromConsole(Graph &graph);
+
+void GetRibsListFromConsole(Graph &graph);
+
+void GetFOFromConsole(Graph &graph);
+
+void GetFIFromConsole(Graph &graph);
+
+void GetMFOFromConsole(Graph &graph);
+
+void GetMFIFromConsole(Graph &graph);
+
+void GetBMFOFromConsole(Graph &graph);
+
+void GetBFOFromConsole(Graph &graph);
+
+void GetIncidenceMatrixFromFile(Graph &graph);
+
+void GetAdjacencyListFromFile(Graph &graph);
+
+void GetRibsListFromFile(Graph &graph);
+
+void GetFOFromFile(Graph &graph);
+
+void GetFIFromFile(Graph &graph);
+
+void GetMFOFromFile(Graph &graph);
+
+void GetMFIFromFile(Graph &graph);
+
+void GetBMFOFromFile(Graph &graph);
+
+void GetBFOFromFile(Graph &graph);
+
+void GetFileGraphInput(Graph &graph);
+
 /**
  *  @brief  Основная функция работы программы.
  *  @return  0 при успешном выполнении, -1 при возникновении ошибки.
@@ -253,7 +295,6 @@ void DoGraphWork(int32_t now_choice, Graph& graph) {
     }
 }
 
-// TODO: ДОРАБОТАТЬ И РАЗБИТЬ НА ФУНКЦИИ + ДОПИСАТЬ ПЕРЕВОДЫ.
 void GetNewGraph(Graph& graph) {
     std::cout << "─────────────────────────────────────────────\n";
     cout << "Приступаем к вводу графа!";
@@ -263,629 +304,789 @@ void GetNewGraph(Graph& graph) {
     int32_t choice = GetChoiceVarious(2);
     std::cout << "─────────────────────────────────────────────\n";
     if (choice == 1) {
-        std::cout << "─────────────────────────────────────────────\n";
-        cout << "Ввод будет производится через консоль.\n";
-        cout << "Выберем тип ввода!";
-        std::cout << "\n─────────────────────────────────────────────\n";
-        cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n[4]"
-                " Список ребер\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n[9] BMFO\n[10] BFO"
-                "\n";
-        std::cout << "─────────────────────────────────────────────\n";
-        int32_t choice_second = GetChoiceVarious(10);
-
-        vector<vector<int>> adjacency_matrix;
-        vector<vector<int>> incidence_matrix{};
-        vector<vector<int>> adjacency_list{};
-        vector<vector<int>> ribs_list{};
-        vector<int> fo{};
-        // FI представление.
-        vector<int> fi{};
-        // MFO представление.
-        vector<int> mfo_me{};
-        vector<int> mfo_mv{};
-        // MFI представление.
-        vector<int> mfi_me{};
-        vector<int> mfi_mv{};
-        // BMFO представление.
-        vector<int> bmfo_me{};
-        vector<int> bmfo_mv{};
-        // BFO представление.
-        vector<int> bfo_fo{};
-
-        string type;
-        int32_t size_of_matrix = 0;
-        int32_t number_of_strings = 0;
-        int32_t number_of_colums = 0;
-        switch (choice_second) {
-            case 1:
-                type = "Матрица смежности";
-                cout << "Введите размер квадртаной матрицы смежности:\n";
-                size_of_matrix = GetChoiceVarious(7, "размер матрицы");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < size_of_matrix; ++i) {
-                    vector<int> matrix_line = GetMatrixLine(size_of_matrix);
-                    adjacency_matrix.push_back(matrix_line);
-                }
-                break;
-            case 2:
-                type = "Матрица инцидентности";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество ребер:\n";
-                number_of_colums = GetChoiceVarious(50, "количество рёбер");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, -1, 1,
-                                                                   "матрицы инцидентности");
-                    incidence_matrix.push_back(matrix_line);
-                }
-                //adjacency_matrix = ParseFromIncidenceMatrix(incidence_matrix, number_of_strings);
-                break;
-            case 3:
-                type = "Список смежности";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    cout << "Введите количество смежных вершин для вершины "<< i+1 <<"\n";
-                    number_of_colums = GetChoiceVarious(6, "количество смежных вершин");
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
-                                                                   "списка смежности");
-                    adjacency_list.push_back(matrix_line);
-                }
-                //adjacency_matrix = ParseFromAdjacencyList(adjacency_list, number_of_strings);
-                break;
-            case 4:
-                cout << "Введите количество вершин:\n";
-                number_of_colums = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                type = "Список ребер";
-                cout << "Введите количество дуг/ребер для списка ребер:\n";
-                number_of_strings = GetChoiceVarious(50, "количество дуг/ребер");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    vector<int> matrix_line = GetMatrixLineVarious(2, 1, 7,
-                                                                   "списка ребер");
-                    ribs_list.push_back(matrix_line);
-                }
-                //adjacency_matrix = ParseFromRibsList(ribs_list, number_of_colums);
-                break;
-            case 5:
-                type = "FO";
-                number_of_strings = 1;
-                cout << "Введите размер массива FO:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива FO");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
-                                                                   "массива FO");
-                    fo = matrix_line;
-                }
-                //adjacency_matrix = ParseFromFO(fo);
-                break;
-            case 6:
-                type = "FI";
-                number_of_strings = 1;
-                cout << "Введите размер массива FI:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива FI");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
-                                                                   "массива FI");
-                    fi = matrix_line;
-                }
-                //adjacency_matrix = ParseFromFI(fi);
-                break;
-            case 7:
-                type = "MFO";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
-                                                                   "массива MV");
-                    mfo_mv = matrix_line;
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    matrix_line = GetMatrixLineVarious(number_of_colums, 0, 110,
-                                                       "массива ME");
-                    mfo_me = matrix_line;
-                }
-                //adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
-                break;
-            case 8:
-                type = "MFI";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
-                                                                   "массива MV");
-                    mfi_mv = matrix_line;
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110,
-                                                       "массива ME");
-                    mfi_me = matrix_line;
-                }
-                //adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
-                break;
-            case 9:
-                type = "BMFO";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
-                                                                   "массива MV");
-                    bmfo_mv = matrix_line;
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110,
-                                                       "массива ME");
-                    bmfo_me = matrix_line;
-                }
-                //adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
-                break;
-            case 10:
-                type = "BFO";
-                number_of_strings = 1;
-                cout << "Введите размер массива BFO:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива BFO");
-                std::cout << "─────────────────────────────────────────────\n";
-                for (int i = 0; i < number_of_strings ; ++i) {
-                    vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
-                                                                   "массива BFO");
-                    bfo_fo = matrix_line;
-                }
-                //adjacency_matrix = ParseFromBF0(bfo_fo);
-                break;
-            default:
-                return;
-        }
-        if (adjacency_matrix.empty()) {
-            cerr << "Было введено недопустимое сочетание данных для представления!";
-            return;
-        }
-        SetAdjacencyMatrix(graph, adjacency_matrix, type);
+        GetConsoleGraphInput(graph);
     } else {
+        GetFileGraphInput(graph);
+    }
+}
 
-        std::cout << "─────────────────────────────────────────────\n";
-        cout << "Ввод будет производится через файл.\n";
-        cout << "Выберем тип ввода!";
-        std::cout << "\n─────────────────────────────────────────────\n";
-        cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n[4]"
-                " Список ребер\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n[9] BMFO\n[10] BFO"
-                "\n";
-        std::cout << "─────────────────────────────────────────────\n";
-        int32_t choice_second = GetChoiceVarious(10);
+void GetFileGraphInput(Graph &graph) {
+    cout << "─────────────────────────────────────────────\nВвод будет производится через"
+                 " файл.\nВыберем тип ввода!\n─────────────────────────────────────────────\n";
+    cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n[4]"
+            " Список ребер\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n[9] BMFO\n[10] BFO\n";
+    cout << "─────────────────────────────────────────────\n";
+    int32_t choice_second = GetChoiceVarious(10);
+    switch (choice_second) {
+        case 1:
+            GetAdjacencyMatrixFromFile(graph);
+            break;
+        case 2:
+            GetIncidenceMatrixFromFile(graph);
+            break;
+        case 3:
+            GetAdjacencyListFromFile(graph);
+            break;
+        case 4:
+            GetRibsListFromFile(graph);
+            break;
+        case 5:
+            GetFOFromFile(graph);
+            break;
+        case 6:
+            GetFIFromFile(graph);
+            break;
+        case 7:
+            GetMFOFromFile(graph);
+            break;
+        case 8:
+            GetMFIFromFile(graph);
+            break;
+        case 9:
+            GetBMFOFromFile(graph);
+            break;
+        case 10:
+            GetBFOFromFile(graph);
+            break;
+        default:
+            return;
+    }
+}
 
-        string type;
-        vector<vector<int>> adjacency_matrix{};
-        vector<vector<int>> incidence_matrix{};
-        vector<vector<int>> adjacency_list{};
-        vector<vector<int>> ribs_list{};
-        vector<int> fo{};
-        // FI представление.
-        vector<int> fi{};
-        // MFO представление.
-        vector<int> mfo_me{};
-        vector<int> mfo_mv{};
-        // MFI представление.
-        vector<int> mfi_me{};
-        vector<int> mfi_mv{};
-        // BMFO представление.
-        vector<int> bmfo_me{};
-        vector<int> bmfo_mv{};
-        // BFO представление.
-        vector<int> bfo_fo{};
-
-        int32_t size_of_matrix = 0;
-        int32_t number_of_strings = 0;
-        int32_t number_of_colums = 0;
-        switch (choice_second) {
-            case 1:
-                GetAdjacencyMatrixFromFile(graph);
-                return;
-                break;
-            case 2:
-                type = "Матрица инцидентности";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество ребер:\n";
-                number_of_colums = GetChoiceVarious(50, "количество рёбер");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    for (auto & i : string_data) {
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям"
-                                    ".\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, -1, 1)) {
-                            incidence_matrix.push_back(final);
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromIncidenceMatrix(incidence_matrix, number_of_strings);
-                size_of_matrix = number_of_strings;
-                break;
-            case 3:
-                type = "Список смежности";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    int counter = 0;
-                    for (auto & i : string_data) {
-                        cout << "Введите количество смежных вершин для вершины."<< ++counter
-                        << "\n";
-                        number_of_colums = GetChoiceVarious(6, "количество смежных вершин");
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям!"
-                                    "\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, 1, 7)) {
-                            adjacency_list.push_back(final);
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                size_of_matrix = number_of_strings;
-                //adjacency_matrix = ParseFromAdjacencyList(adjacency_list, number_of_strings);
-                break;
-            case 4:
-                type = "Список ребер";
-                cout << "Введите количество дуг/ребер для списка ребер:\n";
-                number_of_strings = GetChoiceVarious(50, "количество дуг/ребер");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    for (auto & i : string_data) {
-                        number_of_colums = 2;
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям!"
-                                    "\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, 1, 7)) {
-                            ribs_list.push_back(final);
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromRibsList(ribs_list, number_of_strings);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 5:
-                type = "FO";
-                number_of_strings = 1;
-                cout << "Введите размер массива FO:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива FO");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    for (auto & i : string_data) {
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям!"
-                                    "\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, 0, 7)) {
-                            fo = final;
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromFO(fo);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 6:
-                type = "FI";
-                number_of_strings = 1;
-                cout << "Введите размер массива FI:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива FI");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    for (auto & i : string_data) {
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям!"
-                                    "\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, 0, 7)) {
-                            fi = final;
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\n"
-                                    "Новый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromFI(fi);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 7:
-                type = "MFO";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != 2) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    vector<int> final;
-                    vector<string> str = Split(string_data[0], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                "\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfo_mv = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    str = Split(string_data[1], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                "\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfo_me = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 8:
-                type = "MFI";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != 2) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    vector<int> final;
-                    vector<string> str = Split(string_data[0], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                "\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfi_mv = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    str = Split(string_data[1], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                "\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfi_me = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 9:
-                type = "BMFO";
-                cout << "Введите количество вершин:\n";
-                number_of_strings = GetChoiceVarious(7, "количество вершин");
-                std::cout << "─────────────────────────────────────────────\n";
-                cout << "Введите количество элементов массива MV:\n";
-                number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != 2) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    vector<int> final;
-                    vector<string> str = Split(string_data[0], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                "\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfi_mv = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                    cout << "Введите количество элементов массива ME:\n";
-                    number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
-                    std::cout << "─────────────────────────────────────────────\n";
-                    str = Split(string_data[1], ' ');
-                    if (str.size() != number_of_colums) {
-                        cerr << "Размер строки не соответствует измерениям!"
-                                ".\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    if (IsValidForMatrix(string_data, final, 0, 7)) {
-                        mfi_me = final;
-                        final = {};
-                    } else {
-                        cerr << "Возникли проблемы с валидностью строки!\n"
-                                "Новый граф не установлен!\n";
-                        return;
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            case 10:
-                type = "BFO";
-                number_of_strings = 1;
-                cout << "Введите размер массива BFO:\n";
-                number_of_colums = GetChoiceVarious(100, "размер массива BFO");
-                std::cout << "─────────────────────────────────────────────\n";
-                try {
-                    vector<string> string_data = ReadAllLinesInFile();
-                    if (string_data.size() != number_of_strings) {
-                        cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
-                        return;
-                    }
-                    for (auto & i : string_data) {
-                        vector<int> final;
-                        vector<string> str = Split(i, ' ');
-                        if (str.size() != number_of_colums) {
-                            cerr << "Размер одной из строк не соответствует измерениям!"
-                                    "\nНовый граф не установлен!\n";
-                            return;
-                        }
-                        if (IsValidForMatrix(string_data, final, 0, 7)) {
-                            fo = final;
-                            final = {};
-                        } else {
-                            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
-                            return;
-                        }
-                    }
-                } catch (exception&) {
-                    cerr << "Произошла ошибка при считывании файла!";
-                    return;
-                }
-                //adjacency_matrix = ParseFromBF0(bfo_fo);
-                size_of_matrix = static_cast<int>(adjacency_matrix.size());
-                break;
-            default:
-                return;
-        }
-        if (adjacency_matrix.empty()) {
-            cerr << "Было введено недопустимое сочетание данных для представления!";
+void GetBFOFromFile(Graph &graph) {
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> bfo_fo{};
+    string type = "BFO";
+    int32_t number_of_strings = 1;
+    cout << "Введите размер массива BFO:\n";
+    int32_t number_of_colums = GetChoiceVarious(100, "размер массива BFO");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
             return;
         }
-        CheckAndSetFileData(graph, size_of_matrix, adjacency_matrix, type);
-        std::cout << "Матрица установлена!\n";
+        for (auto &i: string_data) {
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям!"
+                        "\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, 0, 7)) {
+                bfo_fo = final;
+                final = {};
+            } else {
+                cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
     }
+    adjacency_matrix = ParseFromBFO(bfo_fo);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+//TODO: Больше 40 строк!
+void GetBMFOFromFile(Graph &graph) {
+    vector<int> bmfo_me{};
+    vector<int> bmfo_mv{};
+    cout << "Введите количество вершин:\n";
+    int32_t number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\nВведите количество элементов массива MV:\n";
+    int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_mv = final;
+        else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return;
+        }
+        final = {};
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_me = final;
+        else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>> adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, "BMFO");
+}
+
+//TODO: Больше 40 строк!
+void GetMFIFromFile(Graph &graph) {
+    vector<int> mfi_me{};
+    vector<int> mfi_mv{};
+    string type = "MFI";
+    cout << "Введите количество вершин:\n";
+    int32_t number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество элементов массива MV:\n";
+    int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfi_mv = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return;
+        }
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfi_me = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+            return;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>> adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+//TODO: Больше 40 строк!
+void GetMFOFromFile(Graph &graph) {
+    vector<int> mfo_me{};
+    vector<int> mfo_mv{};
+    string type = "MFO";
+    cout << "Введите количество вершин:\n";
+    int32_t number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество элементов массива MV:\n";
+    int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != 2) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        vector<int> final;
+        vector<string> str = Split(string_data[0], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!"
+                    "\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfo_mv = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\n"
+                    "Новый граф не установлен!\n";
+            return;
+        }
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        str = Split(string_data[1], ' ');
+        if (str.size() != number_of_colums) {
+            cerr << "Размер строки не соответствует измерениям!"
+                    "\nНовый граф не установлен!\n";
+            return;
+        }
+        if (IsValidForMatrix(string_data, final, 0, 7)) {
+            mfo_me = final;
+            final = {};
+        } else {
+            cerr << "Возникли проблемы с валидностью строки!\n"
+                    "Новый граф не установлен!\n";
+            return;
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>> adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+void GetFIFromFile(Graph &graph) {
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> fi{};
+    string type = "FI";
+    int32_t number_of_strings = 1;
+    cout << "Введите размер массива FI:\n";
+    int32_t number_of_colums = GetChoiceVarious(100, "размер массива FI");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        for (auto &i: string_data) {
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям!"
+                        "\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, 0, 7)) {
+                fi = final;
+                final = {};
+            } else {
+                cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    adjacency_matrix = ParseFromFI(fi);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+void GetFOFromFile(Graph &graph) {
+    vector<int> fo{};
+    string type = "FO";
+    int32_t  number_of_strings = 1;
+    cout << "Введите размер массива FO:\n";
+    int32_t number_of_colums = GetChoiceVarious(100, "размер массива FO");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        for (auto &i: string_data) {
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям!"
+                        "\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, 0, 7)) {
+                fo = final;
+                final = {};
+            } else {
+                cerr
+                        << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>>  adjacency_matrix = ParseFromFO(fo);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+void GetRibsListFromFile(Graph &graph) {
+    vector<vector<int>> ribs_list{};
+    string type = "Список ребер";
+    cout << "Введите количество дуг/ребер для списка ребер:\n";
+    int32_t  number_of_strings = GetChoiceVarious(50, "количество дуг/ребер");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        for (auto &i: string_data) {
+            int32_t number_of_colums = 2;
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям!\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, 1, 7)) {
+                ribs_list.push_back(final);
+                final = {};
+            } else {
+                cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>> adjacency_matrix = ParseFromRibsList(ribs_list, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, static_cast<int>(adjacency_matrix.size()), adjacency_matrix, type);
+}
+
+void GetAdjacencyListFromFile(Graph &graph) {
+    vector<vector<int>> adjacency_list{};
+    string type = "Список смежности";
+    cout << "Введите количество вершин:\n";
+    int32_t number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        int counter = 0;
+        for (auto &i: string_data) {
+            cout << "Введите количество смежных вершин для вершины." << ++counter << "\n";
+            int32_t number_of_colums = GetChoiceVarious(6, "количество смежных вершин");
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям!\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, 1, 7)) {
+                adjacency_list.push_back(final);
+                final = {};
+            } else {
+                cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    vector<vector<int>> adjacency_matrix = ParseFromAdjacencyList(adjacency_list,number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, number_of_strings, adjacency_matrix, type);
+}
+
+void GetIncidenceMatrixFromFile(Graph &graph) {
+    vector<vector<int>> incidence_matrix{};
+    string type = "Матрица инцидентности";
+    cout << "Введите количество вершин:\n";
+    int32_t number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество ребер:\n";
+    int32_t number_of_colums = GetChoiceVarious(50, "количество рёбер");
+    cout << "─────────────────────────────────────────────\n";
+    try {
+        vector<string> string_data = ReadAllLinesInFile();
+        if (string_data.size() != number_of_strings) {
+            cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
+            return;
+        }
+        for (auto &i: string_data) {
+            vector<int> final;
+            vector<string> str = Split(i, ' ');
+            if (str.size() != number_of_colums) {
+                cerr << "Размер одной из строк не соответствует измерениям.\nНовый граф не установлен!\n";
+                return;
+            }
+            if (IsValidForMatrix(string_data, final, -1, 1)) {
+                incidence_matrix.push_back(final);
+                final = {};
+            } else {
+                cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
+                return;
+            }
+        }
+    } catch (exception &) {
+        cerr << "Произошла ошибка при считывании файла!";
+        return;
+    }
+    auto adjacency_matrix = ParseFromIncidenceMatrix(incidence_matrix, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    CheckAndSetFileData(graph, number_of_strings, adjacency_matrix, type);
+}
+
+void GetConsoleGraphInput(Graph &graph) {
+    cout << "─────────────────────────────────────────────\nВвод будет производится через консоль."
+            "\nВыберем тип ввода!\n─────────────────────────────────────────────\n[1] Матрица "
+            "смежности\n[2] Матрица инцидентности\n[3] Список смежности\n[4] Список ребер\n[5] "
+            "FO\n[6] FI\n[7] MFO\n[8] MFI\n[9] BMFO\n[10] BFO\n "
+            "─────────────────────────────────────────────\n";
+    switch (GetChoiceVarious(10)) {
+        case 1:
+            GetAdjacencyMatrixFromConsole(graph);
+            break;
+        case 2:
+            GetIncidenceMatrixFromConsole(graph);
+            break;
+        case 3:
+            GetAdjacencyListFromConsole(graph);
+            break;
+        case 4:
+            GetRibsListFromConsole(graph);
+            break;
+        case 5:
+            GetFOFromConsole(graph);
+            break;
+        case 6:
+            GetFIFromConsole(graph);
+            break;
+        case 7:
+            GetMFOFromConsole(graph);
+            break;
+        case 8:
+            GetMFIFromConsole(graph);
+            break;
+        case 9:
+            GetBMFOFromConsole(graph);
+            break;
+        case 10:
+            GetBFOFromConsole(graph);
+            break;
+        default:
+            break;
+    }
+}
+
+void GetBFOFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> bfo_fo{};
+    type = "BFO";
+    number_of_strings = 1;
+    cout << "Введите размер массива BFO:\n";
+    number_of_colums = GetChoiceVarious(100, "размер массива BFO");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
+                                                       "массива BFO");
+        bfo_fo = matrix_line;
+    }
+    adjacency_matrix = ParseFromBFO(bfo_fo);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetBMFOFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> bmfo_me{};
+    vector<int> bmfo_mv{};
+    type = "BMFO";
+    cout << "Введите количество вершин:\n";
+    number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество элементов массива MV:\n";
+    number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
+                                                       "массива MV");
+        bmfo_mv = matrix_line;
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110,
+                                           "массива ME");
+        bmfo_me = matrix_line;
+    }
+    adjacency_matrix = ParseFromBMFO(bmfo_mv, bmfo_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetMFIFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> mfi_me{};
+    vector<int> mfi_mv{};
+    type = "MFI";
+    cout << "Введите количество вершин:\n";
+    number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество элементов массива MV:\n";
+    number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,"массива MV");
+        mfi_mv = matrix_line;
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110, "массива ME");
+        mfi_me = matrix_line;
+    }
+    adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetMFOFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> mfo_me{};
+    vector<int> mfo_mv{};
+    type = "MFO";
+    cout << "Введите количество вершин:\n";
+    number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество элементов массива MV:\n";
+    number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
+    cout << "─────────────────────────────────────────────\n";
+    {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,"массива MV");
+        mfo_mv = matrix_line;
+        cout << "Введите количество элементов массива ME:\n";
+        number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
+        cout << "─────────────────────────────────────────────\n";
+        matrix_line = GetMatrixLineVarious(number_of_colums, 0, 110, "массива ME");
+        mfo_me = matrix_line;
+    }
+    adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetFIFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> fi{};
+    type = "FI";
+    number_of_strings = 1;
+    cout << "Введите размер массива FI:\n";
+    number_of_colums = GetChoiceVarious(100, "размер массива FI");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
+                                                       "массива FI");
+        fi = matrix_line;
+    }
+    adjacency_matrix = ParseFromFI(fi);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetFOFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<int> fo{};
+    type = "FO";
+    number_of_strings = 1;
+    cout << "Введите размер массива FO:\n";
+    number_of_colums = GetChoiceVarious(100, "размер массива FO");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
+                                                       "массива FO");
+        fo = matrix_line;
+    }
+    adjacency_matrix = ParseFromFO(fo);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetRibsListFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<vector<int>> ribs_list{};
+    cout << "Введите количество вершин:\n";
+    number_of_colums = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    type = "Список ребер";
+    cout << "Введите количество дуг/ребер для списка ребер:\n";
+    number_of_strings = GetChoiceVarious(50, "количество дуг/ребер");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        vector<int> matrix_line = GetMatrixLineVarious(2, 1, 7,
+                                                       "списка ребер");
+        ribs_list.push_back(matrix_line);
+    }
+    adjacency_matrix = ParseFromRibsList(ribs_list, number_of_colums);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetAdjacencyListFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<vector<int>> adjacency_list{};
+    type = "Список смежности";
+    cout << "Введите количество вершин:\n";
+    number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        cout << "Введите количество смежных вершин для вершины " << i + 1 << "\n";
+        number_of_colums = GetChoiceVarious(6, "количество смежных вершин");
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
+                                                       "списка смежности");
+        adjacency_list.push_back(matrix_line);
+    }
+    adjacency_matrix = ParseFromAdjacencyList(adjacency_list, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetIncidenceMatrixFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    vector<vector<int>> incidence_matrix{};
+    type = "Матрица инцидентности";
+    cout << "Введите количество вершин:\n";
+    number_of_strings = GetChoiceVarious(7, "количество вершин");
+    cout << "─────────────────────────────────────────────\n";
+    cout << "Введите количество ребер:\n";
+    number_of_colums = GetChoiceVarious(50, "количество рёбер");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < number_of_strings; ++i) {
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, -1, 1,
+                                                       "матрицы инцидентности");
+        incidence_matrix.push_back(matrix_line);
+    }
+    adjacency_matrix = ParseFromIncidenceMatrix(incidence_matrix, number_of_strings);
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
+}
+
+void GetAdjacencyMatrixFromConsole(Graph &graph) {
+    string type;
+    int32_t size_of_matrix = 0;
+    int32_t number_of_strings = 0;
+    int32_t number_of_colums = 0;
+    vector<vector<int>> adjacency_matrix{};
+    type = "Матрица смежности";
+    cout << "Введите размер квадртаной матрицы смежности:\n";
+    size_of_matrix = GetChoiceVarious(7, "размер матрицы");
+    cout << "─────────────────────────────────────────────\n";
+    for (int i = 0; i < size_of_matrix; ++i) {
+        vector<int> matrix_line = GetMatrixLine(size_of_matrix);
+        adjacency_matrix.push_back(matrix_line);
+    }
+    if (adjacency_matrix.empty()) {
+        cerr << "Было введено недопустимое сочетание данных для представления!";
+        return;
+    }
+    SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
 void GetAdjacencyMatrixFromFile(Graph &graph) {
@@ -2261,5 +2462,336 @@ vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, in
         }
     } while (!flag);
     return final;
+}
+
+int Find(vector<int> &v, int a) {
+    for (int i = 0; i < v.size(); i++) {
+        if ( v[i] == a) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+vector<vector<int>> ParseFromAdjacencyList(vector<vector<int>> adjacency_list, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    for (int i = 0; i < vertices; ++i) {
+        for (int j = 0; j < vertices; ++j) {
+            if (j < adjacency_list[i].size()) {
+                if (adjacency_list[i][j] > vertices) {
+                    cout << "Предупреждение: обнаружена вершина "<< adjacency_list[i][j] <<
+                         " в списке, которая не покрыта"
+                         " количеством вершин, она проигнорирована!\n";
+                } else {
+                    adjacency_matrix[i][adjacency_list[i][j]-1] = 1;
+                }
+            } else {
+            }
+        }
+    }
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromIncidenceMatrix(vector<vector<int>> incidence_matrix, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    vector<vector<int>> matrix(incidence_matrix[0].size());
+    for (size_t i = 0; i < incidence_matrix[0].size(); i++)
+        for (auto & j : incidence_matrix) matrix[i].push_back(j[i]);
+    for (auto & i : matrix) {
+        if  (find(i.begin(), i.end(), 1) != i.end()) {
+            if (count(i.begin(), i.end(), 1) == 2 && count(i.begin(), i.end(), -1) == 0) {
+                auto find_one = Find(i, 1);
+                i[find_one] = 0;
+                auto find_two = Find(i, 1);
+                if (find_one != -1 && find_two != -1) {
+                    adjacency_matrix[find_one][find_two] = 1;
+                    adjacency_matrix[find_two][find_one] = 1;
+                } else {
+                    cerr << "Неправильная конфигурация одного из ребер!\n";
+                    return {};
+                }
+            } else if ((std::count(i.begin(), i.end(), 1) == 1)) {
+                if  ((std::count(i.begin(), i.end(), -1) == 1)) {
+                    auto find_one = Find(i, 1);
+                    auto find_two = Find(i, -1);
+                    if (find_two != -1 && find_one != -1) adjacency_matrix[find_one][find_two] = 1;
+                    else {
+                        cerr << "Неправильная конфигурация одного из ребер!\n";
+                        return{};
+                    }
+                } else {
+                    cerr << "Возникла ошибка, в одном из ребер не нашлось входящей вершины или"
+                            " их слишком много!\n";
+                    return {};
+                }
+            } else {
+                cerr << "Возникла ошибка, в одном из ребер не нашлось выходящей вершины или"
+                        " их слишком много!\n";
+                return {};
+            }
+        } else {
+            cerr << "Возникла ошибка, одно из ребер не может существовать!\n";
+            return {};
+        }
+    }
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromRibsList(vector<vector<int>> ribs_list, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+
+    for (auto & i : ribs_list) {
+        for (int j = 0; j < 1; ++j) {
+            if (i[j] > vertices) {
+                cout << "Предупреждение: обнаружена вершина "<< i[j] <<
+                     " в списке, которая не покрыта"
+                     " количеством вершин, она проигнорирована!\n";
+            } else if (i[j+1] > vertices) {
+                cout << "Предупреждение: обнаружена вершина "<< i[j+1] <<
+                     " в списке, которая не покрыта"
+                     " количеством вершин, она проигнорирована!\n";
+            } else  {
+                adjacency_matrix[i[j]-1][i[j+1]-1] = 1;
+            }
+        }
+    }
+
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromFO(vector<int> fo) {
+    int counter = static_cast<int>(count(fo.begin(), fo.end(), 0));
+    if (counter != fo[0]) {
+        cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
+        return {};
+    }
+    vector<vector<int>> adjacency_matrix(counter);
+    vector<int> empty_vector(counter);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    vector<int> vertex;
+    int count = 0;
+    for (int i = 1; i < fo.size(); ++i) {
+        if (fo[i] == 0) {
+            for (int j : vertex) {
+                if (j > counter) {
+                    cerr << "Встречена вершина, которая не может находится в данном представлении!\n";
+                    return {};
+                }
+                adjacency_matrix[count][j] = 1;
+            }
+            ++count;
+            vertex= {};
+        } else {
+            vertex.push_back(fo[i]-1);
+        }
+    }
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromFI(vector<int> fi) {
+    int counter = static_cast<int>(count(fi.begin(), fi.end(), 0));
+    if (counter != fi[0]) {
+        cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
+        return {};
+    }
+    vector<vector<int>> adjacency_matrix(counter);
+    vector<int> empty_vector(counter);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    vector<int> vertex;
+    int count = 0;
+    for (int i = 1; i < fi.size(); ++i) {
+        if (fi[i] == 0) {
+            for (int j : vertex) {
+                if (j > counter) {
+                    cerr << "Встречена вершина, которая не может находится в данном представлении!\n";
+                    return {};
+                }
+                adjacency_matrix[count][j] = 1;
+            }
+            ++count;
+            vertex= {};
+        } else {
+            vertex.push_back(fi[i]-1);
+        }
+    }
+    vector<vector<int>> matrix(adjacency_matrix.size());
+    for (size_t i = 0; i < adjacency_matrix.size(); i++)
+        for (auto & j : adjacency_matrix) matrix[i].push_back(j[i]);
+    return matrix;
+}
+
+vector<vector<int>> ParseFromMFO(const vector<int>& mv, vector<int> me, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    if  (mv.size() != vertices) {
+        cerr << "Для графа, у которого свзяаны все вершины, размерность MV должна совпадать"
+                " с количеством вершин.\n";
+        return {};
+    }
+    int now_position = 0;
+    int count = 0;
+    vector<int> vertex;
+    for (int i : mv) {
+        if  (i == 0) {
+            count += 1;
+            continue;
+        }
+        if  (i == 0) continue;
+        for (int j = now_position; j < me.size(); ++j) {
+            if (i > me.size()) {
+                cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+                return {};
+            }
+            if (i == j+1) {
+                vertex.push_back(me[j]);
+                for (int k : vertex) {
+                    if (k > vertices) {
+                        cerr << "Встречена вершина,"
+                                " которая не может находится в данном представлении!\n";
+                        return {};
+                    }
+                    adjacency_matrix[count][k-1] = 1;
+                }
+                now_position = j+1;
+                count += 1;
+                vertex = {};
+                break;
+            } else {
+                vertex.push_back(me[j]);
+            }
+        }
+    }
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromMFI(const vector<int>& mv, vector<int> me, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    if  (mv.size() != vertices) {
+        cerr << "Для графа, у которого свзяаны все вершины, размерность MV должна совпадать"
+                " с количеством вершин.\n";
+        return {};
+    }
+    int now_position = 0;
+    int count = 0;
+    vector<int> vertex;
+    for (int i : mv) {
+        if  (i == 0) {
+            count += 1;
+            continue;
+        }
+        for (int j = now_position; j < me.size(); ++j) {
+            if (i > me.size()) {
+                cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+                return {};
+            }
+            if (i == j+1) {
+                vertex.push_back(me[j]);
+                for (int k : vertex) {
+                    if (k > vertices) {
+                        cerr << "Встречена вершина,"
+                                " которая не может находится в данном представлении!\n";
+                        return {};
+                    }
+                    adjacency_matrix[count][k-1] = 1;
+                }
+                now_position = j+1;
+                count += 1;
+                vertex = {};
+                break;
+            } else {
+                vertex.push_back(me[j]);
+            }
+        }
+    }
+    vector<vector<int>> matrix(adjacency_matrix.size());
+    for (size_t i = 0; i < adjacency_matrix.size(); i++)
+        for (auto & j : adjacency_matrix) matrix[i].push_back(j[i]);
+    return matrix;
+}
+
+vector<vector<int>> ParseFromBMFO(const vector<int>& mv, vector<int> me, int32_t vertices) {
+    vector<vector<int>> adjacency_matrix(vertices);
+    vector<int> empty_vector(vertices);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    if  (mv.size() != vertices) {
+        cerr << "Для графа, у которого свзяаны все вершины, размерность MV должна совпадать"
+                " с количеством вершин.\n";
+        return {};
+    }
+    int now_position = 0;
+    int count = 0;
+    vector<int> vertex;
+    for (int i : mv) {
+        if  (i == 0) {
+            count += 1;
+            continue;
+        }
+        if  (i == 0) continue;
+        for (int j = now_position; j < me.size(); ++j) {
+            if (i > me.size()) {
+                cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+                return {};
+            }
+            if (i == j+1) {
+                vertex.push_back(me[j]);
+                for (int k : vertex) {
+                    if (k > vertices) {
+                        cerr << "Встречена вершина,"
+                                " которая не может находится в данном представлении!\n";
+                        return {};
+                    }
+                    adjacency_matrix[count][k-1] = 1;
+                    adjacency_matrix[k-1][count] = 1;
+                }
+                now_position = j+1;
+                count += 1;
+                vertex = {};
+                break;
+            } else {
+                vertex.push_back(me[j]);
+            }
+        }
+    }
+    return adjacency_matrix;
+}
+
+vector<vector<int>> ParseFromBFO(vector<int> fo) {
+    int counter = static_cast<int>(count(fo.begin(), fo.end(), 0));
+    if (counter != fo[0]) {
+        cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
+        return {};
+    }
+    vector<vector<int>> adjacency_matrix(counter);
+    vector<int> empty_vector(counter);
+    for (auto & i : adjacency_matrix) i = empty_vector;
+    vector<int> vertex;
+    int count = 0;
+    for (int i = 1; i < fo.size(); ++i) {
+        if (fo[i] == 0) {
+            for (int j : vertex) {
+                if (j > counter) {
+                    cerr << "Встречена вершина, которая не может находится"
+                            " в данном представлении!\n";
+                    return {};
+                }
+                adjacency_matrix[count][j] = 1;
+                adjacency_matrix[j][count] = 1;
+            }
+            ++count;
+            vertex= {};
+        } else {
+            vertex.push_back(fo[i]-1);
+        }
+    }
+    return adjacency_matrix;
 }
 
