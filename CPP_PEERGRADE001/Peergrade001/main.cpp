@@ -1,16 +1,6 @@
-#include <iostream>
-#include <utility>
-#include <vector>
-#include <set>
-#include <limits>
-#include <Windows.h>
-#include <cstdio>
-#include <fstream>
-#include <cmath>
-#include <stack>
-#include <queue>
-#include "Functions.h" // Указываем заголовочный файл;
-// TODO: Отсортировать библотеки по алфавиту.
+// Подключаем заголовочный файл.
+#include "Functions.h"
+
 
 /**
  *  @note  1) Проверить ввод из файлов
@@ -32,27 +22,33 @@ struct Graph {
     std::string type{};  // Ориентированный ли граф.
     int32_t p = 0;  // Количество вершин.
     int32_t q = 0;  // Количество рёбер.
-    int32_t arcs = 0; // Количество дуг.
-    int32_t loops = 0; // Количество петель.
+    int32_t arcs = 0;  // Количество дуг.
+    int32_t loops = 0;  // Количество петель.
     // Cтепени или полустепени вершин.
     std::vector<std::vector<int>> vertex_degrees{};
-    // Основные 4 представления.
+    // Матрица смежности.
     std::vector<std::vector<int>> adjacency_matrix{};
+    // Матрица инцидентности.
     std::vector<std::vector<int>> incidence_matrix{};
+    // Список смежности
     std::vector<std::vector<int>> adjacency_list{};
+    // Cписок ребер.
     std::vector<std::vector<int>> ribs_list{};
     // FO представление.
     std::vector<int> fo{};
     // FI представление.
     std::vector<int> fi{};
-    // MFO представление.
+    // MFO представление, вектор ME.
     std::vector<int> mfo_me{};
+    // MFO представление, вектор MV.
     std::vector<int> mfo_mv{};
-    // MFI представление.
+    // MFI представление, вектор ME.
     std::vector<int> mfi_me{};
+    // MFI представление, вектор MV.
     std::vector<int> mfi_mv{};
-    // BMFO представление.
+    // BMFO представление, вектор ME.
     std::vector<int> bmfo_me{};
+    // BMFO представление, вектор MV.
     std::vector<int> bmfo_mv{};
     // BFO представление.
     std::vector<int> bfo_fo{};
@@ -274,15 +270,13 @@ void GetNewGraph(Graph& graph) {
     }
 }
 
-
 void GetFileGraphInput(Graph &graph) {
     cout << "─────────────────────────────────────────────\nВвод будет производится через"
                  " файл.\nВыберем тип ввода!\n─────────────────────────────────────────────\n";
     cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n[4]"
             " Список ребер\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n[9] BMFO\n[10] BFO\n";
     cout << "─────────────────────────────────────────────\n";
-    int32_t choice_second = GetChoiceVarious(10); // Получаем от пользователя его выбор и запускаем.
-    switch (choice_second) {
+    switch (GetChoiceVarious(10)) { // Получаем от пользователя его выбор и запускаем.
         case 1:
             GetAdjacencyMatrixFromFile(graph);
             break;

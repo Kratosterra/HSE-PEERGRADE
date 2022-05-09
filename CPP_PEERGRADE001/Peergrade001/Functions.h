@@ -1,14 +1,15 @@
-#include <iostream>
-#include <vector>
-#include <set>
-#include <limits>
-#include <Windows.h>
-#include <cstdio>
-#include <sstream>
-#include <fstream>
 #include <cmath>
-#include <stack>
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <limits>
 #include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <vector>
+#include <Windows.h>
+
 
 /**
  *  @brief  Структура представления графа.
@@ -43,7 +44,7 @@ void ShowNowGraphInfo(const Graph& graph);
 
 /**
  *  @brief  Функция, которая получает выбор пользователя.
- *  @return  Возвращает значение в пределах от 1 до 8 включительно.
+ *  @return  Возвращает значение в пределах от 1 до 9 включительно.
 */
 
 int32_t GetChoice();
