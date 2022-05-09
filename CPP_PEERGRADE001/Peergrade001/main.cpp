@@ -58,7 +58,6 @@ struct Graph {
     std::vector<int> bfo_fo{};
 };
 
-
 /**
  *  @brief  Основная функция работы программы.
  *  @return  0 при успешном выполнении, -1 при возникновении ошибки.
@@ -341,7 +340,7 @@ void GetBFOFromFile(Graph &graph) {
                         "\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, 0, 7)) {  // Проверяем строку на валидность.
+            if (IsValidForMatrix(str, final, 0, 7)) {  // Проверяем строку на валидность.
                 bfo_fo = final;
                 final = {};
             } else {
@@ -394,7 +393,7 @@ bool TryGetInfoBMFOFromFile(int32_t number_of_colums, vector<int> &bmfo_me, vect
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_mv = final;
+        if (IsValidForMatrix(str, final, 0, 7)) bmfo_mv = final;
         else {
             cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
             return false;
@@ -408,7 +407,7 @@ bool TryGetInfoBMFOFromFile(int32_t number_of_colums, vector<int> &bmfo_me, vect
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) bmfo_me = final;
+        if (IsValidForMatrix(str, final, 0, 7)) bmfo_me = final;
         else {
             cerr << "Возникли проблемы с валидностью строки!\nНовый граф не установлен!\n";
             return false;
@@ -455,7 +454,7 @@ bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {  // Проверяем на валидность.
+        if (IsValidForMatrix(str, final, 0, 7)) {  // Проверяем на валидность.
             mfi_mv = final;
             final = {};
         } else {
@@ -470,7 +469,7 @@ bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) { // Снова проверяем на валидность.
+        if (IsValidForMatrix(str, final, 0, 7)) { // Снова проверяем на валидность.
             mfi_me = final;
             final = {};
         } else {
@@ -519,7 +518,7 @@ bool TryGetMFOFromFile(int32_t number_of_colums, vector<int> &mfo_me, vector<int
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) {  // Проверяем валидность строки-вектора.
+        if (IsValidForMatrix(str, final, 0, 7)) {  // Проверяем валидность строки-вектора.
             mfo_mv = final;
             final = {};
         } else {
@@ -534,7 +533,7 @@ bool TryGetMFOFromFile(int32_t number_of_colums, vector<int> &mfo_me, vector<int
             cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(string_data, final, 0, 7)) { // Проверяем валидность строки-вектора.
+        if (IsValidForMatrix(str, final, 0, 7)) { // Проверяем валидность строки-вектора.
             mfo_me = final;
             final = {};
         } else {
@@ -570,7 +569,7 @@ void GetFIFromFile(Graph &graph) {
                         "\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, 0, 7)) {  // Проверяем строку представления.
+            if (IsValidForMatrix(str, final, 0, 7)) {  // Проверяем строку представления.
                 fi = final;
                 final = {};
             } else {
@@ -611,7 +610,7 @@ void GetFOFromFile(Graph &graph) {
                         "\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, 0, 7)) {  // Проверяем строку представления.
+            if (IsValidForMatrix(str, final, 0, 7)) {  // Проверяем строку представления.
                 fo = final;
                 final = {};
             } else {
@@ -652,7 +651,7 @@ void GetRibsListFromFile(Graph &graph) {
                 cerr << "Размер одной из строк не соответствует измерениям!\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, 1, 7)) {  // Проверяем строку представления.
+            if (IsValidForMatrix(str, final, 1, 7)) {  // Проверяем строку представления.
                 ribs_list.push_back(final);
                 final = {};
             } else {
@@ -694,7 +693,7 @@ void GetAdjacencyListFromFile(Graph &graph) {
                 cerr << "Размер одной из строк не соответствует измерениям!\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, 1, 7)) {  // Проверяем строку представления.
+            if (IsValidForMatrix(str, final, 1, 7)) {  // Проверяем строку представления.
                 adjacency_list.push_back(final);
                 final = {};
             } else {
@@ -736,7 +735,7 @@ void GetIncidenceMatrixFromFile(Graph &graph) {
                 cerr << "Размер одной из строк не соответствует измерениям.\nНовый граф не установлен!\n";
                 return;
             }
-            if (IsValidForMatrix(string_data, final, -1, 1)) {  // Проверяем строку представления.
+            if (IsValidForMatrix(str, final, -1, 1)) {  // Проверяем строку представления.
                 incidence_matrix.push_back(final);
                 final = {};
             } else {
@@ -843,13 +842,13 @@ void GetBMFOFromConsole(Graph &graph) {
     // Получаем основные строки представления в соответсвии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
-        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100,
                                                        "массива MV");
         bmfo_mv = matrix_line;
         cout << "Введите количество элементов массива ME:\n";
         number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
         cout << "─────────────────────────────────────────────\n";
-        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110,
+        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,
                                            "массива ME");
         bmfo_me = matrix_line;
     }
@@ -877,12 +876,12 @@ void GetMFIFromConsole(Graph &graph) {
     // Получаем основные строки представления в соответсвии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
-        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,"массива MV");
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100,"массива MV");
         mfi_mv = matrix_line;
         cout << "Введите количество элементов массива ME:\n";
         number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
         cout << "─────────────────────────────────────────────\n";
-        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 110, "массива ME");
+        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7, "массива ME");
         mfi_me = matrix_line;
     }
     adjacency_matrix = ParseFromMFI(mfi_mv, mfi_me, number_of_strings);
@@ -913,12 +912,12 @@ void GetMFOFromConsole(Graph &graph) {
     // Получаем основные строки представления в соответсвии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
-        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7,"массива MV");
+        vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100,"массива MV");
         mfo_mv = matrix_line;
         cout << "Введите количество элементов массива ME:\n";
         number_of_colums = GetChoiceVarious(100, "количество элементов массива ME");
         cout << "─────────────────────────────────────────────\n";
-        matrix_line = GetMatrixLineVarious(number_of_colums, 0, 110, "массива ME");
+        matrix_line = GetMatrixLineVarious(number_of_colums, 1, 7, "массива ME");
         mfo_me = matrix_line;
     }
     adjacency_matrix = ParseFromMFO(mfo_mv, mfo_me, number_of_strings);
@@ -2515,44 +2514,56 @@ vector<vector<int>> ParseFromIncidenceMatrix(vector<vector<int>> incidence_matri
     vector<int> empty_vector(vertices);
     for (auto & i : adjacency_matrix) i = empty_vector;
     vector<vector<int>> matrix(incidence_matrix[0].size());
+    // Транспонируем матрицу инциндентости.
     for (size_t i = 0; i < incidence_matrix[0].size(); i++)
         for (auto & j : incidence_matrix) matrix[i].push_back(j[i]);
+    // Построчно изучаем каждое ребро в матрице.
     for (auto & i : matrix) {
-        if  (find(i.begin(), i.end(), 1) != i.end()) {
-            if (count(i.begin(), i.end(), 1) == 2 && count(i.begin(), i.end(), -1) == 0) {
-                auto find_one = Find(i, 1);
-                i[find_one] = 0;
-                auto find_two = Find(i, 1);
-                if (find_one != -1 && find_two != -1) {
-                    adjacency_matrix[find_one][find_two] = 1;
-                    adjacency_matrix[find_two][find_one] = 1;
-                } else {
-                    cerr << "Неправильная конфигурация одного из ребер!\n";
-                    return {};
-                }
-            } else if ((std::count(i.begin(), i.end(), 1) == 1)) {
-                if  ((std::count(i.begin(), i.end(), -1) == 1)) {
-                    auto find_one = Find(i, 1);
-                    auto find_two = Find(i, -1);
-                    if (find_two != -1 && find_one != -1) adjacency_matrix[find_one][find_two] = 1;
-                    else {
-                        cerr << "Неправильная конфигурация одного из ребер!\n";
-                        return{};
-                    }
-                } else {
-                    cerr << "Возникла ошибка, в одном из ребер не нашлось входящей вершины или их слишком много!\n";
-                    return {};
-                }
-            } else {
-                cerr << "Возникла ошибка, в одном из ребер не нашлось выходящей вершины или их слишком много!\n";
-                return {};
-            }
-        } else {
-            cerr << "Возникла ошибка, одно из ребер не может существовать!\n";
+        if (!GetStringOfAdjacencyMatrixFromIncidence(adjacency_matrix, i)){
             return {};
         }
     }
     return adjacency_matrix;
+}
+
+bool GetStringOfAdjacencyMatrixFromIncidence(vector<vector<int>> &adjacency_matrix, vector<int> &i) {
+    // Находим информацию об смежности вершин с помощью поиска по элементам вектора.
+    if  (find(i.begin(), i.end(), 1) != i.end()) {
+        if (count(i.begin(), i.end(), 1) == 2 && count(i.begin(), i.end(), -1) == 0) {
+            auto find_one = Find(i, 1);
+            i[find_one] = 0;
+            auto find_two = Find(i, 1);
+            if (find_one != -1 && find_two != -1) {
+                adjacency_matrix[find_one][find_two] = 1;
+                adjacency_matrix[find_two][find_one] = 1;
+            } else {
+                cerr << "Неправильная конфигурация одного из ребер!\n";
+                return false;
+            }
+        } else if ((count(i.begin(), i.end(), 1) == 1)) {
+            if  ((count(i.begin(), i.end(), -1) == 1)) {
+                auto find_one = Find(i, 1);
+                auto find_two = Find(i, -1);
+                if (find_two != -1 && find_one != -1) adjacency_matrix[find_one][find_two] = 1;
+                else {
+                    cerr << "Неправильная конфигурация одного из ребер!\n";
+                    return false;
+                }
+            } else {
+                cerr << "Возникла ошибка, в одном из ребер не нашлось входящей вершины "
+                        "или их слишком много!\n";
+                return false;
+            }
+        } else {
+            cerr << "Возникла ошибка, в одном из ребер не нашлось выходящей вершины"
+                    " или их слишком много!\n";
+            return false;
+        }
+    } else {
+        cerr << "Возникла ошибка, одно из ребер не может существовать!\n";
+        return false;
+    }
+    return true;
 }
 
 vector<vector<int>> ParseFromRibsList(vector<vector<int>> ribs_list, int32_t vertices) {

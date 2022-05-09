@@ -852,3 +852,15 @@ bool TryGetMFIFromFile(int32_t number_of_colums, std::vector<int> &mfi_me, std::
 */
 
 bool TryGetMFOFromFile(int32_t number_of_colums, std::vector<int> &mfo_me, std::vector<int> &mfo_mv);
+
+/**
+ *  @brief  Функция, производящая получения строки матрицы смежности из строки матрицы
+ *  инциндентности.
+ *  @param  adjacency_matrix  Матрица смежности.
+ *  @param  i  Строка матрицы инциндентности.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool GetStringOfAdjacencyMatrixFromIncidence(std::vector<std::vector<int>> &adjacency_matrix,
+                                             std::vector<int> &i);
