@@ -5,15 +5,15 @@ using namespace std;
 
 struct Graph {
     // Существует ли граф.
-    bool Exist = false;
+    bool is_exist = false;
     // Ориентированный ли граф.
-    bool Oriented = false;
+    bool is_oriented = false;
     // C петлями ли он.
-    bool WithLoops = false;
+    bool is_with_loops = false;
     // Псевдограф или нет.
-    bool Pseudo = false;
+    bool is_pseudo = false;
     // Мультиграф или нет.
-    bool Multi = false;
+    bool is_multi = false;
     // Ориентированный ли граф.
     std::string type{};
     // Количество вершин.
@@ -66,7 +66,7 @@ void ShowExitOfProgram() {
 }
 
 void ShowMainMenu() {
-    // Показываем глафное меню.
+    // Показываем главное меню.
     std::cout << "[1] Ввод графа\n"
                  "[2] Вывод графа\n"
                  "[3] Смена типа представления/хранения\n"
@@ -88,8 +88,8 @@ void ShowNowGraphInfo(const Graph& graph) {
                  "─────────────────────────────────────────────\n"
                  "Информация о графе\n"
                  "─────────────────────────────────────────────\n";
-    // Если граф не свуществует, не будем выводить о нём никакой информации.
-    if (!graph.Exist) {
+    // Если граф не существует, не будем выводить о нём никакой информации.
+    if (!graph.is_exist) {
         std::cout << "> Граф не существует, воспользуйтесь вводом.\n";
     } else  {
         // Печатаем основную информацию о графе.
@@ -103,26 +103,26 @@ void ShowNowGraphInfo(const Graph& graph) {
 }
 
 void PrintGraphMainInfo(const Graph &graph) {
-    // Выводим предупреждение если граф не подходит под станартный функционал.
-    if (graph.Pseudo)
+    // Выводим предупреждение если граф не подходит под стандартный функционал.
+    if (graph.is_pseudo)
         std::cout << "> [ОБНАРУЖЕН ПСЕВДОГРАФ] функционал ограничен.\n> [корректная работа не "
                 "гарантируется]\n";
-    else if (graph.Multi) {
+    else if (graph.is_multi) {
         std::cout << "> [ОБНАРУЖЕН МУЛЬТИГРАФ] функционал ограничен.\n> [корректная работа не "
-                "гаранитируется] \n";
+                "гарантируется] \n";
     }
     // Выводим основные характеристики графа.
     std::cout << "> Тип представления графа: " << graph.type << ".\n";
-    std::cout << "> Тип графа: " << (graph.Oriented ? "Ориентированный" : "Неориентированный")
+    std::cout << "> Тип графа: " << (graph.is_oriented ? "Ориентированный" : "Неориентированный")
               << ".\n";
-    std::cout << "> Петли: " << (graph.WithLoops ? "Есть петли [корректная работа не "
-                                              "гаранитруется]" : "Нет петель") << ".\n";
-    if  (graph.WithLoops) {
+    std::cout << "> Петли: " << (graph.is_with_loops ? "Есть петли [корректная работа не "
+                                              "гарантируется]" : "Нет петель") << ".\n";
+    if  (graph.is_with_loops) {
         std::cout << "> Количество петель: " << graph.loops << "\n";
     }
     std::cout << "> Вершины: " << graph.p << ".\n";
-    // В зависимости от типа графа вывоим количество дуг или ребер.
-    if (!graph.Oriented) {
+    // В зависимости от типа графа выводим количество дуг или ребер.
+    if (!graph.is_oriented) {
         std::cout << "> " << "Рёбра: " << graph.q << ".\n";
     } else {
         std::cout << "> " << "Дуги: " << graph.arcs << ".\n";
@@ -165,9 +165,9 @@ void PrintMatrixRepresentation(const Graph &graph) {
 }
 
 void PrintVertexDegrees(const Graph &graph) {
-    // Если граф ориентрованный - выводим информацию о степенях вершины как о полустепенях.
+    // Если граф ориентированный - выводим информацию о степенях вершины как о полустепенях.
     // Иначе выводим степени вершин.
-    if (graph.Oriented) {
+    if (graph.is_oriented) {
         std::string output;
         output += "Полустепени вершин:\n";
         output += " \tИсход\tЗаход\n";
@@ -222,7 +222,7 @@ void DoGraphWork(int32_t now_choice, Graph& graph) {
             BFS(graph);
             break;
         case 9:
-            BFS(graph);
+            BFSRecursion(graph);
             break;
         case 10:
             std::cout << ">>>>>>>>>>>>>>>>>>>>>\nВыходим из программы!\n";
@@ -333,7 +333,7 @@ void GetBFOFromFile(Graph &graph) {
 }
 
 void GetBMFOFromFile(Graph &graph) {
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<int> bmfo_me{};
     std::vector<int> bmfo_mv{};
     // Получаем всю необходимую информацию для фиксации представления.
@@ -360,7 +360,7 @@ void GetBMFOFromFile(Graph &graph) {
 
 bool TryGetInfoBMFOFromFile(int32_t number_of_colums, vector<int> &bmfo_me, vector<int> &bmfo_mv) {
     try {
-        // Считываем всю информацио из файла и проверяем построчную размерность.
+        // Считываем всю информацию из файла и проверяем построчную размерность.
         std::vector<std::string> string_data = ReadAllLinesInFile();
         if (string_data.size() != 2) {
             std::cerr << "Количество строк не подходит!\nНовый граф не установлен!\n";
@@ -401,7 +401,7 @@ bool TryGetInfoBMFOFromFile(int32_t number_of_colums, vector<int> &bmfo_me, vect
 }
 
 void GetMFIFromFile(Graph &graph) {
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<int> mfi_me{};
     std::vector<int> mfi_mv{};
     // Устанавливаем тип представления.
@@ -436,7 +436,7 @@ bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int
             return false;
         }
         std::vector<int> final;
-        std::vector<std::string> str = Split(string_data[0], ' ');  // Делим строку по побелам.
+        std::vector<std::string> str = Split(string_data[0], ' ');  // Делим строку по пробелам.
         if (str.size() != number_of_colums) {
             std::cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
@@ -456,7 +456,7 @@ bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int
             std::cerr << "Размер строки не соответствует измерениям!\nНовый граф не установлен!\n";
             return false;
         }
-        if (IsValidForMatrix(str, final, 0, 7)) { // Снова проверяем на валидность.
+        if (IsValidForMatrix(str, final, 0, 7)) {  // Снова проверяем на валидность.
             mfi_me = final;
             final = {};
         } else {
@@ -471,7 +471,7 @@ bool TryGetMFIFromFile(int32_t number_of_colums, vector<int> &mfi_me, vector<int
 }
 
 void GetMFOFromFile(Graph &graph) {
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<int> mfo_me{};
     std::vector<int> mfo_mv{};
     // Устанавливаем тип представления.
@@ -541,7 +541,7 @@ bool TryGetMFOFromFile(int32_t number_of_colums, vector<int> &mfo_me, vector<int
 
 void GetFIFromFile(Graph &graph) {
     std::vector<std::vector<int>> adjacency_matrix{};
-    std::vector<int> fi{};  // Обьявляем переменные для хранения представления.
+    std::vector<int> fi{};  // Объявляем переменные для хранения представления.
     std::string type = "FI";  // Устанавливаем тип представления.
     int32_t number_of_strings = 1;
     std::cout << "Введите размер массива FI:\n";
@@ -793,7 +793,7 @@ void GetBFOFromConsole(Graph &graph) {
     int32_t size_of_matrix = 0;
     int32_t number_of_strings = 0;
     int32_t number_of_colums = 0;
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<std::vector<int>> adjacency_matrix{};
     std::vector<int> bfo_fo{};
     // Утверждаем тип представления.
@@ -802,7 +802,7 @@ void GetBFOFromConsole(Graph &graph) {
     std::cout << "Введите размер массива BFO:\n";
     number_of_colums = GetChoiceVarious(100, "размер массива BFO");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
@@ -816,14 +816,14 @@ void GetBFOFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
 void GetBMFOFromConsole(Graph &graph) {
     int32_t number_of_colums = 0;
     std::vector<std::vector<int>> adjacency_matrix{};
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<int> bmfo_me{};
     std::vector<int> bmfo_mv{};
     // Утверждаем тип представления.
@@ -834,7 +834,7 @@ void GetBMFOFromConsole(Graph &graph) {
     std::cout << "Введите количество элементов массива MV:\n";
     number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100,
@@ -854,13 +854,13 @@ void GetBMFOFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
 void GetMFIFromConsole(Graph &graph) {
     std::vector<std::vector<int>> adjacency_matrix{};
-    // Обьявляем переменные для хранения представления.
+    // Объявляем переменные для хранения представления.
     std::vector<int> mfi_me{};
     std::vector<int> mfi_mv{};
     // Утверждаем тип представления.
@@ -871,7 +871,7 @@ void GetMFIFromConsole(Graph &graph) {
     std::cout << "Введите количество элементов массива MV:\n";
     int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100, "массива MV");
@@ -889,7 +889,7 @@ void GetMFIFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -907,7 +907,7 @@ void GetMFOFromConsole(Graph &graph) {
     std::cout << "Введите количество элементов массива MV:\n";
     int32_t number_of_colums = GetChoiceVarious(20, "количество элементов массива MV");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 100, "массива MV");
@@ -925,7 +925,7 @@ void GetMFOFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -943,7 +943,7 @@ void GetFIFromConsole(Graph &graph) {
     std::cout << "Введите размер массива FI:\n";
     number_of_colums = GetChoiceVarious(100, "размер массива FI");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
@@ -957,7 +957,7 @@ void GetFIFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -975,7 +975,7 @@ void GetFOFromConsole(Graph &graph) {
     std::cout << "Введите размер массива FO:\n";
     number_of_colums = GetChoiceVarious(100, "размер массива FO");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, 0, 7,
@@ -989,7 +989,7 @@ void GetFOFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -1009,7 +1009,7 @@ void GetRibsListFromConsole(Graph &graph) {
     std::cout << "Введите количество дуг/ребер для списка ребер:\n";
     number_of_strings = GetChoiceVarious(50, "количество дуг/ребер");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(2, 1, 7,
@@ -1023,7 +1023,7 @@ void GetRibsListFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -1040,7 +1040,7 @@ void GetAdjacencyListFromConsole(Graph &graph) {
     std::cout << "Введите количество вершин:\n";
     number_of_strings = GetChoiceVarious(7, "количество вершин");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         std::cout << "Введите количество смежных вершин для вершины " << i + 1 << "\n";
         number_of_colums = GetChoiceVarious(6, "количество смежных вершин");
@@ -1056,7 +1056,7 @@ void GetAdjacencyListFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -1076,7 +1076,7 @@ void GetIncidenceMatrixFromConsole(Graph &graph) {
     std::cout << "Введите количество ребер:\n";
     number_of_colums = GetChoiceVarious(50, "количество рёбер");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < number_of_strings; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLineVarious(number_of_colums, -1, 1,
@@ -1090,7 +1090,7 @@ void GetIncidenceMatrixFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
@@ -1103,10 +1103,10 @@ void GetAdjacencyMatrixFromConsole(Graph &graph) {
     std::vector<std::vector<int>> adjacency_matrix{};
     // Утверждаем тип представления.
     type = "Матрица смежности";
-    std::cout << "Введите размер квадртаной матрицы смежности:\n";
+    std::cout << "Введите размер квадратной матрицы смежности:\n";
     size_of_matrix = GetChoiceVarious(7, "размер матрицы");
     std::cout << "─────────────────────────────────────────────\n";
-    // Получаем основные строки представления в соответсвии с настройками пользователя.
+    // Получаем основные строки представления в соответствии с настройками пользователя.
     for (int i = 0; i < size_of_matrix; ++i) {
         // Подвергаем каждое строковое представление проверке.
         std::vector<int> matrix_line = GetMatrixLine(size_of_matrix);
@@ -1117,14 +1117,14 @@ void GetAdjacencyMatrixFromConsole(Graph &graph) {
         std::cerr << "Было введено недопустимое сочетание данных для представления!\n";
         return;
     }
-    // Устанавливаем данное представление в качетсве представления для нашего графа.
+    // Устанавливаем данное представление в качестве представления для нашего графа.
     SetAdjacencyMatrix(graph, adjacency_matrix, type);
 }
 
 void GetAdjacencyMatrixFromFile(Graph &graph) {
     // Получаем матрицу смежности из файла с помощью построковой проверки входных данных.
     std::string type = "Матрица смежности";
-    std::cout << "Введите размер квадртаной матрицы смежности в файле (должна точно совпадать):\n";
+    std::cout << "Введите размер квадратной матрицы смежности в файле (должна точно совпадать):\n";
     int32_t size_of_matrix = GetChoiceVarious(7, "размер матрицы");
     std::cout << "─────────────────────────────────────────────\n";
     std::vector<std::vector<int>> adjacency_matrix;
@@ -1195,37 +1195,37 @@ std::vector<std::string> ReadAllLinesInFile() {
 void SetAdjacencyMatrix(Graph &graph, const vector<vector<int>>& adjacency_matrix, string type) {
     // Устанавливаем каждое представление в структуру графа, получаем всю информацию сразу.
     graph.adjacency_matrix = adjacency_matrix;
-    graph.Exist = true;
-    graph.Oriented = IsOriented(adjacency_matrix);
-    graph.WithLoops = (CountLoops(adjacency_matrix) > 0);
-    graph.Pseudo = IsPseudo(adjacency_matrix, graph.Oriented);
-    graph.Multi = IsMulti(adjacency_matrix);
+    graph.is_exist = true;
+    graph.is_oriented = IsOriented(adjacency_matrix);
+    graph.is_with_loops = (CountLoops(adjacency_matrix) > 0);
+    graph.is_pseudo = IsPseudo(adjacency_matrix, graph.is_oriented);
+    graph.is_multi = IsMulti(adjacency_matrix);
     graph.type = std::move(type);
     graph.p = static_cast<int>(adjacency_matrix.size());
     graph.q = CountRibs(adjacency_matrix);
     graph.arcs = CountArcs(adjacency_matrix);
     graph.loops = CountLoops(adjacency_matrix);
-    graph.vertex_degrees = GetVertexDegrees(adjacency_matrix, graph.WithLoops, graph.Oriented);
+    graph.vertex_degrees = GetVertexDegrees(adjacency_matrix, graph.is_with_loops, graph.is_oriented);
     graph.ribs_list = ParseInRibsList(adjacency_matrix, graph.arcs);
     graph.adjacency_list = ParseInAdjacencyList(adjacency_matrix);
     graph.incidence_matrix = ParseInIncidenceMatrix(graph.adjacency_list);
-    graph.fo = ParseInFO(adjacency_matrix, graph.Oriented);
-    graph.fi = ParseInFI(adjacency_matrix, graph.Oriented);
-    graph.mfo_me = ParseInMFO(adjacency_matrix, graph.Oriented).first;
-    graph.mfo_mv = ParseInMFO(adjacency_matrix, graph.Oriented).second;
-    graph.mfi_me = ParseInMFI(adjacency_matrix, graph.Oriented).first;
-    graph.mfi_mv = ParseInMFI(adjacency_matrix, graph.Oriented).second;
-    graph.bmfo_me = ParseInBMFO(adjacency_matrix, graph.Oriented).first;
-    graph.bmfo_mv = ParseInBMFO(adjacency_matrix, graph.Oriented).second;
-    graph.bfo_fo = ParseInBFO(adjacency_matrix, graph.Oriented);
+    graph.fo = ParseInFO(adjacency_matrix, graph.is_oriented);
+    graph.fi = ParseInFI(adjacency_matrix, graph.is_oriented);
+    graph.mfo_me = ParseInMFO(adjacency_matrix, graph.is_oriented).first;
+    graph.mfo_mv = ParseInMFO(adjacency_matrix, graph.is_oriented).second;
+    graph.mfi_me = ParseInMFI(adjacency_matrix, graph.is_oriented).first;
+    graph.mfi_mv = ParseInMFI(adjacency_matrix, graph.is_oriented).second;
+    graph.bmfo_me = ParseInBMFO(adjacency_matrix, graph.is_oriented).first;
+    graph.bmfo_mv = ParseInBMFO(adjacency_matrix, graph.is_oriented).second;
+    graph.bfo_fo = ParseInBFO(adjacency_matrix, graph.is_oriented);
 }
 
 void OutputGraph(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
-    // Справшиваем у пользователя предпочтительный стиль вывода.
+    // Спрашиваем у пользователя предпочтительный стиль вывода.
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "Приступаем к выводу графа в текущем представлении";
     std::cout << "\n─────────────────────────────────────────────\n";
@@ -1262,7 +1262,7 @@ void OutputGraph(const Graph& graph) {
 }
 
 void ChangeTypeOfGraph(Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
@@ -1270,14 +1270,14 @@ void ChangeTypeOfGraph(Graph& graph) {
     std::cout << "Приступаем к смене типа представления/хранения графа";
     std::cout << "\n─────────────────────────────────────────────\n";
     // В зависимости от типа графа можно предложить только определённые типы представления, для
-    // этого пользователю предоставляется ограниченая возможность преобразования.
-    if (graph.Pseudo && graph.Oriented) {
+    // этого пользователю предоставляется ограниченная возможность преобразования.
+    if (graph.is_pseudo && graph.is_oriented) {
         ChangeTypeOfGraphForPseudoOriented(graph);
-    } else if (graph.Pseudo && !graph.Oriented) {
+    } else if (graph.is_pseudo && !graph.is_oriented) {
         ChangeTypeOfGraphForPseudoNotOriented(graph);
-    } else if (graph.Multi && !graph.Oriented) {
+    } else if (graph.is_multi && !graph.is_oriented) {
         ChangeTypeOfGraphForMulti(graph);
-    } else if (!graph.Oriented) {
+    } else if (!graph.is_oriented) {
         ChangeTypeOfGraphForNotOriented(graph);
     } else {
         ChangeTypeOfGraphForOriented(graph);
@@ -1287,7 +1287,7 @@ void ChangeTypeOfGraph(Graph& graph) {
 void ChangeTypeOfGraphForOriented(Graph &graph) {
     std::cout << "Для ориентированного графа доступны следующие представления.\n";
     std::cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n"
-            "[4] Список ребёр\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n";
+            "[4] Список ребер\n[5] FO\n[6] FI\n[7] MFO\n[8] MFI\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
     // По выбору пользователя меняем тип представления графа.
@@ -1327,7 +1327,7 @@ void ChangeTypeOfGraphForOriented(Graph &graph) {
 void ChangeTypeOfGraphForNotOriented(Graph &graph) {
     std::cout << "Для неориентированного графа доступны следующие представления.\n";
     std::cout << "[1] Матрица смежности\n[2] Матрица инцидентности\n[3] Список смежности\n"
-            "[4] Список ребёр\n[5] FO\n[6] MFO\n[7] BFO\n[8] BMFO\n";
+            "[4] Список ребер\n[5] FO\n[6] MFO\n[7] BFO\n[8] BMFO\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
     // По выбору пользователя меняем тип представления графа.
@@ -1366,7 +1366,7 @@ void ChangeTypeOfGraphForNotOriented(Graph &graph) {
 
 void ChangeTypeOfGraphForMulti(Graph &graph) {
     std::cout << "Для неориентированного мультиграфа доступны следующие представления.\n";
-    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n"
+    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребер\n"
             "[4] FO\n[5] MFO\n[6] BFO\n[7] BMFO\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
@@ -1403,7 +1403,7 @@ void ChangeTypeOfGraphForMulti(Graph &graph) {
 
 void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph) {
     std::cout << "Для неориентированного псеводографа доступны следующие представления.\n";
-    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n[4] FO\n[5] MFO\n";
+    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребер\n[4] FO\n[5] MFO\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
     // По выбору пользователя меняем тип представления графа.
@@ -1433,7 +1433,7 @@ void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph) {
 
 void ChangeTypeOfGraphForPseudoOriented(Graph &graph) {
     std::cout << "Для ориентированного псеводографа доступны следующие представления.\n";
-    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребёр\n"
+    std::cout << "[1] Матрица смежности\n[2] Список смежности\n[3] Список ребер\n"
             "[4] FO\n[5] FI\n[6] MFO\n";
     std::cout << "─────────────────────────────────────────────\n";
     int32_t choice = GetChoiceVarious(6);
@@ -1467,7 +1467,7 @@ void ChangeTypeOfGraphForPseudoOriented(Graph &graph) {
 }
 
 void CountDegreesOfVertices(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
@@ -1481,7 +1481,7 @@ void CountDegreesOfVertices(const Graph& graph) {
 }
 
 void CountEdgesOfGraph(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
@@ -1490,7 +1490,7 @@ void CountEdgesOfGraph(const Graph& graph) {
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
     // В зависимости от типа графа возвращаем пользователю информацию о ребрах или о дугах.
-    if (!graph.Oriented) {
+    if (!graph.is_oriented) {
         std::cout << "" << "Рёбра: " << graph.q << ".\n";
     } else {
         std::cout << "" << "Дуги: " << graph.arcs << ".\n";
@@ -1499,7 +1499,7 @@ void CountEdgesOfGraph(const Graph& graph) {
 }
 
 void DFSClassic(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
@@ -1513,7 +1513,7 @@ void DFSClassic(const Graph& graph) {
     std::vector<int> path;  // Путь по вершинам.
     for (int & i : used) i = 0;
     stack.push(0);
-    // Пока стэк не пустой, продолжаем работу.
+    // Пока стек не пустой, продолжаем работу.
     while (!stack.empty())
     {
         int now_point = stack.top();  // Получаем вершину.
@@ -1540,9 +1540,10 @@ void DFSClassic(const Graph& graph) {
     std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
 
-void DFSSearchRecursion(int32_t start, int32_t end, const std::vector<std::vector<int>>& matrix,
-                        std::vector<int>& used, std::vector<int>& path)
+void DFSSearchRecursion(int32_t start, int32_t end, const vector<vector<int>>& matrix,
+                        vector<int>& used, vector<int>& path)
 {
+    // Если путь пустой - помечаем точку как стартовую.
     if (path.empty()) {
         std::cout << "Cтартовая точка: " << start + 1 << "\n";
     }
@@ -1551,12 +1552,12 @@ void DFSSearchRecursion(int32_t start, int32_t end, const std::vector<std::vecto
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
     used[start] = 1;
     for (int i = 0; i < end; i++)
-        // Если вершина еше не посешена, идем в неё
+        // Если вершина еше не посещена, идем в неё
         if (matrix[start][i] != 0 && used[i] == 0) DFSSearchRecursion(i, end, matrix, used, path);
 }
 
 void DFSRecursion(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
@@ -1564,10 +1565,11 @@ void DFSRecursion(const Graph& graph) {
     std::cout << "Приступаем к обходу графа в глубину рекурсивно!\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    // Задаём вектор, фиксирующий путь и использованные точки.
     std::vector<int> used(graph.adjacency_matrix.size());
     std::vector<int> path;
     for (int & i : used) i = 0;
-    // Запускаем рекурсивный проход по врешинам.
+    // Запускаем рекурсивный проход по вершинам.
     DFSSearchRecursion(0, static_cast<int>(graph.adjacency_matrix.size()), graph.adjacency_matrix,
                        used, path);
     std::cout << "Обход в глубину рекурсивным методом завершён!\n";
@@ -1575,29 +1577,29 @@ void DFSRecursion(const Graph& graph) {
 }
 
 void BFS(const Graph& graph) {
-    if (!graph.Exist) {
+    if (!graph.is_exist) {
         std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
         return;
     }
     std::cout << "─────────────────────────────────────────────\n";
-    std::cout << "Приступаем к обходу графа в ширину!\n";
+    std::cout << "Приступаем к обходу графа в ширину стандартно!\n";
     std::cout << "─────────────────────────────────────────────\n";
     std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
     std::queue<int> queue;
     std::vector<std::vector<int>> adjacency_matrix = graph.adjacency_matrix;
-    std::vector<int> used(adjacency_matrix.size()); // Вектор для ифнормации по вершинам графа.
+    std::vector<int> used(adjacency_matrix.size());  // Вектор для информации по вершинам графа.
     std::vector<int> path;
     for (int & i : used) i = 0;
     queue.push(0);
     while (!queue.empty())
     {
-        int now_point = queue.front(); // Получаем вершину.
+        int now_point = queue.front();  // Получаем вершину.
         queue.pop();
-        if (used[now_point] == 2) continue;
+        if (used[now_point] == 2) continue;  // Пропускаем фиксацию пути и обнаружение.
         if (path.empty()) std::cout << "Cтартовая точка: " << now_point + 1 << "\n";
         else std::cout << "Путь: " << path[path.size() - 1] << " --> " << now_point + 1 << "\n";
         std::cout << "Посетили вершину " << now_point + 1 << "\n";
-        used[now_point] = 2;
+        used[now_point] = 2;  // Помечаем вершину как посещенную.
         for (int j = 0; j < adjacency_matrix.size(); j++)
         {
             // Если вершина не посещена, то выполняем обнаружение.
@@ -1609,13 +1611,66 @@ void BFS(const Graph& graph) {
                 path.push_back(now_point + 1);
             }
         }
-        std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"; // выводим номер вершины
+        std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";  // Выводим номер вершины
     }
     std::cout << "Обход в ширину завершён!\n";
     std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
 }
 
-bool IsOriented(std::vector<std::vector<int>> matrix) {
+void BFSSearchRecursion(Graph const &graph, queue<int> &queue, vector<bool> &used)
+{
+    // Если очередь пуста - выходим.
+    if (queue.empty()) return;
+    // Получаем вершину из очереди.
+    int32_t vertex = queue.front();
+    // Удаляем.
+    queue.pop();
+    cout << "Посетили вершину " << vertex+1 << "!\n";
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+    // Проходимся по всем смежным с данной вершиной.
+    for (int i: graph.adjacency_list[vertex])
+    {
+        // Если мы еще не использовали вершину.
+        if (!used[i-1])
+        {
+            // Помечаем ее как посещенную и добавляем назад очереди.
+            used[i-1] = true;
+            queue.push(i-1);
+        }
+    }
+    // Вызываем еще раз.
+    BFSSearchRecursion(graph, queue, used);
+}
+
+void BFSRecursion(const Graph& graph) {
+    if (!graph.is_exist) {
+        std::cerr << "Граф не существует. Воспользуйтесь вводом!\n";
+        return;
+    }
+    std::cout << "─────────────────────────────────────────────\n";
+    std::cout << "Приступаем к обходу графа в ширину рекурсивно!\n";
+    std::cout << "─────────────────────────────────────────────\n";
+    std::cout << "˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅˅\n";
+    std::vector<bool> used(graph.adjacency_matrix.size());
+    queue<int> queue;
+    for (_Bit_reference i : used) i = false;
+    // Запускаем рекурсивный проход по вершинам.
+    for (int i = 0; i < graph.p; i++)
+    {
+        // Для каждой вершины помечаем ее как найденную и добавляем в конец очереди, вызывая
+        // функцию поиска.
+        if (!used[i])
+        {
+            used[i] = true;
+            queue.push(i);
+            BFSSearchRecursion(graph, queue, used);
+        }
+    }
+    std::cout << "Обход в глубину рекурсивным методом завершён!\n";
+    std::cout << "˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄˄\n\n";
+}
+
+bool IsOriented(vector<vector<int>> matrix) {
     // Если окажется, что одно из ребер не введет из одной вершину в другую и обратно, то граф
     // ориентированный.
     for (std::size_t i = 0; i < matrix.size(); ++i) {
@@ -1628,8 +1683,8 @@ bool IsOriented(std::vector<std::vector<int>> matrix) {
     return false;
 }
 
-bool IsMulti(const std::vector<std::vector<int>> &matrix) {
-    // Если окажется, что хоть одино ребро не одно или из одной врешщины в другую введет два
+bool IsMulti(const vector<vector<int>> &matrix) {
+    // Если окажется, что хоть одно ребро не одно или из одной вершины в другую введет два
     // ребра, мы говорим, что это мультиграф.
     for (auto & i : matrix) {
         for (int j : i) {
@@ -1641,9 +1696,9 @@ bool IsMulti(const std::vector<std::vector<int>> &matrix) {
     return false;
 }
 
-bool IsPseudo(const std::vector<std::vector<int>>& matrix, bool oriented) {
+bool IsPseudo(const vector<vector<int>>& matrix, bool oriented) {
     // Если граф неориентированный, то он не псевдограф, однако если граф ориентированный и хоть
-    // одина дуга повторятеся, это псевдограф.
+    // одна дуга повторятся, это псевдограф.
     if (!oriented) return false;
     for (auto & i : matrix) {
         for (int j : i) {
@@ -1655,7 +1710,7 @@ bool IsPseudo(const std::vector<std::vector<int>>& matrix, bool oriented) {
     return false;
 }
 
-int CountLoops(std::vector<std::vector<int>> matrix) {
+int CountLoops(vector<vector<int>> matrix) {
     // Считаем петли проходясь по ребрам, которые ведут из вершины в сами себя.
     int count = 0;
     for (std::size_t i = 0; i < matrix.size(); ++i) {
@@ -1671,7 +1726,7 @@ int CountLoops(std::vector<std::vector<int>> matrix) {
 }
 
 int CountArcs(const std::vector<std::vector<int>>& matrix) {
-    // Считаем дуги с помощью подсчета одностороних путей из одной вершины в другу не без вершин
+    // Считаем дуги с помощью подсчета односторонних путей из одной вершины в другую не без вершин
     // посредников.
     int count = 0;
     for (auto & i : matrix) {
@@ -1745,9 +1800,9 @@ vector<vector<int>> GetVertexDegrees(vector<vector<int>> matrix, bool with_loops
 
 vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& adjacency_list) {
     std::vector<std::vector<int>> incidence;
-    // Обявляем переменную множетво, чтобы фииксировать.
+    // Объявляем переменную множество, чтобы фиксировать.
     std::set<std::pair<int, int>> rejected;
-    // Без повторений фиксируем смежность вершин в матрице инцинденций.
+    // Без повторений фиксируем смежность вершин в матрице инцидентности.
     for (std::size_t  i = 0; i < adjacency_list.size(); ++i) {
         for (std::size_t  j = 0; j < adjacency_list[i].size(); ++j) {
             if (!rejected.contains({i, adjacency_list[i][j]-1})) {
@@ -1782,7 +1837,7 @@ vector<vector<int>> ParseInIncidenceMatrix(const vector<vector<int>>& adjacency_
     return new_matrix;
 }
 
-std::vector<std::vector<int>> ParseInAdjacencyList(const std::vector<std::vector<int>>& matrix) {
+std::vector<std::vector<int>> ParseInAdjacencyList(const vector<vector<int>>& matrix) {
     // Фиксируем в виде векторов смежные вершины, проходясь по матрице по строкам.
     std::vector<std::vector<int>> adjacency_list(matrix.size());
     for (std::size_t i = 0; i < matrix.size(); ++i) {
@@ -1820,7 +1875,7 @@ vector<vector<int>> ParseInRibsList(const vector<vector<int>>& matrix, int32_t a
     return ribs_list;
 }
 
-std::vector<int> ParseInFO(const std::vector<std::vector<int>>& matrix, bool oriented) {
+std::vector<int> ParseInFO(const vector<vector<int>>& matrix, bool oriented) {
     // Фиксируем в виде одномерного вектора вершины, смежные с текущей вершиной, деля их 0.
     std::vector<int> fo;
     // Выставляем количество вершин.
@@ -1841,7 +1896,7 @@ std::vector<int> ParseInFO(const std::vector<std::vector<int>>& matrix, bool ori
     return fo;
 }
 
-std::vector<int> ParseInFI(const std::vector<std::vector<int>>& matrix, bool oriented) {
+std::vector<int> ParseInFI(const vector<vector<int>>& matrix, bool oriented) {
     // Фиксируем в виде одномерного вектора вершины, входящие в текущую вершину, деля их
     // 0-разделителем.
     std::vector<int> fi;
@@ -1852,7 +1907,7 @@ std::vector<int> ParseInFI(const std::vector<std::vector<int>>& matrix, bool ori
     std::vector<std::vector<int>> new_matrix(matrix.size());
     for (std::size_t i = 0; i < matrix.size(); i++) for (auto & j : matrix) new_matrix[i]
                     .push_back(j[i]);
-    // Выставляем колличество вершин.
+    // Выставляем количество вершин.
     fi.push_back(static_cast<int>(new_matrix.size()));
     for (std::size_t i = 0; i < new_matrix.size(); ++i) {
         for (std::size_t j = 0; j < new_matrix.size(); ++j) {
@@ -1903,7 +1958,7 @@ pair<vector<int>, vector<int>> ParseInMFI(const vector<vector<int>>& matrix, boo
     }
     std::vector<int> me(0);
     std::vector<int> mv(0);
-    // Трансопнируем входную матрицу смежности.
+    // Транспонируем входную матрицу смежности.
     std::vector<std::vector<int>> new_matrix(matrix.size());
     for (std::size_t i = 0; i < matrix.size(); i++) for (auto & j : matrix) new_matrix[i]
                     .push_back(j[i]);
@@ -1925,7 +1980,7 @@ pair<vector<int>, vector<int>> ParseInMFI(const vector<vector<int>>& matrix, boo
     return {me, mv};
 }
 
-std::vector<int> ParseInBFO(const std::vector<std::vector<int>>& matrix, bool oriented) {
+std::vector<int> ParseInBFO(const vector<vector<int>>& matrix, bool oriented) {
     // Фиксируем в виде одномерного вектора вершины, смежные с текущей вершиной, но с номером не
     // ниже текущей вершины, деля их 0.
     if (oriented) {
@@ -1980,7 +2035,7 @@ pair<vector<int>, vector<int>> ParseInBMFO(const vector<vector<int>>& matrix, bo
 }
 
 std::string GetStringMatrixRepresentation(const Graph &graph) {
-    // В зависимости от типа хранения возфращаем представление информации о графе в качестве строки.
+    // В зависимости от типа хранения возвращаем представление информации о графе в качестве строки.
     std::string output;
     if (graph.type == "Матрица смежности") {
         output = GetStringAdjacencyMatrix(graph);
@@ -2201,7 +2256,7 @@ int32_t GetChoice() {
     bool valid_choice = false;
     int32_t ans = 0;
     std::string line;
-    std::cout << "Выбретите опцию, отправив число от 1 до 10.\n";
+    std::cout << "Выберете опцию, отправив число от 1 до 10.\n";
     // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
@@ -2228,7 +2283,7 @@ int32_t GetChoiceVarious(int32_t upper_bound) {
     bool valid_choice = false;
     int32_t ans = 0;
     std::string line;
-    std::cout << "Выбретите опцию, отправив число от 1 до " << upper_bound << ".\n";
+    std::cout << "Выберете опцию, отправив число от 1 до " << upper_bound << ".\n";
     // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
@@ -2250,11 +2305,11 @@ int32_t GetChoiceVarious(int32_t upper_bound) {
     return ans;
 }
 
-int32_t GetChoiceVarious(int32_t upper_bound, const std::string& info) {
+int32_t GetChoiceVarious(int32_t upper_bound, const string& info) {
     bool valid_choice = false;
     int32_t ans = 0;
     std::string line;
-    std::cout << "Выбретите " << info << ", отправив число от 1 до "<< upper_bound << ".\n";
+    std::cout << "Выберете " << info << ", отправив число от 1 до "<< upper_bound << ".\n";
     // Пока не будет введено подходящее число, продолжаем получать строки от пользователя.
     do {
         try {
@@ -2293,20 +2348,20 @@ int32_t ParseNum(const std::string& string) {
     return ans;
 }
 
-std::ifstream::pos_type GetFileSize(const std::string& filename)
+std::ifstream::pos_type GetFileSize(const string& filename)
 {
-    // Получаем длину файла в байтах, в симолах стандартной кодировки.
+    // Получаем длину файла в байтах, в символах стандартной кодировки.
     std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
     return in.tellg();
 }
 
-std::string ReadFileIntoString(const std::string& path) {
+std::string ReadFileIntoString(const string& path) {
     std::ifstream input_file(path);
     try {
         int size = 0;
         // Получаем размер файла
         size = static_cast<int>(GetFileSize(path));
-        // Провреяем размер файла.
+        // Проверяем размер файла.
         if (size > 30000) {
             std::cerr << "Отмена чтения. Файл весит больше 30 КБ!\n";
             return "";
@@ -2343,7 +2398,7 @@ std::vector<int> GetMatrixLine(int32_t size_of_matrix) {
             if (string_data.size() != size_of_matrix) {
                 std::cout << "Размер не подходит!\n";
             } else {
-                // Проверяем введеную строку на валидность.
+                // Проверяем введенную строку на валидность.
                 if (IsValidForMatrix(string_data, final)) {
                     std::cout << "Успешно получена строка матрицы!\n";
                     return final;
@@ -2359,7 +2414,7 @@ std::vector<int> GetMatrixLine(int32_t size_of_matrix) {
     return final;
 }
 
-std::vector<std::string> Split(const std::string& str, char delim) {
+std::vector<std::string> Split(const string& str, char delim) {
     std::vector<std::string> ans;
     try {
         std::stringstream str_stream(str);
@@ -2378,7 +2433,7 @@ std::vector<std::string> Split(const std::string& str, char delim) {
     return ans;
 }
 
-std::vector<std::string> SplitSegment(const std::string& sentence) {
+std::vector<std::string> SplitSegment(const string& sentence) {
     std::vector<std::string> ans;
     try {
         std::stringstream str_stream(sentence);
@@ -2413,7 +2468,7 @@ bool IsValidString(const std::string& str) {
     return ans;
 }
 
-bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans){
+bool IsValidForMatrix(const vector<string>& line, vector<int>& ans){
     for (auto & i : line) {
         // Проверяем, является ли строка подходящей для представления.
         if (!IsValidString(i)) {
@@ -2427,7 +2482,7 @@ bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& an
     return true;
 }
 
-bool IsValidString(const std::string& str, int32_t lower_bound, int32_t upper_bound) {
+bool IsValidString(const string& str, int32_t lower_bound, int32_t upper_bound) {
     int32_t ans = 0;
     try {
         // Пытаемся преобразовать строку к числу.
@@ -2447,7 +2502,7 @@ bool IsValidString(const std::string& str, int32_t lower_bound, int32_t upper_bo
     return ans;
 }
 
-int32_t ParseNum(const std::string& str, int32_t lower_bound, int32_t upper_bound) {
+int32_t ParseNum(const string& str, int32_t lower_bound, int32_t upper_bound) {
     int32_t ans = 0;
     try {
         // Производим попытку преобразовать строку к числу.
@@ -2480,7 +2535,7 @@ bool IsValidForMatrix(const vector<string>& line, vector<int>& ans, int32_t lowe
 }
 
 std::vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound,
-                                      int32_t upper_bound, const std::string& comment) {
+                                      int32_t upper_bound, const string& comment) {
     std::string line;
     bool flag = false;
     std::vector<int> final;
@@ -2525,7 +2580,7 @@ int Find(std::vector<int> &vector, int item) {
     return -1;
 }
 
-std::vector<std::vector<int>> ParseFromAdjacencyList(std::vector<std::vector<int>> adjacency_list,
+std::vector<std::vector<int>> ParseFromAdjacencyList(vector<vector<int>> adjacency_list,
                                                      int32_t vertices) {
     // Проходимся по всем элементам списка смежности, заполняя по их индексу и самому значению
     // матрицу смежности. При этом фиксируем несуществующие вершины, игнорируя их.
@@ -2535,12 +2590,13 @@ std::vector<std::vector<int>> ParseFromAdjacencyList(std::vector<std::vector<int
     for (int i = 0; i < vertices; ++i) {
         for (int j = 0; j < vertices; ++j) {
             if (j < adjacency_list[i].size()) {
-                //
+                // Если номер вершины больше чем их заявленное количество - предупреждаем.
                 if (adjacency_list[i][j] > vertices) {
                     std::cout << "Предупреждение: обнаружена вершина " << adjacency_list[i][j] <<
                          " в списке, которая не покрыта"
                          " количеством вершин, она проигнорирована!\n";
                 } else {
+                    // Иначе добавляем в матрицу.
                     adjacency_matrix[i][adjacency_list[i][j]-1] = 1;
                 }
             } else {
@@ -2550,13 +2606,13 @@ std::vector<std::vector<int>> ParseFromAdjacencyList(std::vector<std::vector<int
     return adjacency_matrix;
 }
 
-std::vector<std::vector<int>> ParseFromIncidenceMatrix(vector<vector<int>> incidence_matrix,
-                                                       int32_t vertices) {
+vector<vector<int>> ParseFromIncidenceMatrix(vector<vector<int>> incidence_matrix,
+                                             int32_t vertices) {
     std::vector<std::vector<int>> adjacency_matrix(vertices);
     std::vector<int> empty_vector(vertices);
     for (auto & i : adjacency_matrix) i = empty_vector;
     std::vector<std::vector<int>> matrix(incidence_matrix[0].size());
-    // Транспонируем матрицу инциндентости.
+    // Транспонируем матрицу инцидентности.
     for (std::size_t i = 0; i < incidence_matrix[0].size(); i++)
         for (auto & j : incidence_matrix) matrix[i].push_back(j[i]);
     // Построчно изучаем каждое ребро в матрице.
@@ -2568,24 +2624,26 @@ std::vector<std::vector<int>> ParseFromIncidenceMatrix(vector<vector<int>> incid
     return adjacency_matrix;
 }
 
-bool GetStringOfAdjacencyMatrixFromIncidence(vector<vector<int>> &adjacency_matrix, vector<int> &i) {
-    // Находим информацию об смежности вершин с помощью поиска по элементам вектора.
-    if  (find(i.begin(), i.end(), 1) != i.end()) {
-        if (count(i.begin(), i.end(), 1) == 2 && count(i.begin(), i.end(), -1) == 0) {
-            auto find_one = Find(i, 1);
-            i[find_one] = 0;
-            auto find_two = Find(i, 1);
+bool GetStringOfAdjacencyMatrixFromIncidence(vector<vector<int>> &adjacency_matrix, vector<int> &string) {
+    if  (find(string.begin(), string.end(), 1) != string.end()) {
+        if (count(string.begin(), string.end(), 1) == 2 &&
+        count(string.begin(), string.end(), -1) == 0) {
+            auto find_one = Find(string, 1);
+            string[find_one] = 0;
+            auto find_two = Find(string, 1);
             if (find_one != -1 && find_two != -1) {
+                // Если между двумя вершинами есть ребро ставим в два места матрицы смежности 1.
                 adjacency_matrix[find_one][find_two] = 1;
                 adjacency_matrix[find_two][find_one] = 1;
             } else {
                 std::cerr << "Неправильная конфигурация одного из ребер!\n";
                 return false;
             }
-        } else if ((count(i.begin(), i.end(), 1) == 1)) {
-            if  ((count(i.begin(), i.end(), -1) == 1)) {
-                auto find_one = Find(i, 1);
-                auto find_two = Find(i, -1);
+        } else if ((count(string.begin(), string.end(), 1) == 1)) {
+            if  ((count(string.begin(), string.end(), -1) == 1)) {
+                // Если между двумя вершинами есть дуга ставим в одно место матрицы смежности 1.
+                auto find_one = Find(string, 1);
+                auto find_two = Find(string, -1);
                 if (find_two != -1 && find_one != -1) adjacency_matrix[find_one][find_two] = 1;
                 else {
                     std::cerr << "Неправильная конфигурация одного из ребер!\n";
@@ -2612,9 +2670,12 @@ vector<vector<int>> ParseFromRibsList(vector<vector<int>> ribs_list, int32_t ver
     std::vector<std::vector<int>> adjacency_matrix(vertices);
     std::vector<int> empty_vector(vertices);
     for (auto & i : adjacency_matrix) i = empty_vector;
-
+    // Проходимся по всем ребрам из списка и используем их конечные и начальные точки как
+    // координаты для матрицы смежности.
     for (auto & i : ribs_list) {
         for (int j = 0; j < 1; ++j) {
+            // В случае если хоть одна из точек является вершиной, чей номер не может находиться в
+            // данном представлении - предупреждаем.
             if (i[j] > vertices) {
                 std::cout << "Предупреждение: обнаружена вершина " << i[j] <<
                      " в списке, которая не покрыта"
@@ -2628,11 +2689,11 @@ vector<vector<int>> ParseFromRibsList(vector<vector<int>> ribs_list, int32_t ver
             }
         }
     }
-
     return adjacency_matrix;
 }
 
 std::vector<std::vector<int>> ParseFromFO(std::vector<int> fo) {
+    // Производим первичную проверку правильности представления по количеству вершин.
     int counter = static_cast<int>(count(fo.begin(), fo.end(), 0));
     if (counter != fo[0]) {
         std::cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
@@ -2644,18 +2705,24 @@ std::vector<std::vector<int>> ParseFromFO(std::vector<int> fo) {
     std::vector<int> vertex;
     int count = 0;
     for (int i = 1; i < fo.size(); ++i) {
+        // Если встретили разделитель, начинаем поочередно заносить встреченные вершины в матрицу
+        // смежности.
         if (fo[i] == 0) {
             for (int j : vertex) {
+                // Проверим существование вершины с таким номером в этом представлении.
                 if (j >= counter) {
                     std::cerr << "Встречена вершина, которая не может находится в данном "
                                  "представлении!\n";
                     return {};
                 }
+                // По координатам из FO добавляем в матрицу смежности обозначение смежности двух
+                // точек.
                 adjacency_matrix[count][j] = 1;
             }
             ++count;
             vertex= {};
         } else {
+            // Пока нет разделителя в виде нуля мы добавляем информацию о вершинах в вектор.
             vertex.push_back(fo[i]-1);
         }
     }
@@ -2663,6 +2730,7 @@ std::vector<std::vector<int>> ParseFromFO(std::vector<int> fo) {
 }
 
 std::vector<std::vector<int>> ParseFromFI(std::vector<int> fi) {
+    // Производим первичную проверку правильности представления по количеству вершин.
     int counter = static_cast<int>(count(fi.begin(), fi.end(), 0));
     if (counter != fi[0]) {
         std::cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
@@ -2674,21 +2742,28 @@ std::vector<std::vector<int>> ParseFromFI(std::vector<int> fi) {
     std::vector<int> vertex;
     int count = 0;
     for (int i = 1; i < fi.size(); ++i) {
+        // Если встретили разделитель, начинаем поочередно заносить встреченные вершины в матрицу
+        // смежности.
         if (fi[i] == 0) {
             for (int j : vertex) {
+                // Проверим существование вершина с таким номером в этом представлении.
                 if (j >= counter) {
                     std::cerr << "Встречена вершина, которая не может находится в "
                                  "данном представлении!\n";
                     return {};
                 }
+                // По координатам из FI добавляем в матрицу смежности обозначение смежности двух
+                // точек.
                 adjacency_matrix[count][j] = 1;
             }
             ++count;
             vertex= {};
         } else {
+            // Пока нет разделителя в виде нуля мы добавляем информацию о вершинах в вектор.
             vertex.push_back(fi[i]-1);
         }
     }
+    // Транспонируем полученную матрицу, чтобы представить ее в верно для FI представления форме.
     std::vector<std::vector<int>> matrix(adjacency_matrix.size());
     for (std::size_t i = 0; i < adjacency_matrix.size(); i++)
         for (auto & j : adjacency_matrix) matrix[i].push_back(j[i]);
@@ -2697,39 +2772,39 @@ std::vector<std::vector<int>> ParseFromFI(std::vector<int> fi) {
 
 vector<vector<int>> ParseFromMFO(const vector<int>& mv, vector<int> me, int32_t vertices) {
     std::vector<std::vector<int>> adjacency_matrix(vertices);
-    for (auto & i : adjacency_matrix) i = vector<int>(vertices);
+    for (auto & i : adjacency_matrix) i = vector<int>(vertices);  // Делаем проверку размерности.
     if  (mv.size() != vertices) {
         std::cerr << "Размерность MV должна совпадать с количеством вершин.\n";
         return {};
     }
-    int now_position = 0;
+    int now_position = 0;  // Индекс начала считывания вектора ME.
     int count = 0;
     std::vector<int> vertex;
     for (int i : mv) {
-        if  (i == 0) {
+        if  (i == 0) {  // Если индекс разделителя равен нулю, пропускаем.
             count += 1;
             continue;
         }
         if  (i == 0) continue;
         for (int j = now_position; j < me.size(); ++j) {
-            if (i > me.size()) {
-                std::cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+            if (i > me.size()) {  // Проверяем каждый указатель из MV на валидность.
+                std::cerr << "MV массив указывает на несуществующий объект в ME.\n";
                 return {};
             }
-            if (i == j+1) {
+            if (i == j+1) {  // Если мы дошли до индекса разделения, заносим все в матрицу.
                 vertex.push_back(me[j]);
                 for (int k : vertex) {
-                    if (k > vertices) {
+                    if (k > vertices) {  // Следим за номерами вершин, чтобы они могли быть.
                         cerr << "Обнаружена вершина, которая не может быть в таком представлении\n";
                         return {};
                     }
                     adjacency_matrix[count][k-1] = 1;
                 }
-                now_position = j+1;
+                now_position = j+1;  // Устанавливаем новый индекс начала.
                 count += 1;
                 vertex = {};
                 break;
-            } else {
+            } else {  // Иначе заносим в список.
                 vertex.push_back(me[j]);
             }
         }
@@ -2740,37 +2815,37 @@ vector<vector<int>> ParseFromMFO(const vector<int>& mv, vector<int> me, int32_t 
 vector<vector<int>> ParseFromMFI(const vector<int>& mv, vector<int> me, int32_t vertices) {
     std::vector<std::vector<int>> adjacency_matrix(vertices);
     for (auto & i : adjacency_matrix) i = vector<int>(vertices);
-    if  (mv.size() != vertices) {
+    if  (mv.size() != vertices) {  // Делаем проверку размерности.
         cerr << "Размерность MV должна совпадать с количеством вершин.\n";
         return {};
     }
-    int now_position = 0;
+    int now_position = 0;  // Индекс начала считывания вектора ME.
     int count = 0;
     std::vector<int> vertex;
-    for (int i : mv) {
-        if  (i == 0) {
+    for (int i : mv) {  // Если мы дошли до индекса разделения, заносим все в матрицу.
+        if  (i == 0) {  // Если индекс разделителя равен нулю, пропускаем.
             count += 1;
             continue;
         }
         for (int j = now_position; j < me.size(); ++j) {
-            if (i > me.size()) {
-                std::cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+            if (i > me.size()) {  // Проверяем каждый указатель из MV на валидность.
+                std::cerr << "MV массив указывает на несуществующий объект в ME.\n";
                 return {};
             }
             if (i == j+1) {
                 vertex.push_back(me[j]);
-                for (int k : vertex) {
+                for (int k : vertex) {  // Следим за номерами вершин, чтобы они могли быть.
                     if (k > vertices) {
                         cerr << "Обнаружена вершина, которая не может быть в таком представлении\n";
                         return {};
                     }
                     adjacency_matrix[count][k-1] = 1;
                 }
-                now_position = j+1;
+                now_position = j+1;  // Устанавливаем новый индекс начала.
                 count += 1;
                 vertex = {};
                 break;
-            } else
+            } else  // Иначе заносим в список.
                 vertex.push_back(me[j]);
         }
     }
@@ -2783,39 +2858,39 @@ vector<vector<int>> ParseFromMFI(const vector<int>& mv, vector<int> me, int32_t 
 vector<vector<int>> ParseFromBMFO(const vector<int>& mv, vector<int> me, int32_t vertices) {
     std::vector<std::vector<int>> adjacency_matrix(vertices);
     for (auto & i : adjacency_matrix) i = vector<int>(vertices);
-    if  (mv.size() != vertices) {
+    if  (mv.size() != vertices) {  // Делаем проверку размерности.
         cerr << "Размерность MV должна совпадать с количеством вершин.\n";
         return {};
     }
-    int now_position = 0;
+    int now_position = 0;  // Индекс начала считывания вектора ME.
     int count = 0;
     std::vector<int> vertex;
     for (int i : mv) {
-        if  (i == 0) {
+        if  (i == 0) {  // Если индекс разделителя равен нулю, пропускаем.
             count += 1;
             continue;
         }
         if  (i == 0) continue;
         for (int j = now_position; j < me.size(); ++j) {
-            if (i > me.size()) {
-                std::cerr << "MV массив указывает на несуществующий обьект в ME.\n";
+            if (i > me.size()) {  // Проверяем каждый указатель из MV на валидность.
+                std::cerr << "MV массив указывает на несуществующий объект в ME.\n";
                 return {};
             }
-            if (i == j+1) {
+            if (i == j+1) {  // Если мы дошли до индекса разделения, заносим все в матрицу.
                 vertex.push_back(me[j]);
                 for (int k : vertex) {
-                    if (k > vertices) {
+                    if (k > vertices) {  // Следим за номерами вершин, чтобы они могли быть.
                         cerr << "Обнаружена вершина, которая не может быть в таком представлении\n";
                         return {};
                     }
                     adjacency_matrix[count][k-1] = 1;
                     adjacency_matrix[k-1][count] = 1;
                 }
-                now_position = j+1;
+                now_position = j+1;  // Устанавливаем новый индекс начала.
                 count += 1;
                 vertex = {};
                 break;
-            } else
+            } else  // Иначе заносим в список.
                 vertex.push_back(me[j]);
         }
     }
@@ -2823,6 +2898,7 @@ vector<vector<int>> ParseFromBMFO(const vector<int>& mv, vector<int> me, int32_t
 }
 
 std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo) {
+    // Производим первичную проверку правильности представления по количеству вершин.
     int counter = static_cast<int>(count(fo.begin(), fo.end(), 0));
     if (counter != fo[0]) {
         std::cerr << "Количество вершин не совпадает с конфигурацией массива!\n";
@@ -2834,8 +2910,11 @@ std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo) {
     std::vector<int> vertex;
     int count = 0;
     for (int i = 1; i < fo.size(); ++i) {
+        // Если встретили разделитель, начинаем поочередно заносить встреченные вершины в матрицу
+        // смежности.
         if (fo[i] == 0) {
             for (int j : vertex) {
+                // Проверим существование вершины с таким номером в этом представлении.
                 if (j >= counter) {
                     std::cerr << "Встречена вершина, которая не может находится"
                             " в данном представлении!\n";
@@ -2847,6 +2926,8 @@ std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo) {
             ++count;
             vertex= {};
         } else {
+            // По координатам из BFO добавляем в матрицу смежности обозначение смежности двух
+            // точек.
             vertex.push_back(fo[i]-1);
         }
     }

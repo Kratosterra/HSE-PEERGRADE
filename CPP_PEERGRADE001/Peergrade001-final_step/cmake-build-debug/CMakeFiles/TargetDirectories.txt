@@ -1,3 +1,0 @@
-C:/Users/Егор Шарапов/CLionProjects/Peergrade001/cmake-build-debug/CMakeFiles/Peergrade001.dir
-C:/Users/Егор Шарапов/CLionProjects/Peergrade001/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Егор Шарапов/CLionProjects/Peergrade001/cmake-build-debug/CMakeFiles/rebuild_cache.dir

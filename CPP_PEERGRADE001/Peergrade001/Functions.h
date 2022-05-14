@@ -11,6 +11,9 @@
 #include <Windows.h>
 
 
+#ifndef PEERGRADE001_FUNCTIONS_H
+#define PEERGRADE001_FUNCTIONS_H
+
 /**
  *  @brief  Структура представления графа.
 */
@@ -43,12 +46,25 @@ void ShowMainMenu();
 void ShowNowGraphInfo(const Graph& graph);
 
 /**
- *  @brief  Функция, которая получает выбор пользователя.
- *  @return  Возвращает значение в пределах от 1 до 9 включительно.
+ *  @brief  Функция, выводящая на экран основную информацию о графе.
+ *  @param  graph  Текущий граф.
 */
 
-int32_t GetChoice();
+void PrintGraphMainInfo(const Graph &graph);
 
+/**
+ *  @brief  Функция, выводящая на экран статистику по степеням/полустепеням вершин графа.
+ *  @param  graph  Текущий граф.
+*/
+
+void PrintMatrixRepresentation(const Graph &graph);
+
+/**
+ *  @brief  Функция, выводящая на экран статистику по степеням/полустепеням вершин графа.
+ *  @param  graph  Текущий граф.
+*/
+
+void PrintVertexDegrees(const Graph &graph);
 
 /**
  *  @brief  Функция, которая запускает выполнение действий с графом.
@@ -66,6 +82,222 @@ void DoGraphWork(int32_t now_choice, Graph& graph);
 void GetNewGraph(Graph& graph);
 
 /**
+ *  @brief  Функция, получающая граф из файла ввода.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFileGraphInput(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BMFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBMFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая попытку получения BMFO представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего представления в файле.
+ *  @param  bmfo_me  ME-вектор.
+ *  @param  bmfo_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetInfoBMFOFromFile(int32_t number_of_colums, std::vector<int> &bmfo_me, std::vector<int>
+        &bmfo_mv);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFI из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFIFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая попытку получения MFI представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего представления в файле.
+ *  @param  mfi_me  ME-вектор.
+ *  @param  mfi_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetMFIFromFile(int32_t number_of_colums, std::vector<int> &mfi_me, std::vector<int> &mfi_mv);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая попытку получения MFO представления от пользователя.
+ *  @param  number_of_colums  Количество строк для текущего представления в файле.
+ *  @param  mfo_me  ME-вектор.
+ *  @param  mfo_mv  MV-вектор.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool TryGetMFOFromFile(int32_t number_of_colums, std::vector<int> &mfo_me, std::vector<int> &mfo_mv);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FI из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFIFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FO из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFOFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка ребер из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetRibsListFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка смежности из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyListFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы инцидентности из файла.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetIncidenceMatrixFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetConsoleGraphInput(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении BMFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetBMFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFI из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFIFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении MFO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetMFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FI из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFIFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в представлении FO из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetFOFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка ребер из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetRibsListFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде списка смежности из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyListFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы инцидентности из консольного ввода
+ *  пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetIncidenceMatrixFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая граф в виде матрицы смежности из консольного ввода пользователя.
+ *  @param  graph  Текущий граф.
+*/
+
+void GetAdjacencyMatrixFromConsole(Graph &graph);
+
+/**
+ *  @brief  Функция, получающая матрицу смежности из файла.
+ *  @param  graph Текущий граф.
+*/
+
+void GetAdjacencyMatrixFromFile(Graph &graph);
+
+/**
+ *  @brief  Функция, устанавливающая матрицу смежности для графа полученного из файла.
+ *  @param  graph  Текущий граф.
+ *  @param  adjacency_matrix  Матрица смежности графа.
+ *  @param  type  Тип графа.
+*/
+
+void CheckAndSetFileData(Graph &graph, int32_t size_of_matrix,
+                         const std::vector<std::vector<int>> &adjacency_matrix, std::string type);
+
+/**
+ *  @brief  Функция, считывающая информацию из файла, делящая его на строки.
+ *  @return Вектор строк из файла.
+*/
+
+std::vector<std::string> ReadAllLinesInFile();
+
+/**
+ *  @brief  Функция, устанавливающая матрицу смежности для графа.
+ *  @param  graph  Текущий граф.
+ *  @param  adjacency_matrix  Матрица смежности графа.
+ *  @param  type  Тип графа.
+*/
+
+void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjacency_matrix,
+                        std::string type);
+
+/**
  *  @brief  Функция, которая выводит граф.
  *  @param  graph  Текущий граф.
 */
@@ -78,6 +310,41 @@ void OutputGraph(const Graph& graph);
 */
 
 void ChangeTypeOfGraph(Graph& graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для ориентированных графов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для неориентированных графов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForNotOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для мультиграфов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForMulti(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для неориентированных псевдографов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph);
+
+/**
+ *  @brief  Функция, производящая смену представления для ориентированных псевдографов.
+ *  @param  graph  Текущий граф.
+*/
+
+void ChangeTypeOfGraphForPseudoOriented(Graph &graph);
 
 /**
  *  @brief  Функция, которая считает степени/полустепени вершин графа.
@@ -101,23 +368,23 @@ void CountEdgesOfGraph(const Graph& graph);
 void DFSClassic(const Graph& graph);
 
 /**
+ *  @brief  Функция, производящая рекурсивный поиск в глубину с помощью вызова самой себя.
+ *  @param start Начальная вершина поиска.
+ *  @param end Конечная вершина поиска
+ *  @param matrix Матрица смежности графа.
+ *  @param used Использованные вершины.
+ *  @param path Путь прохождения по вершинам.
+*/
+
+void DFSSearchRecursion(int start, int end, const std::vector<std::vector<int>>& matrix,
+                        std::vector<int>& used, std::vector<int>& path);
+
+/**
  *  @brief  Функция, которая обходит граф в глубину рекурсивно.
  *  @param  graph  Текущий граф.
 */
 
 void DFSRecursion(const Graph& graph);
-
-/**
- *  @brief  Функция, проверяющая мультиграф ли граф.
- *  @param start Начальная вершина поиска.
- *  @param end Конечная вершина поиска
- *  @param matrix Матрица смежности графа.
- *  @param used Использованные вершины.
- *  @param path Путь прохождения по врешинам.
-*/
-
-void DFSSearchRecursion(int start, int end, const std::vector<std::vector<int>>& matrix,
-                        std::vector<int>& used, std::vector<int>& path);
 
 /**
  *  @brief  Функция, которая обходит граф в ширину.
@@ -127,7 +394,7 @@ void DFSSearchRecursion(int start, int end, const std::vector<std::vector<int>>&
 void BFS(const Graph& graph);
 
 /**
- *  @brief  Функция, проверяющая ориентированый ли граф.
+ *  @brief  Функция, проверяющая ориентированный ли граф.
  *  @param  matrix  Матрица смежности графа.
  *  @return  Boolean значение является ли граф ориентированным.
 */
@@ -170,15 +437,26 @@ int CountArcs(const std::vector<std::vector<int>>& matrix);
 /**
  *  @brief  Функция, считающая рёбра графа.
  *  @param  matrix  Матрица смежности графа.
- *  @return Количество ребёр графа.
+ *  @return Количество ребер графа.
 */
 
 int CountRibs(std::vector<std::vector<int>> matrix);
 
 /**
- *  @brief  Функция, превращающая список смежности в матрицу инсидентности.
+ *  @brief  Функция, возвращающая векторы с информацией о степях или полустепенях графа.
+ *  @param  matrix Матрица смежности графа.
+ *  @param with_loops C петлями ли граф.
+ *  @param oriented Ориентированный ли граф.
+ *  @return Список вершин со степенями.
+*/
+
+std::vector<std::vector<int>> GetVertexDegrees(std::vector<std::vector<int>> matrix,
+                                               bool with_loops, bool oriented);
+
+/**
+ *  @brief  Функция, превращающая список смежности в матрицу инцидентности.
  *  @param  adjacency_list  Список смежности графа.
- *  @return Mатрицу инcидентности.
+ *  @return Mатрицу инцидентности.
 */
 
 std::vector<std::vector<int>> ParseInIncidenceMatrix(
@@ -195,12 +473,13 @@ std::vector<std::vector<int>> ParseInAdjacencyList(const std::vector<std::vector
 /**
  *  @brief  Функция, превращающая матрицу смежности в список ребер.
  *  @param  matrix Матрица смежности графа.
- *  @param  arcs  Количество дуг вграф.
+ *  @param  arcs  Количество дуг в графе.
  *  @return Список ребер.
 */
 
 std::vector<std::vector<int>> ParseInRibsList(const std::vector<std::vector<int>>& matrix,
                                               int arcs);
+
 /**
  *  @brief  Функция, превращающая матрицу смежности в FO представление.
  *  @param  matrix Матрица смежности графа.
@@ -228,6 +507,7 @@ std::vector<int> ParseInFI(const std::vector<std::vector<int>>& matrix, bool ori
 
 std::pair<std::vector<int>, std::vector<int>> ParseInMFO(const std::vector<std::vector<int>>& matrix,
                                                          bool oriented);
+
 /**
  *  @brief  Функция, превращающая матрицу смежности в MFI представление.
  *  @param  matrix Матрица смежности графа.
@@ -237,6 +517,7 @@ std::pair<std::vector<int>, std::vector<int>> ParseInMFO(const std::vector<std::
 
 std::pair<std::vector<int>, std::vector<int>> ParseInMFI(const std::vector<std::vector<int>>& matrix,
                                                          bool oriented);
+
 /**
  *  @brief  Функция, превращающая матрицу смежности в BFO представление.
  *  @param  matrix Матрица смежности графа.
@@ -257,32 +538,99 @@ std::pair<std::vector<int>, std::vector<int>> ParseInBMFO(const std::vector<std:
                                                           bool oriented);
 
 /**
- *  @brief  Функция, возвращающая векторы с информацией о степянх или полустепенях графа.
- *  @param  matrix Матрица смежности графа.
- *  @param with_loops C петлями ли граф.
- *  @param oriented Ориентированный ли граф.
- *  @return Список вершин со степенями.
+ *  @brief  Функция, возвращающая строковое представление графа в текущем типе хранения.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление графа.
 */
 
-std::vector<std::vector<int>> GetVertexDegrees(std::vector<std::vector<int>> matrix,
-                                               bool with_loops, bool oriented);
+std::string GetStringMatrixRepresentation(const Graph &graph);
 
 /**
- *  @brief  Функция, получаяющая строку с информацией о графе.
- *  @param  size_of_matrix Размер строки.
- *  @return Вектор с числами.
+ *  @brief  Функция, возвращающая строковое представление графа в типе BMFO.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе MFI.
 */
 
-std::vector<int> GetMatrixLine(int32_t size_of_matrix);
+std::string GetStringBMFO(const Graph &graph);
 
 /**
- *  @brief  Функция, делящая строку по разделителю.
- *  @param  str Строка.
- *  @param  delim Разделитель.
- *  @return Вектор подстрок на которые была поделена строка.
+ *  @brief  Функция, возвращающая строковое представление графа в типе BFO.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе BFO.
 */
 
-std::vector<std::string> Split(const std::string& str, char delim);
+std::string GetStringBFO(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в типе MFI.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе MFI.
+*/
+
+std::string GetStringMFI(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в типе MFO.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе MFO.
+*/
+
+std::string GetStringMFO(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в типе FI.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе FI.
+*/
+
+std::string GetStringFI(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в типе FO.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы в типе FO.
+*/
+
+std::string GetStringFO(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в виде cписка ребер.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы cписка ребер.
+*/
+
+std::string GetStringRibsList(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в виде cписка смежности.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы cписка смежности.
+*/
+
+std::string GetStringAdjacencyList(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в виде матрицы инцидентности.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы инцидентности графа.
+*/
+
+std::string GetStringIncidenceMatrix(const Graph &graph);
+
+/**
+ *  @brief  Функция, возвращающая строковое представление графа в виде матрицы смежности.
+ *  @param  graph  Текущий граф.
+ *  @return Строка-представление матрицы смежности графа.
+*/
+
+std::string GetStringAdjacencyMatrix(const Graph &graph);
+
+/**
+ *  @brief  Функция, которая получает выбор пользователя.
+ *  @return  Возвращает значение в пределах от 1 до 10 включительно.
+*/
+
+int32_t GetChoice();
 
 /**
  *  @brief  Функция, получающая ограниченный ввод от пользователя в виде числа.
@@ -295,11 +643,19 @@ int32_t GetChoiceVarious(int32_t upper_bound);
 /**
  *  @brief  Функция, получающая ограниченный ввод от пользователя в виде числа.
  *  @param  upper_bound Верхняя граница числа.
- *  @param info Дополнительная инофрмация для подсказок пользователю.
+ *  @param info Дополнительная информация для подсказок пользователю.
  *  @return Число, которое ввел пользователь.
 */
 
 int32_t GetChoiceVarious(int32_t upper_bound, const std::string& info);
+
+/**
+ *  @brief  Функция, получающая число из строки.
+ *  @param  string  Строка с числом.
+ *  @return Число из строки.
+*/
+
+int32_t ParseNum(const std::string& string);
 
 /**
  *  @brief  Функция, получающая размер файла.
@@ -318,150 +674,21 @@ std::ifstream::pos_type GetFileSize(const std::string& filename);
 std::string ReadFileIntoString(const std::string& path);
 
 /**
- *  @brief  Функция, проверяющая валиден ли набор строк как информация для построеня представления
- *  Также заполняет вектор чисел для одной строки представления.
- *  @param  line  Набор строк.
- *  @param  ans  Изменяемый вектор чисел с инормацией для одной строки представления.
- *  @return Boolean значение является ли данный набор строк подходящим для построения представления.
+ *  @brief  Функция, получающая строку с информацией о графе.
+ *  @param  size_of_matrix Размер строки.
+ *  @return Вектор с числами.
 */
 
-bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans);
+std::vector<int> GetMatrixLine(int32_t size_of_matrix);
 
 /**
- *  @brief  Функция, проверяющая валидена ли строка как представление числа.
- *  @param  str  Строка.
- *  @return Boolean значение является ли данная строка подходящей для построения представления.
+ *  @brief  Функция, делящая строку по разделителю.
+ *  @param  str Строка.
+ *  @param  delim Разделитель.
+ *  @return Вектор подстрок на которые была поделена строка.
 */
 
-bool IsValidString(const std::string& str);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в текущем типе хранения.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление графа.
-*/
-
-std::string GetStringMatrixRepresentation(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в виде матрицы смежности.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы смежности графа.
-*/
-
-std::string GetStringAdjacencyMatrix(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в виде матрицы инсидентности.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы инсидентности графа.
-*/
-
-std::string GetStringIncidenceMatrix(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в виде cписка смежности.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы cписка смежности.
-*/
-
-std::string GetStringAdjacencyList(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в виде cписка ребер.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы cписка ребер.
-*/
-
-std::string GetStringRibsList(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе FO.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе FO.
-*/
-
-std::string GetStringFO(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе FI.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе FI.
-*/
-
-std::string GetStringFI(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе MFO.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе MFO.
-*/
-
-std::string GetStringMFO(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе MFI.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе MFI.
-*/
-
-std::string GetStringMFI(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе BFO.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе BFO.
-*/
-
-std::string GetStringBFO(const Graph &graph);
-
-/**
- *  @brief  Функция, возвращающая строковое предствление графа в типе BMFO.
- *  @param  graph  Текущий граф.
- *  @return Строка-представление матрицы в типе MFI.
-*/
-
-std::string GetStringBMFO(const Graph &graph);
-
-/**
- *  @brief  Функция, выводящая на экран статистику по степеням/полустепеням вершин графа.
- *  @param  graph  Текущий граф.
-*/
-
-void PrintVertexDegrees(const Graph &graph);
-
-/**
- *  @brief  Функция, выводящая на экран статистику по степеням/полустепеням вершин графа.
- *  @param  graph  Текущий граф.
-*/
-
-void PrintMatrixRepresentation(const Graph &graph);
-
-/**
- *  @brief  Функция, выводящая на экран основную информацию о графе.
- *  @param  graph  Текущий граф.
-*/
-
-void PrintGraphMainInfo(const Graph &graph);
-
-/**
- *  @brief  Функция, устанавливающая матрицу смежности для графа.
- *  @param  graph  Текущий граф.
- *  @param  adjacency_matrix  Матрица смежности графа.
- *  @param  type  Тип графа.
-*/
-
-void SetAdjacencyMatrix(Graph &graph, const std::vector<std::vector<int>>& adjacency_matrix,
-                        std::string type);
-
-
-/**
- *  @brief  Функция, получающая число из строки.
- *  @param  string  Строка с числом.
- *  @return Число из строки.
-*/
-
-int32_t ParseNum(const std::string& string);
+std::vector<std::string> Split(const std::string& str, char delim);
 
 /**
  *  @brief  Функция, делящая строку по разделителям новой строки.
@@ -472,14 +699,25 @@ int32_t ParseNum(const std::string& string);
 std::vector<std::string> SplitSegment(const std::string& sentence);
 
 /**
- *  @brief  Функция, получающая матрицу смежности из файла.
- *  @param  graph Текущий граф.
+ *  @brief  Функция, проверяющая валидна ли строка как представление числа.
+ *  @param  str  Строка.
+ *  @return Boolean значение является ли данная строка подходящей для построения представления.
 */
 
-void GetAdjacencyMatrixFromFile(Graph &graph);
+bool IsValidString(const std::string& str);
 
 /**
- *  @brief  Функция, проверяющая валидена ли строка как представление числа.
+ *  @brief  Функция, проверяющая валиден ли набор строк как информация для построения представления
+ *  Также заполняет вектор чисел для одной строки представления.
+ *  @param  line  Набор строк.
+ *  @param  ans  Изменяемый вектор чисел с информацией для одной строки представления.
+ *  @return Boolean значение является ли данный набор строк подходящим для построения представления.
+*/
+
+bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans);
+
+/**
+ *  @brief  Функция, проверяющая валидна ли строка как представление числа.
  *  @param  str  Строка.
  *  @param  lower_bound  Нижняя граница для числа от пользователя.
  *  @param  upper_bound  Верхняя граница для числа от пользователя.
@@ -502,7 +740,7 @@ int32_t ParseNum(const std::string& str, int32_t lower_bound, int32_t upper_boun
  *  @brief  Функция, проверяющая валиден ли набор строк как информация для построения представления
  *  Также заполняет вектор чисел для одной строки представления.
  *  @param  line  Набор строк.
- *  @param  ans  Изменяемый вектор чисел с инормацией для одной строки представления.
+ *  @param  ans  Изменяемый вектор чисел с информацией для одной строки представления.
  *  @param  lower_bound  Нижняя граница для числа от пользователя.
  *  @param  upper_bound  Верхняя граница для числа от пользователя.
  *  @return Boolean значение является ли данный набор строк подходящим для построения представления.
@@ -511,9 +749,8 @@ int32_t ParseNum(const std::string& str, int32_t lower_bound, int32_t upper_boun
 bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& ans, int32_t lower_bound,
                       int32_t upper_bound);
 
-
 /**
- *  @brief  Функция, получаяющая строку с информацией о графе.
+ *  @brief  Функция, получающая строку с информацией о графе.
  *  @param  size_of_matrix Размер строки.
  *  @param  lower_bound  Нижняя граница для числа от пользователя.
  *  @param  upper_bound  Верхняя граница для числа от пользователя.
@@ -523,58 +760,6 @@ bool IsValidForMatrix(const std::vector<std::string>& line, std::vector<int>& an
 
 std::vector<int> GetMatrixLineVarious(int32_t size_of_matrix, int32_t lower_bound, int32_t upper_bound,
                                       const std::string& comment);
-
-/**
- *  @brief  Функция, считывающая информацию из файла, делящая его на строки.
- *  @return Вектор строк из файла.
-*/
-
-std::vector<std::string> ReadAllLinesInFile();
-
-/**
- *  @brief  Функция, устанавливающая матрицу смежности для графа полученого из файла.
- *  @param  graph  Текущий граф.
- *  @param  adjacency_matrix  Матрица смежности графа.
- *  @param  type  Тип графа.
-*/
-
-void CheckAndSetFileData(Graph &graph, int32_t size_of_matrix,
-                         const std::vector<std::vector<int>> &adjacency_matrix, std::string type);
-
-/**
- *  @brief  Функция, производящая смену представления для ориентированных псевдографов.
- *  @param  graph  Текущий граф.
-*/
-
-void ChangeTypeOfGraphForPseudoOriented(Graph &graph);
-
-/**
- *  @brief  Функция, производящая смену представления для неориентированных псевдографов.
- *  @param  graph  Текущий граф.
-*/
-
-void ChangeTypeOfGraphForPseudoNotOriented(Graph &graph);
-
-/**
- *  @brief  Функция, производящая смену представления для мультиграфов.
- *  @param  graph  Текущий граф.
-*/
-
-void ChangeTypeOfGraphForMulti(Graph &graph);
-
-/**
- *  @brief  Функция, производящая смену представления для неориентированных графов.
- *  @param  graph  Текущий граф.
-*/
-
-void ChangeTypeOfGraphForNotOriented(Graph &graph);
-
-/**
- *  @brief  Функция, производящая смену представления для ориентированных графов.
- *  @param  graph  Текущий граф.
-*/
-
-void ChangeTypeOfGraphForOriented(Graph &graph);
 
 /**
  *  @brief  Функция, возвращающая индекс элемента в векторе.
@@ -604,6 +789,18 @@ std::vector<std::vector<int>> ParseFromAdjacencyList(std::vector<std::vector<int
 
 std::vector<std::vector<int>> ParseFromIncidenceMatrix(std::vector<std::vector<int>>
 incidence_matrix, int32_t vertices);
+
+/**
+ *  @brief  Функция, производящая получения строки матрицы смежности из строки матрицы
+ *  инцидентности.
+ *  @param  adjacency_matrix  Матрица смежности.
+ *  @param  string  Строка матрицы инцидентности.
+ *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
+ *  произошло с ошибкой.
+*/
+
+bool GetStringOfAdjacencyMatrixFromIncidence(std::vector<std::vector<int>> &adjacency_matrix,
+                                             std::vector<int> &string);
 
 /**
  *  @brief  Функция, превращающая список ребер в матрицу смежности.
@@ -673,195 +870,19 @@ vertices);
 std::vector<std::vector<int>> ParseFromBFO(std::vector<int> fo);
 
 /**
- *  @brief  Функция, получающая граф из консольного ввода пользователя.
+ *  @brief  Функция, которая обходит граф в ширину рекурсивно.
  *  @param  graph  Текущий граф.
 */
 
-void GetConsoleGraphInput(Graph &graph);
+void BFSRecursion(const Graph& graph);
 
 /**
- *  @brief  Функция, получающая граф в виде матрицы смежности из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
+ *  @brief  Функция, производящая рекурсивный поиск в ширину с помощью вызова самой себя.
+ *  @param graph Текущий граф.
+ *  @param queue Очередь вершин.
+ *  @param used Использованные вершины.
 */
 
-void GetAdjacencyMatrixFromConsole(Graph &graph);
+void BFSSearchRecursion(Graph const &graph, std::queue<int> &queue, std::vector<bool> &used);
 
-/**
- *  @brief  Функция, получающая граф в виде матрицы инцендентности из консольного ввода
- *  пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetIncidenceMatrixFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в виде списка смежности из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetAdjacencyListFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в виде списка ребер из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetRibsListFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении FO из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetFOFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении FI из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetFIFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении MFO из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetMFOFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении MFI из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetMFIFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении BMFO из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetBMFOFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении BFO из консольного ввода пользователя.
- *  @param  graph  Текущий граф.
-*/
-
-void GetBFOFromConsole(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в виде матрицы инциндентности из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetIncidenceMatrixFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в виде списка смежности из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetAdjacencyListFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в виде списка ребер из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetRibsListFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении FO из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetFOFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении FI из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetFIFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении MFO из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetMFOFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении MFI из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetMFIFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении BMFO из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetBMFOFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф в представлении BFO из файла.
- *  @param  graph  Текущий граф.
-*/
-
-void GetBFOFromFile(Graph &graph);
-
-/**
- *  @brief  Функция, получающая граф из файла ввода.
- *  @param  graph  Текущий граф.
-*/
-
-void GetFileGraphInput(Graph &graph);
-
-/**
- *  @brief  Функция, производящая попытку получения BMFO представления от пользователя.
- *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
- *  @param  bmfo_me  ME-вектор.
- *  @param  bmfo_mv  MV-вектор.
- *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
- *  произошло с ошибкой.
-*/
-
-bool TryGetInfoBMFOFromFile(int32_t number_of_colums, std::vector<int> &bmfo_me, std::vector<int>
-        &bmfo_mv);
-
-/**
- *  @brief  Функция, производящая попытку получения MFI представления от пользователя.
- *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
- *  @param  mfi_me  ME-вектор.
- *  @param  mfi_mv  MV-вектор.
- *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
- *  произошло с ошибкой.
-*/
-
-bool TryGetMFIFromFile(int32_t number_of_colums, std::vector<int> &mfi_me, std::vector<int> &mfi_mv);
-
-/**
- *  @brief  Функция, производящая попытку получения MFO представления от пользователя.
- *  @param  number_of_colums  Количество строк для текущего пердставления в файле.
- *  @param  mfo_me  ME-вектор.
- *  @param  mfo_mv  MV-вектор.
- *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
- *  произошло с ошибкой.
-*/
-
-bool TryGetMFOFromFile(int32_t number_of_colums, std::vector<int> &mfo_me, std::vector<int> &mfo_mv);
-
-/**
- *  @brief  Функция, производящая получения строки матрицы смежности из строки матрицы
- *  инциндентности.
- *  @param  adjacency_matrix  Матрица смежности.
- *  @param  i  Строка матрицы инциндентности.
- *  @return Возвращает значение true - если завершено без ошибки и false, если исполнение
- *  произошло с ошибкой.
-*/
-
-bool GetStringOfAdjacencyMatrixFromIncidence(std::vector<std::vector<int>> &adjacency_matrix,
-                                             std::vector<int> &i);
+#endif //PEERGRADE001_FUNCTIONS_H
